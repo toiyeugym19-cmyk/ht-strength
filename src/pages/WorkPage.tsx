@@ -192,7 +192,7 @@ function IOSTaskRow({ task, last, onToggle, onDelete }: {
     const categoryMap: Record<string, string> = { 'work': 'Công việc', 'personal': 'Cá nhân', 'life': 'Cuộc sống' };
 
     return (
-        <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, height: 0 }}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, height: 0 }}
             style={{
                 display: 'flex', alignItems: 'flex-start', gap: 12, padding: 16,
                 borderBottom: !last ? '0.5px solid var(--ios-separator)' : 'none',
@@ -230,7 +230,7 @@ function IOSTaskRow({ task, last, onToggle, onDelete }: {
 
             {/* Delete */}
             <button onClick={() => onDelete(task.id)}
-                style={{ padding: 8, marginRight: -4, color: 'var(--ios-text-tertiary)', background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0 }}>
+                style={{ width: 32, height: 32, padding: 8, color: 'var(--ios-text-tertiary)', background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0 }}>
                 <Trash2 size={16} />
             </button>
         </motion.div>
