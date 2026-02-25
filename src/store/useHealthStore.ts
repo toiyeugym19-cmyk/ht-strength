@@ -49,29 +49,27 @@ const EMPTY_DAY: DailyHealth = {
 async function syncFromHealthKit(): Promise<Partial<DailyHealth>> {
     // Plugin matches iOS native definitions
 
-    // Request ALL available valid health data types according to plugin definitions
-    const healthTypes = [
-        'stepCount',
-        'sleepAnalysis',
+    // The Swift Plugin defines getTypes() DIFFERENTLY than getSampleType()!
+    // requestAuthorization uses getTypes() which expects aliases like 'steps', 'calories', 'activity'
+    const authTypes = [
+        'steps',
+        'activity',
+        'duration',
+        'calories',
+        'distance',
+        'weight',
         'heartRate',
         'restingHeartRate',
-        'activeEnergyBurned',
-        'basalEnergyBurned',
-        'weight',
-        'bodyFat',
-        'bloodPressureSystolic',
-        'bloodPressureDiastolic',
-        'oxygenSaturation',
         'respiratoryRate',
-        'distanceWalkingRunning',
-        'distanceCycling',
-        'appleExerciseTime',
-        'workoutType'
+        'bodyFat',
+        'oxygenSaturation',
+        'bloodPressureSystolic',
+        'bloodPressureDiastolic'
     ];
     await CapacitorHealthkit.requestAuthorization({
-        all: healthTypes,
-        read: healthTypes,
-        write: ['workoutType', 'activeEnergyBurned', 'distanceWalkingRunning', 'weight', 'bodyFat']
+        all: authTypes,
+        read: authTypes,
+        write: ['activity', 'calories', 'distance', 'weight', 'bodyFat']
     });
 
     const now = new Date();
