@@ -49,22 +49,29 @@ async function syncFromHealthKit(): Promise<Partial<DailyHealth>> {
     // Dynamic import to avoid crash on web
     const { CapacitorHealthkit } = await import('@perfood/capacitor-healthkit');
 
-    // Request ALL available health data types
+    // Request ALL available valid health data types according to plugin definitions
     const healthTypes = [
-        'stepCount', 'sleepAnalysis', 'heartRate', 'restingHeartRate',
-        'activeEnergyBurned', 'basalEnergyBurned',
-        'bodyMass', 'bodyFatPercentage', 'bodyMassIndex', 'leanBodyMass',
-        'dietaryWater', 'dietaryEnergyConsumed',
-        'bloodPressureSystolic', 'bloodPressureDiastolic',
-        'oxygenSaturation', 'respiratoryRate',
-        'distanceWalkingRunning', 'distanceCycling',
-        'appleExerciseTime', 'appleStandTime',
-        'vo2Max', 'workoutType'
+        'stepCount',
+        'sleepAnalysis',
+        'heartRate',
+        'restingHeartRate',
+        'activeEnergyBurned',
+        'basalEnergyBurned',
+        'weight',
+        'bodyFat',
+        'bloodPressureSystolic',
+        'bloodPressureDiastolic',
+        'oxygenSaturation',
+        'respiratoryRate',
+        'distanceWalkingRunning',
+        'distanceCycling',
+        'appleExerciseTime',
+        'workoutType'
     ];
     await CapacitorHealthkit.requestAuthorization({
         all: healthTypes,
         read: healthTypes,
-        write: ['workoutType', 'activeEnergyBurned', 'distanceWalkingRunning']
+        write: ['workoutType', 'activeEnergyBurned', 'distanceWalkingRunning', 'weight', 'bodyFat']
     });
 
     const now = new Date();
@@ -131,7 +138,7 @@ async function syncFromHealthKit(): Promise<Partial<DailyHealth>> {
     // ------ Body Mass (Weight) ------
     try {
         const weightData = await CapacitorHealthkit.queryHKitSampleType({
-            sampleName: 'bodyMass',
+            sampleName: 'weight',
             startDate: new Date(now.getTime() - 7 * 86400000).toISOString(), // last 7 days
             endDate: endTime,
             limit: 1
@@ -143,7 +150,7 @@ async function syncFromHealthKit(): Promise<Partial<DailyHealth>> {
     // ------ Body Fat % ------
     try {
         const fatData = await CapacitorHealthkit.queryHKitSampleType({
-            sampleName: 'bodyFatPercentage',
+            sampleName: 'bodyFat',
             startDate: new Date(now.getTime() - 30 * 86400000).toISOString(), // last 30 days
             endDate: endTime,
             limit: 1
@@ -153,17 +160,8 @@ async function syncFromHealthKit(): Promise<Partial<DailyHealth>> {
     } catch { result.bodyFat = 0; }
 
     // ------ Water ------
-    try {
-        const waterData = await CapacitorHealthkit.queryHKitSampleType({
-            sampleName: 'dietaryWater',
-            startDate: startTime,
-            endDate: endTime,
-            limit: 0
-        });
-        result.waterMl = Math.round(
-            (waterData.resultData as any[]).reduce((acc, s) => acc + (s.value || 0), 0) * 1000
-        );
-    } catch { result.waterMl = 0; }
+    // Not directly supported by this HK plugin version, leaving random for now or 0
+    result.waterMl = 0;
 
     return result;
 }

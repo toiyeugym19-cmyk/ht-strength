@@ -1,0 +1,193 @@
+﻿
+  Build Unsigned IPA	Sync iOS 
+Project	
+2026-02-25T05:45:24.2141910Z 
+Γ£ö copy ios in 64.44ms
+  Build Unsigned IPA	Sync iOS 
+Project	
+2026-02-25T05:45:24.2418290Z 
+Γ£ö Updating iOS plugins in 
+8.42ms
+  Build Unsigned IPA	Sync iOS 
+Project	
+2026-02-25T05:45:24.2520400Z 
+[warn] 
+@perfood/capacitor-healthkit 
+does not have a Package.swift
+  Build Unsigned IPA	Sync iOS 
+Project	
+2026-02-25T05:45:24.2522140Z 
+[warn] Some installed packages 
+are not compatable with SPM
+  Build Unsigned IPA	Sync iOS 
+Project	
+2026-02-25T05:45:24.2523050Z 
+[info] Writing Package.swift
+  Build Unsigned IPA	Sync iOS 
+Project	
+2026-02-25T05:45:24.2724280Z 
+[info] Found 1 Capacitor 
+plugin for ios:
+  Build Unsigned IPA	Sync iOS 
+Project	
+2026-02-25T05:45:24.2725630Z   
+     @perfood/capacitor-healthk
+it@1.3.2
+  Build Unsigned IPA	Sync iOS 
+Project	
+2026-02-25T05:45:24.2917120Z 
+Γ£ö update ios in 67.74ms
+  Build Unsigned IPA	Sync iOS 
+Project	
+2026-02-25T05:45:24.3012560Z 
+[info] Sync finished in 0.73s
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	∩╗┐2026-02
+-25T05:45:24.3485080Z 
+##[group]Run cd ios/App
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:24.3485400Z 
+[36;1mcd ios/App[0m
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:24.3485620Z 
+[36;1m# Ignore signing to 
+create an unsigned archive[0m
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:24.3485990Z 
+[36;1mxcodebuild -workspace 
+App.xcworkspace \[0m
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:24.3486280Z 
+[36;1m  -scheme App \[0m
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:24.3486530Z 
+[36;1m  -configuration 
+Release \[0m
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:24.3554520Z 
+[36;1m  clean archive \[0m
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:24.3554830Z 
+[36;1m  -archivePath 
+build/App.xcarchive \[0m
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:24.3555130Z 
+[36;1m  CODE_SIGN_IDENTITY="" 
+\[0m
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:24.3555320Z 
+[36;1m  
+CODE_SIGNING_REQUIRED=NO \[0m
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:24.3555530Z 
+[36;1m  
+CODE_SIGNING_ALLOWED=NO[0m
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:24.5044000Z 
+shell: /bin/bash -e {0}
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:24.5044210Z 
+##[endgroup]
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:26.1286530Z 
+Command line invocation:
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:26.1288470Z   
+  /Applications/Xcode_16.4.app/
+Contents/Developer/usr/bin/xcod
+ebuild -workspace 
+App.xcworkspace -scheme App 
+-configuration Release clean 
+archive -archivePath 
+build/App.xcarchive 
+CODE_SIGN_IDENTITY= 
+CODE_SIGNING_REQUIRED=NO 
+CODE_SIGNING_ALLOWED=NO
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:26.1289490Z 
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:26.1289630Z 
+Build settings from command 
+line:
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:26.1290750Z   
+  CODE_SIGN_IDENTITY = 
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:26.1291830Z   
+  CODE_SIGNING_ALLOWED = NO
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:26.1292520Z   
+  CODE_SIGNING_REQUIRED = NO
+  Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:26.1292890Z 
+> Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:27.2026820Z 
+2026-02-25 05:45:27.201 
+xcodebuild[1898:9164] Writing 
+error result bundle to /var/fol
+ders/q_/pk8v8g4n3qq2gcnsvqjc3sd
+40000gn/T/ResultBundle_2026-25-
+02_05-45-0027.xcresult
+> Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:28.2137070Z 
+xcodebuild: error: 
+'App.xcworkspace' does not 
+exist.
+> Build Unsigned IPA	Build 
+Unsigned iOS Archive	
+2026-02-25T05:45:28.2212810Z 
+##[error]Process completed 
+with exit code 66.
+  Build Unsigned IPA	Post 
+Checkout Repository	∩╗┐2026-02-
+25T05:45:28.2491170Z Post job 
+cleanup.
+  Build Unsigned IPA	Post 
+Checkout Repository	
+2026-02-25T05:45:29.5615710Z 
+[command]/opt/homebrew/bin/git 
+version
+  Build Unsigned IPA	Post 
+Checkout Repository	
+2026-02-25T05:45:29.5922600Z 
+git version 2.53.0
+  Build Unsigned IPA	Post 
+Checkout Repository	
+2026-02-25T05:45:29.6385690Z 
+Copying 
+'/Users/runner/.gitconfig' to '
+/Users/runner/work/_temp/85def6
+59-b6f3-406f-b279-3f01b32fe3f8/
+.gitconfig'
+  Build Unsigned IPA	Post 
+Checkout Repository	
+2026-02-25T05:45:29.6489060Z 
+Temporarily overriding HOME='/U
+sers/runner/work/_temp/85def659
+-b6f3-406f-b279-3f01b32fe3f8' 
+before making global git 
+config changes
+
+
