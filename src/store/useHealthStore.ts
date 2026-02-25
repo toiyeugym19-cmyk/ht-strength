@@ -267,25 +267,7 @@ async function syncFromGoogleFit(accessToken: string): Promise<Partial<DailyHeal
 
 // ============================================================
 //  Simulation fallback (for web dev / demo)
-// ============================================================
-function generateSimulatedData(): DailyHealth {
-    return {
-        steps: Math.floor(Math.random() * (12000 - 4000) + 4000),
-        sleepHours: Number((Math.random() * (9 - 5) + 5).toFixed(1)),
-        waterMl: Math.floor(Math.random() * (3000 - 1500) + 1500),
-        heartRateAvg: Math.floor(Math.random() * (85 - 60) + 60),
-        weight: Number((Math.random() * (85 - 65) + 65).toFixed(1)),
-        bodyFat: Number((Math.random() * (25 - 10) + 10).toFixed(1)),
-        caloriesBurned: Math.floor(Math.random() * (800 - 200) + 200),
-        bloodPressureSystolic: Math.floor(Math.random() * (130 - 110) + 110),
-        bloodPressureDiastolic: Math.floor(Math.random() * (85 - 70) + 70),
-        oxygenSaturation: Number((Math.random() * (100 - 95) + 95).toFixed(1)),
-        restingHeartRate: Math.floor(Math.random() * (75 - 55) + 55),
-        activeMinutes: Math.floor(Math.random() * (90 - 15) + 15)
-    };
-}
-
-// ============================================================
+// Remove simulated data logic - pure native functionality requested
 //  Store
 // ============================================================
 export const useHealthStore = create<HealthState>()(
@@ -350,9 +332,14 @@ export const useHealthStore = create<HealthState>()(
                     else if (connectedSource === 'google' && googleAccessToken) {
                         healthData = await syncFromGoogleFit(googleAccessToken);
                     }
-                    // ---- Fallback: Simulation ----
+                    // ---- Fallback: No connection ----
                     else {
-                        healthData = generateSimulatedData();
+                        console.warn('No Health connection source is active.');
+                        if (!isNative) {
+                            alert('Tính năng đồng bộ sức khỏe từ hệ điều hành chỉ hoạt động trên thiết bị iPhone/iPad (File IPA) thực tế. Trên web hãy kết nối Google.');
+                        }
+                        set({ isSyncing: false });
+                        return; // do not update store dummy data
                     }
                 } catch (err: any) {
                     console.error('Health sync error:', err);
@@ -360,13 +347,11 @@ export const useHealthStore = create<HealthState>()(
                     const isNative = Capacitor.isNativePlatform();
                     if (isNative) {
                         alert("HealthKit Lỗi: " + (err?.message || JSON.stringify(err)));
-                        // Stop syncing without dummy data if it's native and there's a real error
-                        set({ isSyncing: false });
-                        return;
                     } else {
-                        // Web fallback
-                        healthData = generateSimulatedData();
+                        alert("Health Sync Error: " + err?.message);
                     }
+                    set({ isSyncing: false });
+                    return; // Stop execution on error, no fake data
                 }
 
                 const current = get().dailyStats[today] || { ...EMPTY_DAY };

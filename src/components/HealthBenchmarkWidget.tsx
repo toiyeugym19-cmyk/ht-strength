@@ -138,15 +138,10 @@ export default function HealthBenchmarkWidget() {
                 <button
                     onClick={() => syncWithDevice()}
                     disabled={isSyncing}
-                    style={{
-                        display: 'flex', alignItems: 'center', gap: 5,
-                        padding: '5px 12px', borderRadius: 20,
-                        background: isSyncing ? 'rgba(142,142,147,0.12)' : 'rgba(48,209,88,0.12)',
-                        color: isSyncing ? '#8E8E93' : '#30D158',
-                        fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer'
-                    }}
+                    className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-semibold text-[13px] active:scale-95 transition-transform ${isSyncing ? 'bg-[var(--ios-fill-tertiary)] text-[var(--ios-text-secondary)]' : 'bg-[var(--ios-fill-tertiary)] text-[var(--ios-tint)]'}`}
+                    style={{ border: 'none', cursor: 'pointer' }}
                 >
-                    <RefreshCw size={13} className={isSyncing ? 'animate-spin' : ''} />
+                    <RefreshCw size={13} strokeWidth={2.5} className={isSyncing ? 'animate-spin' : ''} />
                     {isSyncing ? 'Đang đồng bộ...' : 'Đồng bộ'}
                 </button>
             </div>

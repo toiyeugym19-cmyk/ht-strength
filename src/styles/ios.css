@@ -799,10 +799,10 @@
 
 /* ===== RESPONSIVE — iPad & Desktop ===== */
 
-/* --- iPad Portrait (768px – 1024px) --- */
-@media (min-width: 768px) and (max-width: 1199px) {
+/* --- Tablet & Desktop (768px+) --- */
+@media (min-width: 768px) {
     .ios-app-root {
-        /* Full-width on iPad — sidebar + content flex layout */
+        /* Full-width on iPad/Desktop — sidebar + content flex layout */
         max-width: 100%;
         margin: 0;
     }
@@ -821,21 +821,5 @@
 
     .ios-large-title {
         font-size: 34px;
-    }
-}
-
-/* --- Desktop (1200px+) — iPhone simulator frame --- */
-@media (min-width: 1200px) {
-    .ios-app-root {
-        max-width: 500px;
-        margin: 0 auto;
-        border-left: 0.33px solid rgba(84, 84, 88, 0.35);
-        border-right: 0.33px solid rgba(84, 84, 88, 0.35);
-    }
-
-    .ios-tabbar {
-        max-width: 500px;
-        left: 50%;
-        transform: translateX(-50%);
     }
 }
