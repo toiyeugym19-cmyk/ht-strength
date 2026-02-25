@@ -193,30 +193,44 @@ function IOSTaskRow({ task, last, onToggle, onDelete }: {
 
     return (
         <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, height: 0 }}
-            className={`flex items-start gap-3 p-4 ${!last ? 'border-b border-[var(--ios-separator)]' : ''} ${task.completed ? 'opacity-50' : ''}`}>
+            style={{
+                display: 'flex', alignItems: 'flex-start', gap: 12, padding: 16,
+                borderBottom: !last ? '0.5px solid var(--ios-separator)' : 'none',
+                opacity: task.completed ? 0.5 : 1,
+            }}>
 
             {/* Checkbox */}
             <button onClick={() => onToggle(task.id)}
-                className={`w-[22px] h-[22px] mt-0.5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${task.completed ? 'bg-[var(--ios-tint)] border-[var(--ios-tint)]' : 'border-[var(--ios-text-tertiary)]'
-                    }`}>
-                {task.completed && <Check size={12} className="text-white" strokeWidth={3} />}
+                style={{
+                    width: 22, height: 22, marginTop: 2, borderRadius: '50%',
+                    border: task.completed ? '2px solid var(--ios-tint)' : '2px solid var(--ios-text-tertiary)',
+                    background: task.completed ? 'var(--ios-tint)' : 'transparent',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    flexShrink: 0, cursor: 'pointer', padding: 0,
+                }}>
+                {task.completed && <Check size={12} color="#fff" strokeWidth={3} />}
             </button>
 
             {/* Content */}
-            <div className="flex-1 min-w-0 overflow-hidden">
-                <p className={`text-[15px] leading-snug truncate ${task.completed ? 'line-through text-[var(--ios-text-tertiary)]' : 'text-white'}`}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{
+                    fontSize: 15, lineHeight: 1.4, margin: 0,
+                    color: task.completed ? 'var(--ios-text-tertiary)' : '#F5F5F7',
+                    textDecoration: task.completed ? 'line-through' : 'none',
+                    whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                }}>
                     {task.content}
                 </p>
-                <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
-                    <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded-md" style={{ color: p.color, background: `${p.color}18` }}>{p.label}</span>
-                    <span className="text-[11px] text-[var(--ios-text-tertiary)] px-1.5 py-0.5 rounded-md bg-[var(--ios-fill-tertiary)]">{categoryMap[task.category] || task.category}</span>
-                    <span className="text-[11px] text-[var(--ios-text-tertiary)]">{format(new Date(task.date), 'dd/MM')}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 6, flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: 11, fontWeight: 600, padding: '2px 6px', borderRadius: 6, color: p.color, background: `${p.color}18` }}>{p.label}</span>
+                    <span style={{ fontSize: 11, color: 'var(--ios-text-tertiary)', padding: '2px 6px', borderRadius: 6, background: 'var(--ios-fill-tertiary)' }}>{categoryMap[task.category] || task.category}</span>
+                    <span style={{ fontSize: 11, color: 'var(--ios-text-tertiary)' }}>{format(new Date(task.date), 'dd/MM')}</span>
                 </div>
             </div>
 
             {/* Delete */}
             <button onClick={() => onDelete(task.id)}
-                className="p-2 -mr-1 text-[var(--ios-text-tertiary)] active:text-[#FF453A] transition-colors flex-shrink-0">
+                style={{ padding: 8, marginRight: -4, color: 'var(--ios-text-tertiary)', background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0 }}>
                 <Trash2 size={16} />
             </button>
         </motion.div>

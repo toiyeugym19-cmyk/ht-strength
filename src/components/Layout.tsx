@@ -118,7 +118,7 @@ export default function Layout() {
                             {canGoBack ? (
                                 <button onClick={() => navigate(-1)} className="ios-nav-back">
                                     <ChevronLeft size={28} strokeWidth={2.5} />
-                                    <span>Back</span>
+                                    <span>Quay lại</span>
                                 </button>
                             ) : (
                                 <div className="ios-nav-bar__logo">
