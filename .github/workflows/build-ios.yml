@@ -32,7 +32,7 @@ jobs:
         run: |
           cd ios/App
           # Ignore signing to create an unsigned archive
-          xcodebuild -workspace App.xcworkspace \
+          xcodebuild -project App.xcodeproj \
             -scheme App \
             -configuration Release \
             clean archive \
