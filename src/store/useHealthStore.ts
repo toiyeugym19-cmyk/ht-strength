@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { format, startOfDay, endOfDay } from 'date-fns';
 import { Capacitor } from '@capacitor/core';
+import { CapacitorHealthkit } from '@perfood/capacitor-healthkit';
 
 // ============================================================
 //  Types
@@ -46,8 +47,7 @@ const EMPTY_DAY: DailyHealth = {
 //  HealthKit helpers (only imported on iOS)
 // ============================================================
 async function syncFromHealthKit(): Promise<Partial<DailyHealth>> {
-    // Dynamic import to avoid crash on web
-    const { CapacitorHealthkit } = await import('@perfood/capacitor-healthkit');
+    // Plugin matches iOS native definitions
 
     // Request ALL available valid health data types according to plugin definitions
     const healthTypes = [
@@ -356,9 +356,19 @@ export const useHealthStore = create<HealthState>()(
                     else {
                         healthData = generateSimulatedData();
                     }
-                } catch (err) {
+                } catch (err: any) {
                     console.error('Health sync error:', err);
-                    healthData = generateSimulatedData();
+
+                    const isNative = Capacitor.isNativePlatform();
+                    if (isNative) {
+                        alert("HealthKit Lỗi: " + (err?.message || JSON.stringify(err)));
+                        // Stop syncing without dummy data if it's native and there's a real error
+                        set({ isSyncing: false });
+                        return;
+                    } else {
+                        // Web fallback
+                        healthData = generateSimulatedData();
+                    }
                 }
 
                 const current = get().dailyStats[today] || { ...EMPTY_DAY };
