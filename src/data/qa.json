@@ -1,0 +1,1244 @@
+[
+    {
+        "id": "qa-001",
+        "question": "Tôi nên tập bao nhiêu buổi một tuần?",
+        "answer": "Tùy thuộc vào mục tiêu và lịch trình của bạn. Người mới bắt đầu nên tập 3-4 buổi/tuần (Full Body hoặc Upper/Lower). Người có kinh nghiệm có thể tập 5-6 buổi (PPL hoặc Split). Quan trọng nhất là tính kiên trì.",
+        "category": "Tập luyện"
+    },
+    {
+        "id": "qa-002",
+        "question": "Khi nào nên uống Whey Protein?",
+        "answer": "Thời điểm uống không quan trọng bằng tổng lượng Protein nạp vào trong ngày. Tuy nhiên, uống sau khi tập (Post-workout) là thời điểm tốt để cơ thể hấp thu nhanh. Uống sáng sớm hoặc phụ bữa cũng rất ổn.",
+        "category": "Dinh dưỡng"
+    },
+    {
+        "id": "qa-003",
+        "question": "Làm sao để giảm mỡ bụng nhanh nhất?",
+        "answer": "Không có cách nào giảm mỡ MỘT VÙNG (spot reduction) tự nhiên. Bạn phải giảm mỡ toàn thân thông qua việc thâm hụt Calo (Calorie Deficit). Khi tỷ lệ mỡ cơ thể thấp xuống, mỡ bụng sẽ dần biến mất.",
+        "category": "Giảm cân"
+    },
+    {
+        "id": "qa-004",
+        "question": "Cardio trước hay sau tập tạ?",
+        "answer": "Nếu mục tiêu là tăng cơ/sức mạnh: Hãy tập tạ trước khi còn nhiều sức, Cardio nhẹ sau buổi tập hoặc tách riêng buổi. Nếu tập Cardio cường độ cao trước, bạn sẽ không còn sức để nâng tạ hiệu quả.",
+        "category": "Tập luyện"
+    },
+    {
+        "id": "qa-005",
+        "question": "Đau cơ (DOMS) có phải là tập hiệu quả?",
+        "answer": "Không hẳn. Đau cơ chỉ là dấu hiệu cơ thể đang thích nghi với vận động mới. Khi bạn quen bài tập, bạn sẽ ít đau hơn nhưng vẫn tăng cơ nếu tăng tạ đều đặn (Progressive Overload). Đừng lấy độ đau làm thước đo hiệu quả.",
+        "category": "Kiến thức chung"
+    },
+    {
+        "id": "qa-006",
+        "question": "Con gái tập tạ có bị to thô không?",
+        "answer": "Rất khó. Phụ nữ có lượng Testosterone thấp hơn nam giới 10-20 lần, nên việc phát triển cơ bắp to như nam giới là cực kỳ khó (trừ khi dùng thuốc). Tập tạ giúp phụ nữ săn chắc, đường cong quyến rũ hơn.",
+        "category": "Tập luyện cho nữ"
+    },
+    {
+        "id": "qa-007",
+        "question": "Tôi bị chững cân (Hit Plateau) phải làm sao?",
+        "answer": "1. Kiểm tra lại Calo nạp vào (có thể bạn ăn lặt vặt không để ý).\n2. Tăng cường độ vận động (NEAT - đi bộ nhiều hơn).\n3. Nghỉ ngơi (Deload) 1 tuần để giảm Stress/Cortisol.\n4. Điều chỉnh lại Macro (tăng Protein, giảm Carb).",
+        "category": "Giảm cân"
+    },
+    {
+        "id": "qa-008",
+        "question": "Tập Dip có bị đau lưng không?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-009",
+        "question": "Thực đơn giảm mỡ với Creatine như thế nào?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-010",
+        "question": "Ăn Omega-3 nhiều có tốt không?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-011",
+        "question": "Tập Row có bị đau lưng không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-012",
+        "question": "Nên tập Cutting bao nhiêu lần 1 tuần?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-013",
+        "question": "Làm sao để tăng cơ Cơ Chân (Legs) nhanh nhất?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-014",
+        "question": "Tập Bench Press có bị đau lưng không?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-015",
+        "question": "Làm sao để tăng cơ Cơ Lưng (Back) nhanh nhất?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-016",
+        "question": "Tập Dip có bị đau lưng không?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-017",
+        "question": "Nên tập Cutting bao nhiêu lần 1 tuần?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-018",
+        "question": "Nên tập Cutting bao nhiêu lần 1 tuần?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-019",
+        "question": "Làm sao để tăng cơ Cơ Chân (Legs) nhanh nhất?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-020",
+        "question": "Thực đơn giảm mỡ với Bông cải xanh như thế nào?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-021",
+        "question": "Thực đơn giảm mỡ với Whey Protein như thế nào?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-022",
+        "question": "Bị đau khớp khi tập Overhead Press phải làm sao?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-023",
+        "question": "Thực đơn giảm mỡ với Creatine như thế nào?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-024",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-025",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-026",
+        "question": "Ăn Yến mạch nhiều có tốt không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-027",
+        "question": "Ăn Whey Protein nhiều có tốt không?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-028",
+        "question": "Làm sao để tăng cơ Cơ Tay (Arms) nhanh nhất?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-029",
+        "question": "Nên tập Flexibility bao nhiêu lần 1 tuần?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-030",
+        "question": "Nên tập Calorie Deficit bao nhiêu lần 1 tuần?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-031",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-032",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-033",
+        "question": "Nên tập Hypertrophy bao nhiêu lần 1 tuần?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-034",
+        "question": "Ăn Whey Protein nhiều có tốt không?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-035",
+        "question": "Làm sao để tăng cơ Toàn Thân (Full Body) nhanh nhất?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-036",
+        "question": "Làm sao để tăng cơ Cơ Vai (Shoulder) nhanh nhất?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-037",
+        "question": "Bị đau khớp khi tập Row phải làm sao?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-038",
+        "question": "Tập Squat có bị đau lưng không?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-039",
+        "question": "Bị đau khớp khi tập Plank phải làm sao?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-040",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-041",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-042",
+        "question": "Bị đau khớp khi tập Squat phải làm sao?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-043",
+        "question": "Làm sao để tăng cơ Cơ Lưng (Back) nhanh nhất?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-044",
+        "question": "Làm sao để tăng cơ Cơ Bụng (Abs) nhanh nhất?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-045",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-046",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-047",
+        "question": "Ăn Khoai lang nhiều có tốt không?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-048",
+        "question": "Thực đơn giảm mỡ với BCAA như thế nào?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-049",
+        "question": "Nên tập Flexibility bao nhiêu lần 1 tuần?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-050",
+        "question": "Nên tập Progressive Overload bao nhiêu lần 1 tuần?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-051",
+        "question": "Thực đơn giảm mỡ với Omega-3 như thế nào?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-052",
+        "question": "Làm sao để tăng cơ Cơ Bụng (Abs) nhanh nhất?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-053",
+        "question": "Tập Bench Press có bị đau lưng không?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-054",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-055",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-056",
+        "question": "Thực đơn giảm mỡ với Omega-3 như thế nào?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-057",
+        "question": "Thực đơn giảm mỡ với Bông cải xanh như thế nào?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-058",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-059",
+        "question": "Thực đơn giảm mỡ với Whey Protein như thế nào?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-060",
+        "question": "Ăn Cá hồi nhiều có tốt không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-061",
+        "question": "Bị đau khớp khi tập Lunge phải làm sao?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-062",
+        "question": "Làm sao để tăng cơ Cơ Bụng (Abs) nhanh nhất?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-063",
+        "question": "Thực đơn giảm mỡ với Omega-3 như thế nào?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-064",
+        "question": "Nên tập Macro bao nhiêu lần 1 tuần?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-065",
+        "question": "Làm sao để tăng cơ Cơ Chân (Legs) nhanh nhất?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-066",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-067",
+        "question": "Làm sao để tăng cơ Cơ Ngực (Chest) nhanh nhất?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-068",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-069",
+        "question": "Bị đau khớp khi tập Lunge phải làm sao?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-070",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-071",
+        "question": "Thực đơn giảm mỡ với Whey Protein như thế nào?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-072",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-073",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-074",
+        "question": "Bị đau khớp khi tập HIIT phải làm sao?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-075",
+        "question": "Ăn Trứng nhiều có tốt không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-076",
+        "question": "Tập HIIT có bị đau lưng không?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-077",
+        "question": "Thực đơn giảm mỡ với Khoai lang như thế nào?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-078",
+        "question": "Tập Overhead Press có bị đau lưng không?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-079",
+        "question": "Làm sao để tăng cơ Cơ Vai (Shoulder) nhanh nhất?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-080",
+        "question": "Tập Row có bị đau lưng không?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-081",
+        "question": "Nên tập Strength bao nhiêu lần 1 tuần?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-082",
+        "question": "Nên tập Strength bao nhiêu lần 1 tuần?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-083",
+        "question": "Bị đau khớp khi tập Cardio LISS phải làm sao?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-084",
+        "question": "Bị đau khớp khi tập HIIT phải làm sao?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-085",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-086",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-087",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-088",
+        "question": "Tập Overhead Press có bị đau lưng không?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-089",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-090",
+        "question": "Làm sao để tăng cơ Cơ Bụng (Abs) nhanh nhất?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-091",
+        "question": "Tập HIIT có bị đau lưng không?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-092",
+        "question": "Ăn Yến mạch nhiều có tốt không?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-093",
+        "question": "Thực đơn giảm mỡ với Whey Protein như thế nào?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-094",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-095",
+        "question": "Tập Row có bị đau lưng không?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-096",
+        "question": "Ăn Khoai lang nhiều có tốt không?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-097",
+        "question": "Ăn Cá hồi nhiều có tốt không?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-098",
+        "question": "Làm sao để tăng cơ Toàn Thân (Full Body) nhanh nhất?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-099",
+        "question": "Tập Overhead Press có bị đau lưng không?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-100",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-101",
+        "question": "Làm sao để tăng cơ Toàn Thân (Full Body) nhanh nhất?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-102",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-103",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-104",
+        "question": "Nên tập Macro bao nhiêu lần 1 tuần?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-105",
+        "question": "Thực đơn giảm mỡ với Yến mạch như thế nào?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-106",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-107",
+        "question": "Làm sao để tăng cơ Cơ Lưng (Back) nhanh nhất?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-108",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-109",
+        "question": "Ăn Yến mạch nhiều có tốt không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-110",
+        "question": "Thực đơn giảm mỡ với Whey Protein như thế nào?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-111",
+        "question": "Ăn Whey Protein nhiều có tốt không?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-112",
+        "question": "Ăn BCAA nhiều có tốt không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-113",
+        "question": "Nên tập Bulking bao nhiêu lần 1 tuần?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-114",
+        "question": "Tập Overhead Press có bị đau lưng không?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-115",
+        "question": "Ăn Omega-3 nhiều có tốt không?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-116",
+        "question": "Nên tập Bulking bao nhiêu lần 1 tuần?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-117",
+        "question": "Tập Row có bị đau lưng không?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-118",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-119",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-120",
+        "question": "Làm sao để tăng cơ Cơ Tay (Arms) nhanh nhất?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-121",
+        "question": "Ăn Ức gà nhiều có tốt không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-122",
+        "question": "Làm sao để tăng cơ Cơ Ngực (Chest) nhanh nhất?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-123",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-124",
+        "question": "Bị đau khớp khi tập Deadlift phải làm sao?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-125",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-126",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-127",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-128",
+        "question": "Làm sao để tăng cơ Cơ Bụng (Abs) nhanh nhất?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-129",
+        "question": "Nên tập Strength bao nhiêu lần 1 tuần?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-130",
+        "question": "Tập Plank có bị đau lưng không?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-131",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-132",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-133",
+        "question": "Làm sao để tăng cơ Cơ Tay (Arms) nhanh nhất?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-134",
+        "question": "Bị đau khớp khi tập Pull Up phải làm sao?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-135",
+        "question": "Làm sao để tăng cơ Cơ Chân (Legs) nhanh nhất?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-136",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-137",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-138",
+        "question": "Bị đau khớp khi tập Row phải làm sao?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-139",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-140",
+        "question": "Bị đau khớp khi tập Dip phải làm sao?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-141",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-142",
+        "question": "Ăn Whey Protein nhiều có tốt không?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-143",
+        "question": "Ăn Bông cải xanh nhiều có tốt không?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-144",
+        "question": "Bị đau khớp khi tập Overhead Press phải làm sao?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-145",
+        "question": "Ăn Bông cải xanh nhiều có tốt không?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-146",
+        "question": "Nên tập Progressive Overload bao nhiêu lần 1 tuần?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-147",
+        "question": "Tập Overhead Press có bị đau lưng không?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-148",
+        "question": "Làm sao để tăng cơ Toàn Thân (Full Body) nhanh nhất?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-149",
+        "question": "Tập Squat có bị đau lưng không?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-150",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-151",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-152",
+        "question": "Tập Overhead Press có bị đau lưng không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-153",
+        "question": "Bị đau khớp khi tập Pull Up phải làm sao?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-154",
+        "question": "Tập Cardio LISS có bị đau lưng không?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-155",
+        "question": "Bị đau khớp khi tập HIIT phải làm sao?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-156",
+        "question": "Nên tập Flexibility bao nhiêu lần 1 tuần?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-157",
+        "question": "Thực đơn giảm mỡ với Omega-3 như thế nào?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-158",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-159",
+        "question": "Tập Dip có bị đau lưng không?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-160",
+        "question": "Thực đơn giảm mỡ với Yến mạch như thế nào?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-161",
+        "question": "Làm sao để tăng cơ Cơ Chân (Legs) nhanh nhất?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-162",
+        "question": "Nên tập Progressive Overload bao nhiêu lần 1 tuần?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-163",
+        "question": "Nên tập Mobility bao nhiêu lần 1 tuần?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-164",
+        "question": "Bị đau khớp khi tập Bench Press phải làm sao?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-165",
+        "question": "Nên tập Progressive Overload bao nhiêu lần 1 tuần?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-166",
+        "question": "Làm sao để tăng cơ Cơ Chân (Legs) nhanh nhất?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-167",
+        "question": "Tập Pull Up có bị đau lưng không?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-168",
+        "question": "Ăn Creatine nhiều có tốt không?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-169",
+        "question": "Làm sao để tăng cơ Cơ Bụng (Abs) nhanh nhất?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-170",
+        "question": "Thực đơn giảm mỡ với Cá hồi như thế nào?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-171",
+        "question": "Tập Deadlift có bị đau lưng không?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-172",
+        "question": "Nên tập Endurance bao nhiêu lần 1 tuần?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-173",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-174",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-175",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-176",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-177",
+        "question": "Nên tập Endurance bao nhiêu lần 1 tuần?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-178",
+        "question": "Thực đơn giảm mỡ với Creatine như thế nào?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-179",
+        "question": "Làm sao để tăng cơ Toàn Thân (Full Body) nhanh nhất?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-180",
+        "question": "Bị đau khớp khi tập Squat phải làm sao?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-181",
+        "question": "Nên tập Hypertrophy bao nhiêu lần 1 tuần?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-182",
+        "question": "Ăn Yến mạch nhiều có tốt không?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-183",
+        "question": "Tập HIIT có bị đau lưng không?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-184",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-185",
+        "question": "Bị đau khớp khi tập Cardio LISS phải làm sao?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-186",
+        "question": "Thực đơn giảm mỡ với Yến mạch như thế nào?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-187",
+        "question": "Ăn BCAA nhiều có tốt không?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-188",
+        "question": "Thực đơn giảm mỡ với BCAA như thế nào?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-189",
+        "question": "Nên tập Macro bao nhiêu lần 1 tuần?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-190",
+        "question": "Ăn Bông cải xanh nhiều có tốt không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-191",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-192",
+        "question": "Thực đơn giảm mỡ với Whey Protein như thế nào?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-193",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-194",
+        "question": "Thực đơn giảm mỡ với Trứng như thế nào?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-195",
+        "question": "Bị đau khớp khi tập Bench Press phải làm sao?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-196",
+        "question": "Làm sao để tăng cơ Cơ Vai (Shoulder) nhanh nhất?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-197",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-198",
+        "question": "Thực đơn giảm mỡ với Ức gà như thế nào?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-199",
+        "question": "Nên tập Macro bao nhiêu lần 1 tuần?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-200",
+        "question": "Thực đơn giảm mỡ với Bông cải xanh như thế nào?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-201",
+        "question": "Thực đơn giảm mỡ với Bông cải xanh như thế nào?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-202",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-203",
+        "question": "Bị đau khớp khi tập Pull Up phải làm sao?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-204",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-205",
+        "question": "Làm sao để tăng cơ Cơ Vai (Shoulder) nhanh nhất?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-206",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-207",
+        "question": "Tập Squat có bị đau lưng không?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Thực Phẩm Bổ Sung"
+    }
+]

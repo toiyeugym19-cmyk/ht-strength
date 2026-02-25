@@ -1,0 +1,123 @@
+{
+    "name": "GYM_WORKOUT_01",
+    "nodes": [
+        {
+            "parameters": {
+                "path": "workout-log",
+                "httpMethod": "POST",
+                "responseMode": "lastNode",
+                "options": {}
+            },
+            "name": "Webhook",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                250,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "const items = $input.all();\nconst volume = items[0].json.exercises.reduce((acc, ex) => acc + (ex.weight * ex.reps * ex.sets), 0);\nreturn { json: { volume } };"
+            },
+            "name": "CalcVolume",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                450,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "SELECT max_volume FROM stats WHERE user_id = $1"
+            },
+            "name": "CheckPR",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 1,
+            "position": [
+                650,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "number": [
+                        {
+                            "value1": "={{$json.volume}}",
+                            "operation": "larger",
+                            "value2": "={{$node[\"CheckPR\"].json.max_volume}}"
+                        }
+                    ]
+                }
+            },
+            "name": "IF_PR",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 1,
+            "position": [
+                850,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "message": "NEW PR ALERT! You lifted {{json.volume}}kg today! 🏆"
+            },
+            "name": "TelegramNotify",
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1,
+            "position": [
+                1050,
+                200
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "CalcVolume",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "CalcVolume": {
+            "main": [
+                [
+                    {
+                        "node": "CheckPR",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "CheckPR": {
+            "main": [
+                [
+                    {
+                        "node": "IF_PR",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "IF_PR": {
+            "main": [
+                [
+                    {
+                        "node": "TelegramNotify",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

@@ -1,0 +1,285 @@
+@import 'framework7/css/bundle';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap&subset=vietnamese,latin');
+@import './styles/mobile.css';
+@import './styles/tablet.css';
+@import './styles/ios.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  /* 🎨 Athletic Energy Dark Theme (UI/UX Pro Max) */
+  --bg-app: #0A0E27;
+  /* Deep Navy - Main bg */
+  --bg-sidebar: rgba(26, 31, 58, 0.6);
+  /* Dark Slate transparent */
+  --bg-card: rgba(26, 31, 58, 0.6);
+  /* Dark Slate cards */
+  --border-color: rgba(255, 255, 255, 0.08);
+  --text-main: #FFFFFF;
+  /* Pure White */
+  --text-muted: #8B92B2;
+  /* Muted Blue-Gray */
+
+  /* Primary: Energetic Orange */
+  --primary: #FF6B35;
+  --primary-rgb: 255, 107, 53;
+  --primary-hover: #FF8555;
+
+  /* Secondary: Electric Cyan */
+  --accent: #00D9FF;
+  --accent-rgb: 0, 217, 255;
+
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --card-radius: 1.5rem;
+}
+
+[data-theme='light'] {
+  /* Clean Business SaaS (Backup - App prioritizes dark mode) */
+  --bg-app: #f1f5f9;
+  /* Slate 100 */
+  --bg-sidebar: #ffffff;
+  --bg-card: #ffffff;
+  --border-color: #e2e8f0;
+  /* Slate 200 */
+  --text-main: #1e293b;
+  /* Slate 800 */
+  --text-muted: #64748b;
+  /* Slate 500 */
+  --primary: #FF6B35;
+  /* Keep Athletic Orange even in light */
+  --primary-rgb: 255, 107, 53;
+  --accent: #00D9FF;
+  /* Electric Cyan */
+  --accent-rgb: 0, 217, 255;
+  --shadow-color: rgba(148, 163, 184, 0.1);
+  --card-radius: 1rem;
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--bg-app)] text-[var(--text-main)] antialiased transition-colors duration-500 font-sans overflow-hidden h-screen;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+
+  /* Universal Card Style - Adapts to Theme */
+  .glass-panel {
+    @apply bg-[var(--bg-card)] border border-[var(--border-color)] transition-all duration-300 relative overflow-hidden;
+    border-radius: var(--card-radius);
+    box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color);
+  }
+
+  [data-theme='dark'] .glass-panel {
+    @apply bg-white/[0.02] backdrop-blur-[20px] border-white/10;
+  }
+
+  .glass-panel:hover {
+    @apply translate-y-[-2px];
+    box-shadow: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -2px var(--shadow-color);
+    border-color: rgba(var(--primary-rgb), 0.3);
+  }
+
+  /* Buttons */
+  .btn {
+    @apply px-6 py-3 font-bold uppercase tracking-wider transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 text-[11px] rounded-xl;
+  }
+
+  .btn-primary {
+    @apply bg-[var(--primary)] text-white hover:-translate-y-0.5 border border-transparent;
+    box-shadow: 0 10px 20px -5px rgba(var(--primary-rgb), 0.4);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 15px 30px -5px rgba(var(--primary-rgb), 0.6);
+  }
+
+  .btn-secondary {
+    @apply bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-muted)] hover:text-[var(--text-main)] hover:border-[var(--primary)];
+  }
+
+  /* Clean Inputs */
+  .input-clean {
+    @apply w-full bg-[var(--bg-app)] border border-[var(--border-color)] rounded-xl px-4 py-3 text-sm text-[var(--text-main)] outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] transition-all placeholder-[var(--text-muted)] placeholder-opacity-50;
+  }
+
+  /* Calendar Overrides for Light Mode */
+  [data-theme='light'] .rbc-calendar {
+    @apply text-slate-600;
+  }
+
+  [data-theme='light'] .rbc-off-range-bg {
+    @apply bg-slate-100 !important;
+  }
+
+  [data-theme='light'] .rbc-today {
+    @apply bg-blue-50 !important;
+  }
+
+  [data-theme='light'] .rbc-toolbar button {
+    @apply text-slate-600 border-slate-200 hover:bg-slate-50 !important;
+  }
+
+  [data-theme='light'] .rbc-toolbar button.rbc-active {
+    @apply bg-blue-500 text-white border-blue-500 !important;
+  }
+
+  [data-theme='light'] .rbc-event {
+    @apply shadow-sm !important;
+  }
+
+  /* Dark specific extras */
+  .text-glow {
+    text-shadow: 0 0 20px rgba(var(--primary-rgb), 0.5);
+  }
+}
+
+/* Animations */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+/* --- iOS Premium UI --- */
+.ios-glass {
+  @apply backdrop-blur-[24px] bg-opacity-[0.82];
+  background-color: var(--ios-bg-glass);
+}
+
+.ios-tab-bar {
+  @apply fixed bottom-0 left-0 right-0 h-20 border-t flex items-center justify-around px-2 z-[100] backdrop-blur-3xl;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background-color: var(--ios-tab-bar-bg);
+  border-color: var(--ios-border);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+}
+
+
+.ios-card {
+  @apply p-5 rounded-[28px] border transition-all active:scale-[0.96] duration-200;
+  background-color: var(--ios-card-bg);
+  border-color: var(--ios-border);
+  box-shadow: 0 12px 40px -8px var(--shadow-color);
+}
+
+.ios-header {
+  @apply h-[110px] flex flex-col justify-end px-6 pb-4 sticky top-0 z-[60] backdrop-blur-2xl border-b;
+  background-color: var(--ios-header-bg);
+  border-color: var(--ios-border);
+}
+
+.ios-title {
+  @apply text-3xl font-black tracking-tight leading-tight;
+}
+
+.ios-search-bar {
+  @apply mx-6 mt-4 mb-2 bg-[#1c1c1e] rounded-xl flex items-center px-3 py-2.5 gap-2 border border-white/5;
+}
+
+.ios-list-item {
+  @apply flex items-center gap-4 px-5 py-4 active:bg-white/5 transition-colors border-b border-white/5 last:border-0;
+}
+
+.ios-btn-primary {
+  @apply bg-primary text-white font-black py-4 rounded-2xl text-center active:scale-95 transition-all shadow-lg shadow-primary/20;
+}
+
+.ios-tag {
+  @apply px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter;
+}
+
+:root {
+  --ios-bg-glass: rgba(15, 15, 20, 0.85);
+  --ios-tab-bar-bg: rgba(10, 10, 15, 0.9);
+  --ios-header-bg: rgba(3, 0, 20, 0.8);
+  --ios-card-bg: rgba(255, 255, 255, 0.05);
+  --ios-border: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme='light'] {
+  --ios-bg-glass: rgba(255, 255, 255, 0.85);
+  --ios-tab-bar-bg: rgba(255, 255, 255, 0.95);
+  --ios-header-bg: rgba(241, 245, 249, 0.9);
+  --ios-card-bg: #ffffff;
+  --ios-border: rgba(0, 0, 0, 0.05);
+}
+
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+::selection {
+  background: var(--primary);
+  color: white;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+  /* Prevent pull-to-refresh */
+  touch-action: manipulation;
+  height: 100%;
+}
+
+body {
+  cursor: default;
+  overflow-x: hidden;
+  height: 100%;
+  overscroll-behavior: none;
+}

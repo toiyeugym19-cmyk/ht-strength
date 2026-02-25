@@ -1,0 +1,44 @@
+{
+    "name": "CORE_03_Plate_Math_Solver",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "plate-math",
+                "options": {}
+            },
+            "name": "Webhook Input",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                100,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "const target = items[0].json.body.weight;\nconst bar = 20;\nlet remaining = (target - bar) / 2;\nconst plates = [25, 20, 15, 10, 5, 2.5, 1.25];\nconst result = [];\n\nfor (let p of plates) {\n  while (remaining >= p) {\n    result.push(p);\n    remaining -= p;\n  }\n}\n\nreturn [{ json: { weight: target, perSide: result } }];"
+            },
+            "name": "Greedy Algorithm",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                300,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook Input": {
+            "main": [
+                [
+                    {
+                        "node": "Greedy Algorithm",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

@@ -1,0 +1,44 @@
+{
+    "name": "CORE_02_Warmup_Generator",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "warmup-calc",
+                "options": {}
+            },
+            "name": "Webhook Input",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                100,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "const targetWeight = items[0].json.body.targetWeight;\nconst exerciseType = items[0].json.body.exerciseType || 'COMPOUND';\n\nconst sets = [];\n\nif (targetWeight < 20) {\n  sets.push({ weight: 'Bodyweight', reps: 10, note: 'Dynamic Stretch' });\n} else {\n  // Empty Bar\n  sets.push({ weight: 20, reps: 10, note: 'Focus on technique' });\n  \n  if (targetWeight > 40) {\n    sets.push({ weight: Math.round(targetWeight * 0.4 / 2.5) * 2.5, reps: 5, note: 'Slow Tempo' });\n  }\n  if (targetWeight > 60) {\n    sets.push({ weight: Math.round(targetWeight * 0.6 / 2.5) * 2.5, reps: 3, note: 'Explosive' });\n  }\n  if (targetWeight > 80) {\n    sets.push({ weight: Math.round(targetWeight * 0.8 / 2.5) * 2.5, reps: 1, note: 'Primer Rep' });\n  }\n}\n\nreturn [{ json: { targetWeight, warmups: sets } }];"
+            },
+            "name": "Warmup Algorithm",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                300,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook Input": {
+            "main": [
+                [
+                    {
+                        "node": "Warmup Algorithm",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

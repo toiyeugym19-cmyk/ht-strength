@@ -1,0 +1,71 @@
+{
+    "name": "POST_03_Plateau_Breaker",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "plateau-check",
+                "options": {}
+            },
+            "name": "Webhook Input",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                100,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "SELECT * FROM workout_logs WHERE user_id = $1 AND exercise_id = $2 ORDER BY created_at DESC LIMIT 5;",
+                "additionalFields": {
+                    "queryParams": "={{$json.body.userId}},={{$json.body.exerciseId}}"
+                }
+            },
+            "name": "Fetch Last 5 Sessions",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 1,
+            "position": [
+                300,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "const sessions = items.map(i => i.json);\nlet isStuck = true;\n\n// Check if weight increased in last 3 sessions\nfor (let i = 0; i < Math.min(sessions.length, 3) - 1; i++) {\n  if (sessions[i].e1rm > sessions[i+1].e1rm) {\n    isStuck = false;\n    break;\n  }\n}\n\nlet strategy = 'NONE';\nif (isStuck && sessions.length >= 3) {\n  const r = Math.random();\n  if (r < 0.33) strategy = 'DROP_REPS_INC_WEIGHT';\n  else if (r < 0.66) strategy = 'ADD_PAUSE_TEMPO';\n  else strategy = 'CLUSTER_SETS';\n}\n\nreturn [{ json: { isStuck, strategy, sessionsAnalyzed: sessions.length } }];"
+            },
+            "name": "Plateau Algorithm",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                500,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook Input": {
+            "main": [
+                [
+                    {
+                        "node": "Fetch Last 5 Sessions",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Fetch Last 5 Sessions": {
+            "main": [
+                [
+                    {
+                        "node": "Plateau Algorithm",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

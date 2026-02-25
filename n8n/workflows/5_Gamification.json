@@ -1,0 +1,129 @@
+{
+    "name": "GYM_GAME_01",
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "hours",
+                            "hoursInterval": 24
+                        }
+                    ]
+                }
+            },
+            "name": "DailyCheck",
+            "type": "n8n-nodes-base.schedule",
+            "typeVersion": 1,
+            "position": [
+                250,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "SELECT user_id, streak_days FROM users"
+            },
+            "name": "GetStreaks",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 1,
+            "position": [
+                450,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "number": [
+                        {
+                            "value1": "={{$json.streak_days}}",
+                            "operation": "equal",
+                            "value2": 7
+                        }
+                    ]
+                }
+            },
+            "name": "CheckMilestone",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 1,
+            "position": [
+                650,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "UPDATE users SET badges = array_append(badges, 'week_warrior') WHERE user_id = $1"
+            },
+            "name": "AwardBadge",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 1,
+            "position": [
+                850,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "message": "🔥 7 DAY STREAK! You've earned the 'Week Warrior' badge!"
+            },
+            "name": "NotifyBadge",
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1,
+            "position": [
+                1050,
+                200
+            ]
+        }
+    ],
+    "connections": {
+        "DailyCheck": {
+            "main": [
+                [
+                    {
+                        "node": "GetStreaks",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "GetStreaks": {
+            "main": [
+                [
+                    {
+                        "node": "CheckMilestone",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "CheckMilestone": {
+            "main": [
+                [
+                    {
+                        "node": "AwardBadge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                []
+            ]
+        },
+        "AwardBadge": {
+            "main": [
+                [
+                    {
+                        "node": "NotifyBadge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

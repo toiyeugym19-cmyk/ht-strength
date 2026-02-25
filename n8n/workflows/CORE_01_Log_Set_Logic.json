@@ -1,0 +1,155 @@
+{
+    "name": "CORE_01_Log_Set_Logic",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "log-set",
+                "options": {}
+            },
+            "name": "Webhook Receiver",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                100,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "number": [
+                        {
+                            "value1": "={{$json.body.weight}}",
+                            "operation": "larger",
+                            "value2": 0
+                        },
+                        {
+                            "value1": "={{$json.body.reps}}",
+                            "operation": "larger",
+                            "value2": 0
+                        }
+                    ]
+                }
+            },
+            "name": "Validate Input",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 1,
+            "position": [
+                300,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "SELECT * FROM workout_logs WHERE user_id = $1 AND exercise_id = $2 ORDER BY created_at DESC LIMIT 1;",
+                "additionalFields": {
+                    "queryParams": "={{$json.body.userId}},={{$json.body.exerciseId}}"
+                }
+            },
+            "name": "Fetch Last Session",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 1,
+            "position": [
+                500,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// 🧠 THE QUANTUM LOGIC CORE\nconst current = items[0].json.body;\nconst history = items[0].json.history || {};\n\n// 1. Calculate E1RM (Epley Formula)\nconst e1rm = current.weight * (1 + current.reps / 30);\nconst old_e1rm = history.weight ? history.weight * (1 + history.reps / 30) : 0;\n\n// 2. Performance Analysis\nlet status = 'MAINTENANCE';\nlet confetti = false;\nlet advice = 'Giữ vững phong độ!';\n\nconst delta = e1rm - old_e1rm;\n\nif (delta > 0) {\n  status = 'PROGRESS';\n  confetti = true;\n  advice = `Tuyệt vời! Bạn mạnh hơn phiên trước ${delta.toFixed(1)}kg (e1RM).`;\n} else if (delta < -2.5) {\n  status = 'REGRESS';\n  advice = 'Hôm nay hơi đuối? Hãy nghỉ thêm 30s nhé.';\n}\n\n// 3. RPE Auto-Regulation (Next Set Logic)\nconst targetRPE = 8;\nlet nextWeight = current.weight;\n\nif (current.rpe < targetRPE - 1) {\n  // Too Easy (RPE 6 vs 8) -> Increase Load\n  nextWeight += 2.5;\n  advice += ` Set sau lắp thêm 2.5kg nhé!`;\n} else if (current.rpe > targetRPE + 1) {\n  // Too Hard (RPE 9.5 vs 8) -> Back-off\n  nextWeight -= 2.5;\n  advice += ` Set sau giảm nhẹ 2.5kg để giữ form.`;\n}\n\n// 4. Output Payload\nreturn [{\n  json: {\n    computed: {\n      e1rm,\n      delta,\n      status,\n      nextWeight\n    },\n    ui: {\n      confetti,\n      toastMessage: advice\n    },\n    db_write: {\n      ...current,\n      e1rm,\n      script_version: 'v1.0.evox'\n    }\n  }\n}];"
+            },
+            "name": "AI Calc Engine",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                700,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "table": "workout_logs",
+                "columns": "user_id, exercise_id, weight, reps, rpe, e1rm, created_at",
+                "additionalFields": {}
+            },
+            "name": "Save to DB",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 1,
+            "position": [
+                900,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "name": "Respond to App",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1,
+            "position": [
+                1100,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook Receiver": {
+            "main": [
+                [
+                    {
+                        "node": "Validate Input",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Validate Input": {
+            "main": [
+                [
+                    {
+                        "node": "Fetch Last Session",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Fetch Last Session": {
+            "main": [
+                [
+                    {
+                        "node": "AI Calc Engine",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Calc Engine": {
+            "main": [
+                [
+                    {
+                        "node": "Save to DB",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save to DB": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to App",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

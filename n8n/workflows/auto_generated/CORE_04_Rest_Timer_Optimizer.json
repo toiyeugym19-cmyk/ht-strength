@@ -1,0 +1,44 @@
+{
+    "name": "CORE_04_Rest_Timer_Optimizer",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "rest-timer",
+                "options": {}
+            },
+            "name": "Webhook Input",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                100,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "const { exerciseType, rpe, setNumber } = items[0].json.body;\nlet seconds = 90;\n\nif (exerciseType === 'COMPOUND' || exerciseType === 'SQUAT' || exerciseType === 'DEADLIFT') {\n  seconds = 180;\n  if (rpe > 9) seconds += 60; // Extra rest for heavy sets\n}\n\nif (exerciseType === 'ISOLATION') {\n  seconds = 60;\n  if (setNumber === 1) seconds = 45;\n}\n\nreturn [{ json: { recommendedRest: seconds, type: exerciseType } }];"
+            },
+            "name": "Timer Logic",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                300,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook Input": {
+            "main": [
+                [
+                    {
+                        "node": "Timer Logic",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

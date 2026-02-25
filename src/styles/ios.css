@@ -1,0 +1,841 @@
+/* ============================================================
+   iOS MOBILE-FIRST DESIGN SYSTEM
+   Inspired by native iOS 18 Human Interface Guidelines
+   Vietnamese Typography Fix — Diacritics Safe
+   ============================================================ */
+
+/* ===== VIETNAMESE FONT GLOBAL FIX ===== 
+   Inter font has excellent Vietnamese diacritic support.
+   We must avoid italic + extreme weights + tight tracking
+   which cause dấu tiếng Việt to overlap/misalign.
+   ============================================= */
+
+/* Force Vietnamese-safe font everywhere */
+*,
+*::before,
+*::after {
+    font-family: 'Inter', -apple-system, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif !important;
+    /* Ensure diacritics have room */
+    font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+    text-rendering: optimizeLegibility;
+}
+
+/* CRITICAL: Remove italic from ALL Vietnamese text.
+   iOS native UI NEVER uses italic — it's a Western design pattern.
+   Italic breaks Vietnamese diacritics (dấu mũ, sắc, huyền, nặng, hỏi, ngã) */
+.ios-app-root * {
+    font-style: normal !important;
+}
+
+/* CRITICAL: Fix letter-spacing — tight tracking causes dấu to overlap */
+.ios-app-root [class*="tracking-tighter"],
+.ios-app-root [class*="tracking-tight"] {
+    letter-spacing: normal !important;
+}
+
+/* CRITICAL: Limit max font-weight to 800 (ExtraBold).
+   font-weight 900/1000 distorts Vietnamese diacritics in most fonts */
+.ios-app-root [class*="font-black"],
+.ios-app-root [class*="font-[900]"],
+.ios-app-root [class*="font-[1000]"] {
+    font-weight: 700 !important;
+}
+
+/* Ensure line-height accommodates Vietnamese diacritics above/below */
+.ios-app-root p,
+.ios-app-root span,
+.ios-app-root h1,
+.ios-app-root h2,
+.ios-app-root h3,
+.ios-app-root h4,
+.ios-app-root h5,
+.ios-app-root h6,
+.ios-app-root label {
+    line-height: 1.4;
+}
+
+/* ===== APP ROOT ===== */
+.ios-app-root {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    width: 100vw;
+    background: var(--ios-bg);
+    color: var(--ios-text);
+    font-family: 'Inter', -apple-system, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+    overflow: hidden;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== STATUS BAR SPACER ===== */
+.ios-status-bar-spacer {
+    height: env(safe-area-inset-top, 0px);
+    min-height: 0px;
+    background: var(--ios-nav-bg);
+    flex-shrink: 0;
+}
+
+/* ===== NAVIGATION BAR ===== */
+.ios-nav-bar {
+    flex-shrink: 0;
+    background: var(--ios-nav-bg);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 0.5px solid var(--ios-separator);
+    z-index: 60;
+    transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+    padding-bottom: 4px;
+}
+
+.ios-nav-bar__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px;
+    padding: 0 16px;
+}
+
+.ios-nav-bar__left {
+    display: flex;
+    align-items: center;
+    min-width: 80px;
+}
+
+.ios-nav-bar__center {
+    flex: 1;
+    text-align: center;
+    overflow: hidden;
+}
+
+.ios-nav-bar__right {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 80px;
+    justify-content: flex-end;
+}
+
+.ios-nav-back {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    color: var(--ios-tint);
+    font-size: 17px;
+    font-weight: 400;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ios-nav-back span {
+    font-size: 17px;
+    margin-left: -4px;
+}
+
+.ios-nav-bar__logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ios-nav-logo-img {
+    height: 28px;
+    width: auto;
+    border-radius: 6px;
+    object-fit: contain;
+}
+
+.ios-nav-small-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ios-text);
+    letter-spacing: -0.2px;
+}
+
+.ios-nav-action {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ios-tint);
+    background: none;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.2s;
+}
+
+.ios-nav-action:active {
+    background: var(--ios-fill-tertiary);
+}
+
+/* Large Title */
+.ios-nav-bar__large-title {
+    padding: 0 16px;
+    overflow: hidden;
+}
+
+.ios-large-title {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: 0.37px;
+    color: var(--ios-text);
+    line-height: 1.1;
+    margin: 0;
+    padding-bottom: 8px;
+}
+
+/* ===== CONTENT AREA ===== */
+.ios-content-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+}
+
+.ios-content-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.ios-content-inner {
+    padding: 0 0 120px 0;
+    min-height: 100%;
+}
+
+/* ===== TAB BAR — iOS 18 Native ===== */
+.ios-tabbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /* 49px is the exact Apple HIG tab bar height */
+    height: calc(49px + env(safe-area-inset-bottom, 20px));
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+    z-index: 100;
+    /* iOS frosted glass — matches new bg system */
+    background: rgba(20, 20, 22, 0.85);
+    backdrop-filter: saturate(180%) blur(25px);
+    -webkit-backdrop-filter: saturate(180%) blur(25px);
+    border-top: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+
+.ios-tabbar__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    cursor: pointer;
+    /* Touch feedback */
+    transition: opacity 0.1s ease;
+}
+
+.ios-tabbar__item:active {
+    opacity: 0.6;
+}
+
+.ios-tabbar__icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(142, 142, 147, 0.85);
+    transition: color 0.2s ease;
+}
+
+.ios-tabbar__icon--active {
+    color: var(--ios-tint);
+}
+
+.ios-tabbar__label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.07px;
+    line-height: 1.1;
+    text-align: center;
+    white-space: nowrap;
+    color: rgba(142, 142, 147, 0.85);
+    transition: color 0.2s ease;
+    margin-top: 0;
+}
+
+.ios-tabbar__label--active {
+    color: var(--ios-tint);
+    font-weight: 600;
+}
+
+/* ===== BOTTOM SHEET — iOS 18 ===== */
+.ios-sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 200;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ios-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 85vh;
+    /* Sheet base — darker so grouped cards pop */
+    background: #1C1C1E;
+    border-radius: 14px 14px 0 0;
+    z-index: 201;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+}
+
+.ios-sheet::-webkit-scrollbar {
+    display: none;
+}
+
+/* Drag handle */
+.ios-sheet__handle-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0 4px;
+}
+
+.ios-sheet__handle {
+    width: 36px;
+    height: 5px;
+    border-radius: 100px;
+    background: rgba(118, 118, 128, 0.5);
+}
+
+/* Header with title + done button */
+.ios-sheet__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px 12px;
+}
+
+.ios-sheet__title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.ios-sheet__close-btn {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ios-tint);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 60px;
+    text-align: right;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ios-sheet__close-btn:active {
+    opacity: 0.5;
+}
+
+/* ===== Grouped inset list ===== */
+.ios-sheet__list {
+    margin: 4px 16px 12px;
+    background: #2C2C2E;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.ios-sheet__row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: #fff;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    transition: background 0.1s ease;
+}
+
+/* Separator — inset from left (after icon) */
+.ios-sheet__row+.ios-sheet__row::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 60px;
+    right: 0;
+    height: 0.5px;
+    background: rgba(84, 84, 88, 0.5);
+}
+
+.ios-sheet__row:active {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.ios-sheet__row--active .ios-sheet__row-label {
+    color: var(--ios-tint);
+    font-weight: 600;
+}
+
+/* Colored icon slot — larger, crisper */
+.ios-sheet__row-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ios-sheet__row-label {
+    flex: 1;
+    font-size: 17px;
+    font-weight: 400;
+    color: #fff;
+}
+
+.ios-sheet__row-chevron {
+    color: rgba(142, 142, 147, 0.6);
+    flex-shrink: 0;
+}
+
+/* ===== Profile card ===== */
+.ios-sheet__profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    margin: 0 16px 8px;
+    background: #2C2C2E;
+    border-radius: 12px;
+}
+
+.ios-sheet__avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ios-tint), #FF8B5C);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+}
+
+.ios-sheet__profile-info {
+    flex: 1;
+}
+
+.ios-sheet__profile-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.ios-sheet__profile-status {
+    font-size: 13px;
+    color: #AEAEB2;
+    margin: 2px 0 0;
+}
+
+/* ===== iOS CARDS — Enhanced ===== */
+.ios-card {
+    background: var(--ios-card-bg);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 0 16px;
+}
+
+.ios-card--grouped {
+    margin: 0;
+    border-radius: 0;
+    border-bottom: 0.33px solid rgba(84, 84, 88, 0.35);
+}
+
+.ios-card--grouped:first-child {
+    border-radius: 12px 12px 0 0;
+}
+
+.ios-card--grouped:last-child {
+    border-radius: 0 0 12px 12px;
+    border-bottom: none;
+}
+
+.ios-grouped-section {
+    margin: 16px 16px 24px;
+}
+
+.ios-section-header {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--ios-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: -0.08px;
+    padding: 0 16px 8px;
+}
+
+/* ===== iOS LIST ===== */
+.ios-list {
+    background: var(--ios-card-bg);
+    border-radius: 12px;
+    margin: 0 16px;
+    overflow: hidden;
+}
+
+.ios-list-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 0.33px solid rgba(84, 84, 88, 0.35);
+    transition: background 0.15s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ios-list-item:last-child {
+    border-bottom: none;
+}
+
+.ios-list-item:active {
+    background: var(--ios-fill-tertiary);
+}
+
+/* ===== iOS BUTTONS — Premium ===== */
+.ios-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 14px 20px;
+    font-size: 17px;
+    font-weight: 600;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity 0.2s, transform 0.15s;
+    letter-spacing: -0.2px;
+}
+
+.ios-btn:active {
+    opacity: 0.7;
+    transform: scale(0.97);
+}
+
+.ios-btn--filled {
+    background: var(--ios-tint);
+    color: white;
+}
+
+.ios-btn--gray {
+    background: rgba(118, 118, 128, 0.24);
+    color: var(--ios-text);
+}
+
+.ios-btn--plain {
+    background: transparent;
+    color: var(--ios-tint);
+    padding: 8px 12px;
+}
+
+.ios-btn--small {
+    font-size: 15px;
+    padding: 8px 16px;
+    border-radius: 10px;
+}
+
+.ios-btn--danger {
+    background: #FF3B30;
+    color: white;
+}
+
+/* Large prominent button (like App Store "Get") */
+.ios-btn--large {
+    font-size: 17px;
+    padding: 16px 24px;
+    border-radius: 14px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+/* ===== iOS SEARCH BAR ===== */
+.ios-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(118, 118, 128, 0.24);
+    border-radius: 10px;
+    padding: 8px 10px;
+    margin: 0 16px 8px;
+}
+
+.ios-search-bar input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 17px;
+    color: var(--ios-text);
+    font-weight: 400;
+}
+
+.ios-search-bar input::placeholder {
+    color: var(--ios-text-tertiary);
+}
+
+.ios-search-bar__icon {
+    color: var(--ios-text-tertiary);
+    flex-shrink: 0;
+}
+
+/* ===== iOS BADGES / CHIPS ===== */
+.ios-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    background: #FF3B30;
+    color: white;
+}
+
+.ios-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    background: rgba(118, 118, 128, 0.24);
+    color: var(--ios-text);
+    -webkit-tap-highlight-color: transparent;
+    transition: all 0.15s ease;
+}
+
+.ios-chip:active {
+    opacity: 0.7;
+}
+
+.ios-chip--active {
+    background: var(--ios-tint);
+    color: white;
+}
+
+/* ===== iOS SEGMENTED CONTROL ===== */
+.ios-segmented {
+    display: flex;
+    background: rgba(118, 118, 128, 0.12);
+    border-radius: 9px;
+    padding: 2px;
+    margin: 0 16px;
+    position: relative;
+}
+
+.ios-segmented__item {
+    flex: 1;
+    text-align: center;
+    padding: 7px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ios-text);
+    background: transparent;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    z-index: 1;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.2s;
+}
+
+.ios-segmented__item--active {
+    color: var(--ios-text);
+    font-weight: 600;
+    background: rgba(44, 44, 46, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 0.5px rgba(255, 255, 255, 0.04);
+}
+
+/* ===== DESIGN TOKENS ===== */
+:root {
+    /* iOS Dark Mode Colors — iOS 18 HIG (Improved Contrast) */
+    --ios-bg: #0D0D0F;
+    --ios-text: #F5F5F7;
+    --ios-text-secondary: #98989D;
+    --ios-text-tertiary: #636366;
+    --ios-tint: #FF6B35;
+    --ios-separator: rgba(84, 84, 88, 0.65);
+    --ios-separator-opaque: #38383A;
+    --ios-fill-tertiary: rgba(118, 118, 128, 0.24);
+    --ios-nav-bg: rgba(13, 13, 15, 0.88);
+    --ios-tabbar-bg: rgba(22, 22, 24, 0.78);
+    --ios-tabbar-inactive: #8E8E93;
+    --ios-card-bg: #1C1C1F;
+    --ios-sheet-bg: #1C1C1F;
+    --ios-grouped-bg: #2C2C2E;
+    --ios-systemRed: #FF453A;
+    --ios-systemGreen: #30D158;
+    --ios-systemBlue: #0A84FF;
+    --ios-systemOrange: #FF9F0A;
+    --ios-systemYellow: #FFD60A;
+    --ios-systemPurple: #BF5AF2;
+    --ios-systemPink: #FF375F;
+    --ios-systemCyan: #64D2FF;
+}
+
+/* ===== UTILITY CLASSES FOR iOS ===== */
+.ios-text-primary {
+    color: var(--ios-text);
+}
+
+.ios-text-secondary {
+    color: var(--ios-text-secondary);
+}
+
+.ios-text-tertiary {
+    color: var(--ios-text-tertiary);
+}
+
+.ios-text-tint {
+    color: var(--ios-tint);
+}
+
+.ios-px {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.ios-py {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.ios-mx {
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+.ios-rounded {
+    border-radius: 12px;
+}
+
+.ios-rounded-lg {
+    border-radius: 16px;
+}
+
+/* ===== ANIMATIONS FOR iOS FEEL ===== */
+@keyframes ios-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ios-animate-in {
+    animation: ios-fade-in 0.3s ease-out;
+}
+
+@keyframes ios-press {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(0.97);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.ios-press:active {
+    animation: ios-press 0.15s ease-out;
+}
+
+/* ===== SCROLLBAR HIDING ===== */
+.ios-content-scroll::-webkit-scrollbar,
+.ios-sheet::-webkit-scrollbar {
+    display: none;
+}
+
+.ios-content-scroll,
+.ios-sheet {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* ===== RESPONSIVE — iPad & Desktop ===== */
+
+/* --- iPad Portrait (768px – 1024px) --- */
+@media (min-width: 768px) and (max-width: 1199px) {
+    .ios-app-root {
+        /* Full-width on iPad — sidebar + content flex layout */
+        max-width: 100%;
+        margin: 0;
+    }
+
+    .ios-content-inner {
+        padding: 0 20px 40px;
+    }
+
+    .ios-nav-bar__top {
+        padding: 0 20px;
+    }
+
+    .ios-nav-bar__large-title {
+        padding: 0 20px;
+    }
+
+    .ios-large-title {
+        font-size: 34px;
+    }
+}
+
+/* --- Desktop (1200px+) — iPhone simulator frame --- */
+@media (min-width: 1200px) {
+    .ios-app-root {
+        max-width: 500px;
+        margin: 0 auto;
+        border-left: 0.33px solid rgba(84, 84, 88, 0.35);
+        border-right: 0.33px solid rgba(84, 84, 88, 0.35);
+    }
+
+    .ios-tabbar {
+        max-width: 500px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}

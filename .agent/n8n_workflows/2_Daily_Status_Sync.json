@@ -1,0 +1,145 @@
+{
+    "name": "Gym App - Daily Status & Health Sync",
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "cronExpression",
+                            "expression": "0 1 * * *"
+                        }
+                    ]
+                }
+            },
+            "name": "Schedule - Daily 1AM",
+            "type": "n8n-nodes-base.schedule",
+            "typeVersion": 1,
+            "position": [
+                250,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "SELECT id, expiry_date, status FROM members WHERE status = 'Active' AND expiry_date < CURDATE();"
+            },
+            "name": "Get Expired Members",
+            "type": "n8n-nodes-base.mySql",
+            "typeVersion": 1,
+            "position": [
+                450,
+                200
+            ],
+            "credentials": {
+                "mySql": {
+                    "id": "YOUR_MYSQL_CREDENTIAL_ID",
+                    "name": "Gym Database"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "=UPDATE members SET status = 'Expired' WHERE id = '{{ $json.id }}';"
+            },
+            "name": "Update Status to Expired",
+            "type": "n8n-nodes-base.mySql",
+            "typeVersion": 1,
+            "position": [
+                650,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "SELECT id, health_metrics FROM members WHERE status = 'Active';"
+            },
+            "name": "Get Active Members Health",
+            "type": "n8n-nodes-base.mySql",
+            "typeVersion": 1,
+            "position": [
+                450,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Calculate Progress Score & Risk Level\nconst metrics = JSON.parse($json.health_metrics || '[]');\nlet score = 0;\nlet risk = 'Low';\n\nif (metrics.length >= 2) {\n  const latest = metrics[metrics.length - 1];\n  const prev = metrics[metrics.length - 2];\n  \n  // Logic tính điểm đơn giản\n  if (latest.weight < prev.weight) score += 10; // Giảm cân là tốt (ví dụ)\n  if (latest.muscle > prev.muscle) score += 15; // Tăng cơ\n  \n  // Logic Risk\n  const lastCheckup = new Date(latest.date);\n  const daysSinceCheckup = (new Date() - lastCheckup) / (1000 * 60 * 60 * 24);\n  if (daysSinceCheckup > 30) risk = 'Medium';\n  if (daysSinceCheckup > 60) risk = 'High';\n}\n\nreturn {\n  id: $json.id,\n  progress_score: score,\n  risk_level: risk\n};"
+            },
+            "name": "Calculate Health Stats",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 1,
+            "position": [
+                650,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "=UPDATE members SET progress_score = {{ $json.progress_score }}, risk_level = '{{ $json.risk_level }}' WHERE id = '{{ $json.id }}';"
+            },
+            "name": "Update Health Stats",
+            "type": "n8n-nodes-base.mySql",
+            "typeVersion": 1,
+            "position": [
+                850,
+                400
+            ]
+        }
+    ],
+    "connections": {
+        "Schedule - Daily 1AM": {
+            "main": [
+                [
+                    {
+                        "node": "Get Expired Members",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Get Active Members Health",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Expired Members": {
+            "main": [
+                [
+                    {
+                        "node": "Update Status to Expired",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Active Members Health": {
+            "main": [
+                [
+                    {
+                        "node": "Calculate Health Stats",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Calculate Health Stats": {
+            "main": [
+                [
+                    {
+                        "node": "Update Health Stats",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

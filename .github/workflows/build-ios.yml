@@ -1,0 +1,58 @@
+name: Build iOS IPA for ESign
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    name: Build Unsigned IPA
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Build Web App
+        run: npm run build
+
+      - name: Sync iOS Project
+        run: npx cap sync ios
+
+      - name: Build Unsigned iOS Archive
+        run: |
+          cd ios/App
+          # Ignore signing to create an unsigned archive
+          xcodebuild -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            clean archive \
+            -archivePath build/App.xcarchive \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Export Payload to IPA
+        run: |
+          cd ios/App/build
+          mkdir -p Payload
+          # Move the compiled App binary into Payload folder
+          mv App.xcarchive/Products/Applications/App.app Payload/
+          # Zip the Payload into an .ipa file ready for ESign
+          zip -r HT-Strength-ESign.ipa Payload
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: HT-Strength-IPA
+          path: ios/App/build/HT-Strength-ESign.ipa
+          retention-days: 7

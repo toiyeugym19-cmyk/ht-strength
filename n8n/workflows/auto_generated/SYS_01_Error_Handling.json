@@ -1,0 +1,44 @@
+{
+    "name": "SYS_01_Error_Handling",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "error-log",
+                "options": {}
+            },
+            "name": "Webhook Input",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                100,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "const { errorCode, context, user } = items[0].json.body;\n\n// 1. Severity Classification\nlet severity = 'LOW';\nif (errorCode.startsWith('DB_')) severity = 'HIGH';\nif (errorCode === 'PAYMENT_FAIL') severity = 'CRITICAL';\n\n// 2. Alert Routing\nlet channel = 'dev-logs';\nif (severity === 'CRITICAL') channel = 'urgent-alerts';\n\nreturn [{ json: { severity, channel, alertMessage: `Error ${errorCode} for ${user}: ${context}` } }];"
+            },
+            "name": "Triage AI",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                300,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook Input": {
+            "main": [
+                [
+                    {
+                        "node": "Triage AI",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

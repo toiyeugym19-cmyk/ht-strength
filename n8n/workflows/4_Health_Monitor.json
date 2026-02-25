@@ -1,0 +1,96 @@
+{
+    "name": "GYM_SAFE_01",
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "hours",
+                            "hoursInterval": 6
+                        }
+                    ]
+                }
+            },
+            "name": "Schedule",
+            "type": "n8n-nodes-base.schedule",
+            "typeVersion": 1,
+            "position": [
+                250,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "SELECT * FROM health_metrics WHERE date = CURRENT_DATE"
+            },
+            "name": "GetMetrics",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 1,
+            "position": [
+                450,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const items = $input.all();\nreturn items.filter(item => item.json.hrv < 30 || item.json.rhr > 80);"
+            },
+            "name": "DetectAnomalies",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 1,
+            "position": [
+                650,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "message": "⚠️ HEALTH ALERT: Detecting high fatigue/stress. Recommended to lower intensity today."
+            },
+            "name": "AlertUser",
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1,
+            "position": [
+                850,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Schedule": {
+            "main": [
+                [
+                    {
+                        "node": "GetMetrics",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "GetMetrics": {
+            "main": [
+                [
+                    {
+                        "node": "DetectAnomalies",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "DetectAnomalies": {
+            "main": [
+                [
+                    {
+                        "node": "AlertUser",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}
