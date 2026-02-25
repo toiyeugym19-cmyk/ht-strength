@@ -60,7 +60,7 @@ export default function AnalyticsPage() {
                 <StatCard icon={<GitPullRequest size={16} />} value={`${completionRate}%`} label="Hoàn thành" color="#0A84FF" />
                 <StatCard icon={<Activity size={16} />} value={`${totalVolume.toLocaleString()}kg`} label="Tổng volume" color="#BF5AF2" />
                 <StatCard icon={<Flame size={16} />} value={`${avgCal}kcal`} label="Calo TB" color="#FF9F0A" />
-                <StatCard icon={<Zap size={16} />} value="99.9%" label="Uptime" color="#30D158" />
+                <StatCard icon={<Zap size={16} />} value="99.9%" label="Duy trì" color="#30D158" />
             </div>
 
             {/* ===== WORK EFFICIENCY CHART ===== */}
@@ -163,7 +163,7 @@ export default function AnalyticsPage() {
                             <div style={{ width: 10, height: 10, borderRadius: 3, background: 'rgba(48,209,88,0.45)' }} />
                             <div style={{ width: 10, height: 10, borderRadius: 3, background: 'rgba(48,209,88,0.7)' }} />
                         </div>
-                        <span style={{ fontSize: 11, color: '#636366' }}>Beast mode</span>
+                        <span style={{ fontSize: 11, color: '#636366' }}>Tích cực</span>
                     </div>
                 </IOSCard>
             </div>

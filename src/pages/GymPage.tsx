@@ -206,14 +206,14 @@ export default function GymPage() {
             {/* ===== LOG BUTTON ===== */}
             <div style={{ margin: '0 16px 14px' }}>
                 <button style={{
-                    width: '100%', padding: '15px',
-                    background: '#FF6B35', color: '#fff',
-                    borderRadius: 12, border: 'none',
-                    fontSize: 17, fontWeight: 600,
+                    width: '100%', padding: '12px',
+                    background: 'var(--ios-tint)', color: '#fff',
+                    borderRadius: 14, border: 'none',
+                    fontSize: 15, fontWeight: 600,
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                     cursor: 'pointer', WebkitTapHighlightColor: 'transparent'
                 }}>
-                    <Plus size={20} strokeWidth={2.5} /> Ghi bài tập mới
+                    <Plus size={18} strokeWidth={2.5} /> Ghi bài tập mới
                 </button>
             </div>
 

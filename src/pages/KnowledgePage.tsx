@@ -222,9 +222,9 @@ export default function KnowledgePage() {
                         <motion.h1
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className={`${isMobile ? 'text-4xl' : isTablet ? 'text-6xl' : 'text-7xl'} font-serif font-bold tracking-tight mb-2 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent italic uppercase`}
+                            className={`${isMobile ? 'text-3xl' : isTablet ? 'text-4xl' : 'text-5xl'} font-bold tracking-tight mb-2 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent`}
                         >
-                            The Library
+                            Thư Viện Kiến Thức
                         </motion.h1>
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
@@ -432,7 +432,7 @@ export default function KnowledgePage() {
                                                 <div className="lg:col-span-4">
                                                     <div className="bg-white/5 border border-white/5 rounded-[2.5rem] p-8 sticky top-24 shadow-2xl">
                                                         <div className="flex justify-between items-center mb-10">
-                                                            <h3 className="text-xs font-black uppercase tracking-[0.3em] text-zinc-500">Trending Now</h3>
+                                                            <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-500">Xem nhiều</h3>
                                                         </div>
 
                                                         <div className="relative space-y-8">
@@ -658,10 +658,10 @@ export default function KnowledgePage() {
                             onClick={() => {
                                 document.getElementById('scroll-top')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                             }}
-                            className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-2xl border border-white/20 text-white hover:bg-primary hover:border-primary transition-all duration-300 shadow-[0_0_30px_rgba(0,0,0,0.5)] flex items-center justify-center group pointer-events-auto cursor-pointer"
+                            className="w-11 h-11 rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 text-white hover:bg-primary hover:border-primary transition-all duration-300 shadow-lg flex items-center justify-center group pointer-events-auto cursor-pointer"
                             title="Cuộn lên đầu"
                         >
-                            <ArrowUp size={28} className="group-hover:-translate-y-1 transition-transform" />
+                            <ArrowUp size={20} className="group-hover:-translate-y-0.5 transition-transform" />
                         </motion.button>
                         <motion.button
                             whileHover={{ scale: 1.1 }}
@@ -669,10 +669,10 @@ export default function KnowledgePage() {
                             onClick={() => {
                                 document.getElementById('scroll-bottom')?.scrollIntoView({ behavior: 'smooth', block: 'end' });
                             }}
-                            className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-2xl border border-white/20 text-white hover:bg-primary hover:border-primary transition-all duration-300 shadow-[0_0_30px_rgba(0,0,0,0.5)] flex items-center justify-center group pointer-events-auto cursor-pointer"
+                            className="w-11 h-11 rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 text-white hover:bg-primary hover:border-primary transition-all duration-300 shadow-lg flex items-center justify-center group pointer-events-auto cursor-pointer"
                             title="Cuộn xuống cuối"
                         >
-                            <ArrowDown size={28} className="group-hover:translate-y-1 transition-transform" />
+                            <ArrowDown size={20} className="group-hover:translate-y-0.5 transition-transform" />
                         </motion.button>
                     </div>
                 )}

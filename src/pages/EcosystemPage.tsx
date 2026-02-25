@@ -114,10 +114,10 @@ export default function EcosystemPage() {
         return (
             <div className="flex flex-col min-h-full bg-bg-dark pb-32" data-device="mobile">
                 <div className="px-6 pt-10 mb-8">
-                    <h1 className="text-4xl font-[900] text-white italic uppercase tracking-tighter leading-none mb-3">
-                        HEALTH <span className="text-primary italic">HUB</span>
+                    <h1 className="text-3xl font-bold text-white leading-none mb-3">
+                        Hệ Sinh Thái <span className="text-primary">Sức Khỏe</span>
                     </h1>
-                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.3em] pl-1">PREMIUM ECOSYSTEM</p>
+                    <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest pl-1">Theo dõi & tối ưu hóa sức khỏe</p>
                 </div>
 
                 {/* Vertical Tabs for Mobile? No, horizontal is fine but more stylish */}
@@ -202,11 +202,11 @@ export default function EcosystemPage() {
         <div className={`min-h-screen pb-32 bg-bg-dark ${isTablet ? 'p-8' : 'p-12'}`} data-device={isTablet ? 'tablet' : 'desktop'}>
             {/* Header */}
             <div className="mb-12">
-                <h1 className={`${isTablet ? 'text-5xl' : 'text-7xl'} font-[900] text-white italic uppercase leading-none tracking-tighter mb-4`}>
-                    HEALTH <span className="text-primary">HUB</span>
+                <h1 className={`${isTablet ? 'text-4xl' : 'text-5xl'} font-bold text-white leading-none mb-4`}>
+                    Hệ Sinh Thái <span className="text-primary">Sức Khỏe</span>
                 </h1>
-                <p className="text-zinc-500 text-sm md:text-xl font-bold uppercase tracking-[0.2em]">
-                    Hế thống theo dõi & tối ưu hóa sức khỏe đa tầng
+                <p className="text-zinc-500 text-sm md:text-base font-medium">
+                    Theo dõi & tối ưu hóa sức khỏe đa tầng
                 </p>
             </div>
 
@@ -461,11 +461,11 @@ function MentalHealthContent() {
             <div className="grid grid-cols-2 gap-4">
                 <div onClick={() => toast.success('Đang phát: Focus Flow')} className="p-4 bg-neutral-800/50 border border-white/5 rounded-2xl cursor-pointer hover:bg-neutral-800">
                     <Brain className="text-blue-500 mb-2" size={24} />
-                    <h4 className="text-white font-bold text-sm">Focus Music</h4>
+                    <h4 className="text-white font-bold text-sm">Nhạc tập trung</h4>
                 </div>
                 <div onClick={() => toast.success('Đang phát: Hype Music')} className="p-4 bg-neutral-800/50 border border-white/5 rounded-2xl cursor-pointer hover:bg-neutral-800">
                     <Zap className="text-red-500 mb-2" size={24} />
-                    <h4 className="text-white font-bold text-sm">Energy Music</h4>
+                    <h4 className="text-white font-bold text-sm">Nhạc năng lượng</h4>
                 </div>
             </div>
         </div>
@@ -477,11 +477,11 @@ function TechniqueContent() {
         <div className="space-y-3">
             <div className="p-3 bg-neutral-900 border border-white/5 rounded-xl flex items-center gap-3 cursor-pointer hover:bg-neutral-800" onClick={() => toast.info('Mở video: Squat Tutorial')}>
                 <Play size={20} className="text-amber-500" />
-                <span className="text-white font-bold text-sm">Squat Guide</span>
+                <span className="text-white font-bold text-sm">Hướng dẫn Squat</span>
             </div>
             <div className="p-3 bg-neutral-900 border border-white/5 rounded-xl flex items-center gap-3 cursor-pointer hover:bg-neutral-800" onClick={() => toast.info('Mở video: Bench Press')}>
                 <Play size={20} className="text-amber-500" />
-                <span className="text-white font-bold text-sm">Bench Press Guide</span>
+                <span className="text-white font-bold text-sm">Hướng dẫn Bench Press</span>
             </div>
         </div>
     );
@@ -491,8 +491,8 @@ function NutritionTipsContent() {
     return (
         <div className="space-y-4">
             <div className="p-4 bg-green-900/10 border border-green-500/20 rounded-2xl">
-                <h4 className="font-bold text-green-400 mb-2 flex items-center gap-2"><AlertCircle size={16} /> 80/20 Rule</h4>
-                <p className="text-sm text-green-100/80">80% Whole Foods, 20% Fun Foods for sustainability.</p>
+                <h4 className="font-bold text-green-400 mb-2 flex items-center gap-2"><AlertCircle size={16} /> Quy tắc 80/20</h4>
+                <p className="text-sm text-green-100/80">80% thực phẩm lành mạnh, 20% thực phẩm tự thưởng để duy trì lâu dài.</p>
             </div>
         </div>
     );
@@ -501,8 +501,8 @@ function NutritionTipsContent() {
 function InjuryPreventionContent() {
     return (
         <div className="p-4 bg-red-900/10 border border-red-500/20 rounded-2xl">
-            <h4 className="font-bold text-red-400 mb-2">R.I.C.E Method</h4>
-            <p className="text-sm text-red-100/80">Rest - Ice - Compression - Elevation</p>
+            <h4 className="font-bold text-red-400 mb-2">Phương pháp R.I.C.E</h4>
+            <p className="text-sm text-red-100/80">Nghỉ ngơi - Chườm lạnh - Băng ép - Nâng cao</p>
         </div>
     );
 }

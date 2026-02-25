@@ -61,8 +61,8 @@ export default function JournalPage() {
                         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="px-6 pt-6 flex flex-col h-full">
                             <div className="flex justify-between items-end mb-8">
                                 <div>
-                                    <h1 className="text-4xl font-[900] text-white italic uppercase tracking-tighter leading-none mb-2">JOURNAL</h1>
-                                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.3em]">COMMIT HISTORY</p>
+                                    <h1 className="text-3xl font-bold text-white leading-none mb-2">Nhật Ký</h1>
+                                    <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Lịch sử ghi chép</p>
                                 </div>
                                 <button onClick={() => { setViewEntry(null); setMobileView('editor'); }} className="w-14 h-14 bg-primary rounded-[1.5rem] flex items-center justify-center text-white shadow-2xl shadow-primary/30 active:scale-90 transition-all">
                                     <Plus size={28} strokeWidth={3} />
@@ -94,7 +94,7 @@ export default function JournalPage() {
                                     </div>
                                 ))}
                                 {entries.length === 0 && (
-                                    <div className="text-center py-20 opacity-20"><BookOpen size={64} className="mx-auto mb-4" /><p className="font-black uppercase tracking-widest text-xs">No records found</p></div>
+                                    <div className="text-center py-20 opacity-20"><BookOpen size={64} className="mx-auto mb-4" /><p className="font-bold uppercase tracking-widest text-xs">Chưa có ghi chép nào</p></div>
                                 )}
                             </div>
                         </motion.div>
@@ -103,7 +103,7 @@ export default function JournalPage() {
                     {mobileView === 'editor' && (
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="flex flex-col h-full bg-[#0c0c0e] rounded-t-[3rem] mt-4 flex-1">
                             <div className="px-8 pt-8 pb-4 flex justify-between items-center border-b border-white/5">
-                                <button onClick={() => setMobileView('list')} className="text-[10px] font-black uppercase tracking-widest text-zinc-500">CANCEL</button>
+                                <button onClick={() => setMobileView('list')} className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Huỷ</button>
                                 <div className="flex gap-2">
                                     {(Object.keys(moodMap) as Array<keyof typeof moodMap>).map(m => (
                                         <button key={m} onClick={() => setSelectedMood(m)} className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all ${selectedMood === m ? moodMap[m].bg + ' scale-110' : 'opacity-30'}`}>
@@ -116,7 +116,7 @@ export default function JournalPage() {
                                 <EditorContent editor={editor} className="min-h-[300px]" />
                             </div>
                             <div className="p-8">
-                                <button onClick={handleSave} className="w-full py-5 bg-primary text-white font-[900] rounded-[2rem] shadow-2xl shadow-primary/40 italic uppercase tracking-[0.2em]">COMMIT ENTRY</button>
+                                <button onClick={handleSave} className="w-full py-5 bg-primary text-white font-bold rounded-2xl shadow-2xl shadow-primary/40 uppercase tracking-widest">Lưu bài viết</button>
                             </div>
                         </motion.div>
                     )}
@@ -131,7 +131,7 @@ export default function JournalPage() {
                                 </div>
                             </div>
                             <div className="mb-8">
-                                <h1 className="text-3xl font-[900] text-white italic uppercase leading-tight tracking-tighter mb-2">ENTRY DETAIL</h1>
+                                <h1 className="text-2xl font-bold text-white leading-tight mb-2">Chi tiết bài viết</h1>
                                 <p className="text-[10px] font-black text-primary uppercase tracking-[0.3em]">{format(new Date(viewEntry.date), 'PPPP', { locale: vi })}</p>
                             </div>
                             <div className="flex-1 bg-zinc-900/20 border border-white/5 rounded-[2.5rem] p-8 overflow-y-auto no-scrollbar prose prose-invert max-w-none mb-10" dangerouslySetInnerHTML={{ __html: viewEntry.content }} />
@@ -148,10 +148,10 @@ export default function JournalPage() {
             <div className={`${isTablet ? 'lg:col-span-5' : 'lg:col-span-4'} flex flex-col gap-6 h-full overflow-hidden`}>
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-4xl font-[900] text-white italic uppercase tracking-tighter">
-                            JOURNAL
+                        <h1 className="text-3xl font-bold text-white">
+                            Nhật Ký
                         </h1>
-                        <p className="text-zinc-500 text-[10px] font-black uppercase tracking-[0.3em] mt-1 pl-1">Lịch sử hoạt động / MASTER</p>
+                        <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mt-1 pl-1">Lịch sử ghi chép</p>
                     </div>
                     <button
                         onClick={() => setViewEntry(null)}
@@ -197,7 +197,7 @@ export default function JournalPage() {
                     {entries.length === 0 && (
                         <div className="text-center py-24 opacity-10 border-4 border-dashed border-white/5 rounded-[3rem]">
                             <PenTool size={64} className="mx-auto mb-6" />
-                            <p className="text-xs font-black uppercase tracking-[0.5em]">System Idle</p>
+                            <p className="text-xs font-bold uppercase tracking-widest">Chưa có ghi chép</p>
                         </div>
                     )}
                 </div>
@@ -218,13 +218,13 @@ export default function JournalPage() {
                                         {React.cloneElement(moodMap[viewEntry.mood || 'neutral'].icon, { size: 36, className: moodMap[viewEntry.mood || 'neutral'].color })}
                                     </div>
                                     <div>
-                                        <h2 className="text-4xl font-[900] text-white italic tracking-tighter leading-none mb-3">ENTRY READOUT</h2>
+                                        <h2 className="text-3xl font-bold text-white leading-none mb-3">Chi tiết bài viết</h2>
                                         <p className="text-sm font-black text-zinc-500 uppercase tracking-[0.3em] flex items-center gap-2">
                                             <Calendar size={14} strokeWidth={3} /> {format(new Date(viewEntry.date), 'PPPP', { locale: vi })}
                                         </p>
                                     </div>
                                 </div>
-                                <button onClick={() => setViewEntry(null)} className="px-8 py-3 bg-zinc-900 border border-white/10 text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-zinc-800 active:scale-95 transition-all">TERMINATE VIEW</button>
+                                <button onClick={() => setViewEntry(null)} className="px-6 py-2.5 bg-zinc-900 border border-white/10 text-white text-[11px] font-semibold uppercase tracking-widest rounded-full hover:bg-zinc-800 active:scale-95 transition-all">Đóng</button>
                             </div>
                             <div className="prose prose-invert max-w-none text-xl leading-relaxed font-medium text-zinc-200 bg-zinc-900/20 p-10 rounded-[2.5rem] border border-white/5" dangerouslySetInnerHTML={{ __html: viewEntry.content }} />
                         </motion.div>
@@ -255,7 +255,7 @@ export default function JournalPage() {
                                         onClick={() => setShowTemplates(!showTemplates)}
                                         className={`h-12 px-6 rounded-[1.2rem] flex items-center gap-3 text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${showTemplates ? 'bg-primary text-white shadow-lg' : 'bg-black/40 text-zinc-500 hover:text-white'}`}
                                     >
-                                        <BookOpen size={18} strokeWidth={3} /> TEMPLATES
+                                        <BookOpen size={18} strokeWidth={3} /> Mẫu viết
                                     </button>
 
                                     <AnimatePresence>
@@ -300,7 +300,7 @@ export default function JournalPage() {
 
                                 <div className="flex-1" />
                                 <button onClick={handleSave} className="bg-primary px-10 py-4 rounded-[1.5rem] font-[900] italic text-white text-[11px] flex items-center gap-3 group shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all uppercase tracking-widest">
-                                    <Save size={20} strokeWidth={3} className="group-hover:rotate-12 transition-transform" /> COMMIT
+                                    <Save size={20} strokeWidth={3} className="group-hover:rotate-12 transition-transform" /> Lưu
                                 </button>
                             </div>
 

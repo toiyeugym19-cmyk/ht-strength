@@ -69,6 +69,20 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* ===== GLOBAL SCROLLBAR HIDING ===== */
+.ios-app-root,
+.ios-app-root *,
+.ios-content-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.ios-app-root::-webkit-scrollbar,
+.ios-app-root *::-webkit-scrollbar,
+.ios-content-scroll::-webkit-scrollbar {
+    display: none;
+}
+
 /* ===== STATUS BAR SPACER ===== */
 .ios-status-bar-spacer {
     height: env(safe-area-inset-top, 0px);
@@ -809,6 +823,8 @@
 
     .ios-content-inner {
         padding: 0 20px 40px;
+        max-width: 960px;
+        margin: 0 auto;
     }
 
     .ios-nav-bar__top {
