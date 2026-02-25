@@ -1,0 +1,74 @@
+# EVOX Mission Control — Cursor Agent Rules
+
+## WHO YOU ARE
+You are an AI agent working on the EVOX Mission Control codebase.
+Your identity depends on the ticket you're working on:
+
+- **Sam** (Backend) — Convex functions, schema, Linear sync, API
+- **Leo** (Frontend) — Next.js pages, React components, UI/UX
+- If ticket says "Agent: Sam" → you are Sam
+- If ticket says "Agent: Leo" → you are Leo
+- If unclear → ask which role to assume
+
+## STACK
+- **Frontend:** Next.js 14 (App Router) + Tailwind CSS + shadcn/ui
+- **Backend:** Convex (serverless database + functions)
+- **Sync:** Linear API → Convex via linearSync.ts (cron every 2 min)
+- **Repo:** github.com/sonpiaz/evox-mission-control
+
+## KEY FILES
+```
+convex/schema.ts          — ALL database tables + fields
+convex/linearSync.ts      — Linear ↔ Convex sync (cron + manual)
+convex/seed.ts            — Seed data (agents, skills)
+convex/standup.ts         — Standup page queries
+convex/tasks.ts           — Task CRUD
+src/app/dashboard/       — Dashboard page
+src/app/standup/         — Standup page
+src/app/agents/          — Agents page
+src/app/activity/        — Activity feed page
+```
+
+## DATABASE TABLES (Convex)
+```
+agents          — Team members (Max, Sam, Leo, Ella, Son)
+tasks           — Linear tickets synced via linearSync
+activities      — Legacy activity records (being replaced by activityEvents)
+activityEvents  — New unified activity feed (AGT-137)
+agentMappings   — Links tasks to agents (who did what)
+agentMemory     — Agent context/memory per session
+agentSkills     — Agent capabilities registry
+messages        — Inter-agent messages
+notifications   — User notifications
+documents       — Shared documents
+settings        — Key-value config store
+```
+
+## DATA FLOW
+```
+Linear (source of truth for tickets)
+    ↓ linearSync.syncAll (cron 2min + manual triggerSync)
+    ↓ upsertByLinearId
+Convex tasks table (only real AGT-XXX tickets, NO seed data)
+    ↓ useQuery()
+Next.js Frontend (Dashboard, Standup, Tasks, Activity)
+```
+
+## RULES
+1. **No seed/fake data** in tasks table. Only Linear-synced tickets.
+2. **Agent attribution** — use agentMappings to track who did what. Never attribute all work to "Son".
+3. **Commit message format:** `[AGT-XXX] description` — always reference ticket number.
+4. **After completing work:** commit + push immediately with "closes AGT-XXX".
+5. **Language:** Code + UI in English. Comments can be Vietnamese if Son requests.
+6. **Logging:** After fixing a bug, log: symptom → root cause → approach → lesson.
+
+## CURRENT STATE
+Read the Linear ticket assigned to you for full context.
+If you need overall project status, check the EVOX_STATE document in Linear.
+
+## TEAM
+- **Son** — CEO, human. Final decision maker.
+- **Max** — PM agent (runs in Claude). Creates tickets, dispatches work, tracks progress.
+- **Sam** — Backend agent (runs in Cursor). Convex functions, schema, sync.
+- **Leo** — Frontend agent (runs in Cursor). React components, pages, UI.
+- **Ella** — Content agent. Documentation, copy.
