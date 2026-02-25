@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
     Footprints, Moon, Droplets, Heart, Scale, Flame,
@@ -109,10 +109,11 @@ function getRating(value: number, optimal: [number, number]): { label: string; c
 //  Main component
 // ============================================================
 export default function HealthBenchmarkWidget() {
-    const { dailyStats, isSyncing, lastSyncTime, syncWithDevice } = useHealthStore();
+    const { dailyStats, isSyncing, lastSyncTime, syncWithDevice, syncLog } = useHealthStore();
     const device = useDeviceDetect();
     const today = format(new Date(), 'yyyy-MM-dd');
     const todayStats = dailyStats[today];
+    const [showLog, setShowLog] = useState(false);
 
     // Auto-sync on mount if no data
     useEffect(() => {
@@ -296,6 +297,43 @@ export default function HealthBenchmarkWidget() {
                     );
                 })}
             </div>
+
+            {/* Sync Diagnostic Log */}
+            {syncLog && syncLog.length > 0 && (
+                <div style={{ margin: '12px 16px 0' }}>
+                    <button
+                        onClick={() => setShowLog(!showLog)}
+                        style={{
+                            display: 'flex', alignItems: 'center', gap: 6,
+                            fontSize: 12, fontWeight: 600, color: '#636366',
+                            background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0'
+                        }}
+                    >
+                        {showLog ? '▼' : '▶'} Nhật ký đồng bộ ({syncLog.length} dòng)
+                    </button>
+                    {showLog && (
+                        <div style={{
+                            background: '#1C1C1F', borderRadius: 10,
+                            padding: 12, marginTop: 6,
+                            maxHeight: 200, overflowY: 'auto',
+                            fontFamily: 'monospace', fontSize: 11, lineHeight: 1.5,
+                            color: '#A1A1A6'
+                        }}>
+                            {syncLog.map((line, i) => (
+                                <div key={i} style={{
+                                    color: line.includes('❌') || line.includes('💥') || line.includes('FAILED')
+                                        ? '#FF453A'
+                                        : line.includes('✅') || line.includes('Hoàn thành')
+                                            ? '#30D158'
+                                            : line.includes('⚠️')
+                                                ? '#FF9F0A'
+                                                : '#A1A1A6'
+                                }}>{line}</div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 }

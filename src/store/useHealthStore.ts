@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { format, startOfDay, endOfDay } from 'date-fns';
 import { Capacitor } from '@capacitor/core';
-import { CapacitorHealthkit } from '@perfood/capacitor-healthkit';
 
 // ============================================================
 //  Types
@@ -28,6 +27,7 @@ interface HealthState {
     lastSyncTime: string | null;
     connectedSource: 'apple' | 'google' | 'manual' | null;
     googleAccessToken: string | null;
+    syncLog: string[]; // diagnostic log
 
     // Actions
     updateStat: (date: string, data: Partial<DailyHealth>) => void;
@@ -44,122 +44,153 @@ const EMPTY_DAY: DailyHealth = {
 };
 
 // ============================================================
-//  HealthKit helpers (only imported on iOS)
+//  HealthKit sync (iOS only)
+//  Uses dynamic import so Vite won't tree-shake on web
 // ============================================================
-async function syncFromHealthKit(): Promise<Partial<DailyHealth>> {
-    // Plugin matches iOS native definitions
+async function syncFromHealthKit(log: (msg: string) => void): Promise<Partial<DailyHealth>> {
+    log('🏥 Bắt đầu sync HealthKit...');
 
-    // The Swift Plugin defines getTypes() DIFFERENTLY than getSampleType()!
-    // requestAuthorization uses getTypes() which expects aliases like 'steps', 'calories', 'activity'
+    // Dynamic import to avoid web build issues
+    const { CapacitorHealthkit } = await import('@perfood/capacitor-healthkit');
+
+    // ---- Step 1: Request Authorization ----
+    // The Swift plugin's getTypes() uses alias names (steps, calories, etc.)
+    // while getSampleType() uses original HK names (stepCount, activeEnergyBurned)
     const authTypes = [
-        'steps',
-        'activity',
-        'duration',
-        'calories',
-        'distance',
-        'weight',
-        'heartRate',
-        'restingHeartRate',
-        'respiratoryRate',
-        'bodyFat',
-        'oxygenSaturation',
-        'bloodPressureSystolic',
-        'bloodPressureDiastolic'
+        'steps',          // → HKQuantityTypeIdentifier.stepCount
+        'activity',       // → sleepAnalysis + workoutType
+        'duration',       // → appleExerciseTime
+        'calories',       // → activeEnergyBurned + basalEnergyBurned
+        'distance',       // → distanceWalkingRunning + distanceCycling
+        'weight',         // → bodyMass
+        'heartRate',      // → heartRate
+        'restingHeartRate', // → restingHeartRate
+        'bodyFat',        // → bodyFatPercentage
+        'oxygenSaturation', // → oxygenSaturation
+        'bloodPressureSystolic',  // → bloodPressureSystolic
+        'bloodPressureDiastolic', // → bloodPressureDiastolic
     ];
-    await CapacitorHealthkit.requestAuthorization({
-        all: authTypes,
-        read: authTypes,
-        write: ['activity', 'calories', 'distance', 'weight', 'bodyFat']
-    });
 
+    log('📋 Requesting auth for: ' + authTypes.join(', '));
+
+    try {
+        await CapacitorHealthkit.requestAuthorization({
+            all: authTypes,
+            read: authTypes,
+            write: ['activity', 'calories', 'distance', 'weight', 'bodyFat']
+        });
+        log('✅ Authorization granted (or previously granted)');
+    } catch (authErr: any) {
+        log('❌ Authorization FAILED: ' + (authErr?.message || JSON.stringify(authErr)));
+        throw new Error('HealthKit Authorization thất bại: ' + (authErr?.message || 'Không rõ lỗi'));
+    }
+
+    // ---- Step 2: Query data ----
     const now = new Date();
     const startTime = startOfDay(now).toISOString();
     const endTime = endOfDay(now).toISOString();
     const result: Partial<DailyHealth> = {};
 
-    // ------ Steps ------
-    try {
-        const stepsData = await CapacitorHealthkit.queryHKitSampleType({
-            sampleName: 'stepCount',
-            startDate: startTime,
-            endDate: endTime,
-            limit: 0
-        });
-        result.steps = Math.round(
-            (stepsData.resultData as any[]).reduce((acc, s) => acc + (s.value || 0), 0)
-        );
-    } catch { result.steps = 0; }
+    // Helper to safely query a single sample type
+    async function queryType(
+        sampleName: string,
+        opts?: { startDate?: string; limit?: number }
+    ): Promise<any[]> {
+        try {
+            const res = await CapacitorHealthkit.queryHKitSampleType({
+                sampleName,
+                startDate: opts?.startDate || startTime,
+                endDate: endTime,
+                limit: opts?.limit ?? 0
+            });
+            const data = (res?.resultData as any[]) || [];
+            log(`  📊 ${sampleName}: ${data.length} records`);
+            return data;
+        } catch (err: any) {
+            log(`  ⚠️ ${sampleName}: FAILED - ${err?.message || JSON.stringify(err)}`);
+            return [];
+        }
+    }
 
-    // ------ Heart Rate ------
-    try {
-        const heartData = await CapacitorHealthkit.queryHKitSampleType({
-            sampleName: 'heartRate',
-            startDate: startTime,
-            endDate: endTime,
-            limit: 0
-        });
-        const rates = (heartData.resultData as any[]).map(h => h.value || 0).filter(v => v > 0);
-        result.heartRateAvg = rates.length > 0
-            ? Math.round(rates.reduce((a, b) => a + b, 0) / rates.length)
-            : 0;
-    } catch { result.heartRateAvg = 0; }
+    // ------ Steps ------
+    const stepsData = await queryType('stepCount');
+    result.steps = Math.round(stepsData.reduce((acc, s) => acc + (s.value || 0), 0));
+
+    // ------ Heart Rate (average of today's readings) ------
+    const heartData = await queryType('heartRate');
+    const heartRates = heartData.map(h => h.value || 0).filter(v => v > 0);
+    result.heartRateAvg = heartRates.length > 0
+        ? Math.round(heartRates.reduce((a, b) => a + b, 0) / heartRates.length)
+        : 0;
+
+    // ------ Resting Heart Rate ------
+    const restingHR = await queryType('restingHeartRate');
+    const latestRestingHR = restingHR.length > 0 ? restingHR[restingHR.length - 1] : null;
+    result.restingHeartRate = latestRestingHR ? Math.round(latestRestingHR.value || 0) : 0;
 
     // ------ Active Energy (Calories) ------
-    try {
-        const calData = await CapacitorHealthkit.queryHKitSampleType({
-            sampleName: 'activeEnergyBurned',
-            startDate: startTime,
-            endDate: endTime,
-            limit: 0
-        });
-        result.caloriesBurned = Math.round(
-            (calData.resultData as any[]).reduce((acc, s) => acc + (s.value || 0), 0)
-        );
-    } catch { result.caloriesBurned = 0; }
+    const calData = await queryType('activeEnergyBurned');
+    result.caloriesBurned = Math.round(calData.reduce((acc, s) => acc + (s.value || 0), 0));
 
-    // ------ Sleep ------
-    try {
-        const sleepData = await CapacitorHealthkit.queryHKitSampleType({
-            sampleName: 'sleepAnalysis',
-            startDate: new Date(now.getTime() - 86400000).toISOString(), // last 24h
-            endDate: endTime,
-            limit: 0
-        });
-        const totalMinutes = (sleepData.resultData as any[]).reduce((acc, s) => {
-            const start = new Date(s.startDate).getTime();
-            const end = new Date(s.endDate).getTime();
-            return acc + (end - start) / 60000;
-        }, 0);
-        result.sleepHours = Number((totalMinutes / 60).toFixed(1));
-    } catch { result.sleepHours = 0; }
+    // ------ Apple Exercise Time (Active Minutes) ------
+    const exerciseData = await queryType('appleExerciseTime');
+    result.activeMinutes = Math.round(exerciseData.reduce((acc, s) => acc + (s.value || 0), 0));
 
-    // ------ Body Mass (Weight) ------
-    try {
-        const weightData = await CapacitorHealthkit.queryHKitSampleType({
-            sampleName: 'weight',
-            startDate: new Date(now.getTime() - 7 * 86400000).toISOString(), // last 7 days
-            endDate: endTime,
-            limit: 1
-        });
-        const latest = (weightData.resultData as any[])?.[0];
-        result.weight = latest ? Number((latest.value || 0).toFixed(1)) : 0;
-    } catch { result.weight = 0; }
+    // ------ Sleep (last 24h) ------
+    const sleepData = await queryType('sleepAnalysis', {
+        startDate: new Date(now.getTime() - 86400000).toISOString()
+    });
+    const totalSleepMinutes = sleepData.reduce((acc, s) => {
+        const start = new Date(s.startDate).getTime();
+        const end = new Date(s.endDate).getTime();
+        return acc + (end - start) / 60000;
+    }, 0);
+    result.sleepHours = Number((totalSleepMinutes / 60).toFixed(1));
 
-    // ------ Body Fat % ------
-    try {
-        const fatData = await CapacitorHealthkit.queryHKitSampleType({
-            sampleName: 'bodyFat',
-            startDate: new Date(now.getTime() - 30 * 86400000).toISOString(), // last 30 days
-            endDate: endTime,
-            limit: 1
-        });
-        const latest = (fatData.resultData as any[])?.[0];
-        result.bodyFat = latest ? Number(((latest.value || 0) * 100).toFixed(1)) : 0;
-    } catch { result.bodyFat = 0; }
+    // ------ Body Mass / Weight (last 7 days, latest) ------
+    const weightData = await queryType('weight', {
+        startDate: new Date(now.getTime() - 7 * 86400000).toISOString(),
+        limit: 1
+    });
+    const latestWeight = weightData.length > 0 ? weightData[0] : null;
+    result.weight = latestWeight ? Number((latestWeight.value || 0).toFixed(1)) : 0;
 
-    // ------ Water ------
-    // Not directly supported by this HK plugin version, leaving random for now or 0
+    // ------ Body Fat % (last 30 days, latest) ------
+    const fatData = await queryType('bodyFat', {
+        startDate: new Date(now.getTime() - 30 * 86400000).toISOString(),
+        limit: 1
+    });
+    const latestFat = fatData.length > 0 ? fatData[0] : null;
+    // HealthKit stores body fat as decimal (0.20 = 20%), multiply by 100
+    result.bodyFat = latestFat ? Number(((latestFat.value || 0) * 100).toFixed(1)) : 0;
+
+    // ------ Blood Pressure ------
+    const bpSys = await queryType('bloodPressureSystolic', {
+        startDate: new Date(now.getTime() - 7 * 86400000).toISOString(),
+        limit: 1
+    });
+    result.bloodPressureSystolic = bpSys.length > 0 ? Math.round(bpSys[0].value || 0) : 0;
+
+    const bpDia = await queryType('bloodPressureDiastolic', {
+        startDate: new Date(now.getTime() - 7 * 86400000).toISOString(),
+        limit: 1
+    });
+    result.bloodPressureDiastolic = bpDia.length > 0 ? Math.round(bpDia[0].value || 0) : 0;
+
+    // ------ Oxygen Saturation ------
+    const o2Data = await queryType('oxygenSaturation', {
+        startDate: new Date(now.getTime() - 7 * 86400000).toISOString(),
+        limit: 1
+    });
+    // HealthKit stores SpO2 as decimal (0.98 = 98%)
+    const latestO2 = o2Data.length > 0 ? o2Data[0] : null;
+    result.oxygenSaturation = latestO2 ? Number(((latestO2.value || 0) * 100).toFixed(0)) : 0;
+
+    // ------ Water (not supported by this plugin version) ------
     result.waterMl = 0;
+
+    log('🏁 Hoàn thành sync HealthKit!');
+    log(`📈 Kết quả: Steps=${result.steps}, HR=${result.heartRateAvg}, Cal=${result.caloriesBurned}, Sleep=${result.sleepHours}h, Weight=${result.weight}kg`);
 
     return result;
 }
@@ -266,8 +297,6 @@ async function syncFromGoogleFit(accessToken: string): Promise<Partial<DailyHeal
 }
 
 // ============================================================
-//  Simulation fallback (for web dev / demo)
-// Remove simulated data logic - pure native functionality requested
 //  Store
 // ============================================================
 export const useHealthStore = create<HealthState>()(
@@ -278,6 +307,7 @@ export const useHealthStore = create<HealthState>()(
             lastSyncTime: null,
             connectedSource: null,
             googleAccessToken: null,
+            syncLog: [],
 
             updateStat: (date, data) => set((state) => {
                 const current = state.dailyStats[date] || { ...EMPTY_DAY };
@@ -294,7 +324,13 @@ export const useHealthStore = create<HealthState>()(
 
             syncWithDevice: async () => {
                 const { connectedSource, googleAccessToken } = get();
-                set({ isSyncing: true });
+                const logs: string[] = [];
+                const log = (msg: string) => {
+                    console.log('[HealthSync]', msg);
+                    logs.push(`[${new Date().toLocaleTimeString()}] ${msg}`);
+                };
+
+                set({ isSyncing: true, syncLog: [] });
 
                 const today = format(new Date(), 'yyyy-MM-dd');
                 let healthData: Partial<DailyHealth> = {};
@@ -302,62 +338,67 @@ export const useHealthStore = create<HealthState>()(
                 try {
                     const isNative = Capacitor.isNativePlatform();
                     const platform = Capacitor.getPlatform();
+                    log(`Platform: ${platform}, Native: ${isNative}`);
 
                     // ---- iOS: Use HealthKit ----
                     if (isNative && platform === 'ios') {
-                        healthData = await syncFromHealthKit();
+                        healthData = await syncFromHealthKit(log);
                         set({ connectedSource: 'apple' });
                     }
                     // ---- Android native: Use Google Fit plugin ----
                     else if (isNative && platform === 'android') {
+                        log('Android detected — trying Google Fit plugin...');
                         try {
                             const { GoogleFit } = await import('@perfood/capacitor-google-fit');
                             await GoogleFit.connectToGoogleFit();
                             const allowed = await GoogleFit.isAllowed();
                             if (allowed.allowed) {
-                                // Google Fit plugin has limited API, use what's available
                                 const history = await GoogleFit.getHistory({
                                     startTime: startOfDay(new Date()),
                                     endTime: endOfDay(new Date())
                                 });
-                                // Extract steps from history if available
-                                console.log('Google Fit history:', history);
+                                log('Google Fit history: ' + JSON.stringify(history));
                             }
                             set({ connectedSource: 'google' });
-                        } catch (e) {
-                            console.warn('Google Fit native error:', e);
+                        } catch (e: any) {
+                            log('⚠️ Google Fit error: ' + (e?.message || JSON.stringify(e)));
                         }
                     }
                     // ---- Web: Google Fit REST API ----
                     else if (connectedSource === 'google' && googleAccessToken) {
+                        log('Web → Google Fit REST API');
                         healthData = await syncFromGoogleFit(googleAccessToken);
                     }
                     // ---- Fallback: No connection ----
                     else {
-                        console.warn('No Health connection source is active.');
+                        log('❌ Không có nguồn kết nối health data nào.');
                         if (!isNative) {
-                            alert('Tính năng đồng bộ sức khỏe từ hệ điều hành chỉ hoạt động trên thiết bị iPhone/iPad (File IPA) thực tế. Trên web hãy kết nối Google.');
+                            alert('Tính năng đồng bộ sức khỏe chỉ hoạt động trên thiết bị iPhone/iPad thực tế. Trên trình duyệt hãy kết nối Google Fit.');
                         }
-                        set({ isSyncing: false });
-                        return; // do not update store dummy data
+                        set({ isSyncing: false, syncLog: logs });
+                        return;
                     }
                 } catch (err: any) {
+                    const errMsg = err?.message || JSON.stringify(err);
+                    log('💥 LỖI SYNC: ' + errMsg);
                     console.error('Health sync error:', err);
 
                     const isNative = Capacitor.isNativePlatform();
                     if (isNative) {
-                        alert("HealthKit Lỗi: " + (err?.message || JSON.stringify(err)));
+                        alert('HealthKit Lỗi: ' + errMsg);
                     } else {
-                        alert("Health Sync Error: " + err?.message);
+                        alert('Health Sync Error: ' + errMsg);
                     }
-                    set({ isSyncing: false });
-                    return; // Stop execution on error, no fake data
+                    set({ isSyncing: false, syncLog: logs });
+                    return;
                 }
 
                 const current = get().dailyStats[today] || { ...EMPTY_DAY };
+                log('✅ Cập nhật store thành công!');
                 set({
                     isSyncing: false,
                     lastSyncTime: new Date().toISOString(),
+                    syncLog: logs,
                     dailyStats: {
                         ...get().dailyStats,
                         [today]: { ...current, ...healthData }
