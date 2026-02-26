@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { format, startOfDay, endOfDay } from 'date-fns';
 import { Capacitor } from '@capacitor/core';
+import { CapacitorHealthkit } from '@perfood/capacitor-healthkit';
 
 // ============================================================
 //  Types
@@ -50,8 +51,8 @@ const EMPTY_DAY: DailyHealth = {
 async function syncFromHealthKit(log: (msg: string) => void): Promise<Partial<DailyHealth>> {
     log('🏥 Bắt đầu sync HealthKit...');
 
-    // Dynamic import to avoid web build issues
-    const { CapacitorHealthkit } = await import('@perfood/capacitor-healthkit');
+    // Static import to avoid plugin_not_implemented errors in Vite prod builds
+    // (We import at the top of the file)
 
     // ---- Step 1: Request Authorization ----
     // The Swift plugin's getTypes() uses alias names (steps, calories, etc.)
