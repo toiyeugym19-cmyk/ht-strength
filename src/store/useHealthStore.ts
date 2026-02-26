@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { format, startOfDay, endOfDay } from 'date-fns';
 import { Capacitor } from '@capacitor/core';
 import { CapacitorHealthkit } from '@perfood/capacitor-healthkit';
+import { GoogleFit } from '@perfood/capacitor-google-fit';
 
 // ============================================================
 //  Types
@@ -348,7 +349,6 @@ export const useHealthStore = create<HealthState>()(
                     else if (isNative && platform === 'android') {
                         log('Android detected — trying Google Fit plugin...');
                         try {
-                            const { GoogleFit } = await import('@perfood/capacitor-google-fit');
                             await GoogleFit.connectToGoogleFit();
                             const allowed = await GoogleFit.isAllowed();
                             if (allowed.allowed) {
