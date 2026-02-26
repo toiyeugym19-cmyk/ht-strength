@@ -71,13 +71,11 @@ async function syncFromHealthKit(log: (msg: string) => void): Promise<Partial<Da
         'bloodPressureDiastolic', // → bloodPressureDiastolic
     ];
 
-    log('📋 Requesting auth for: ' + authTypes.join(', '));
-
     try {
         await CapacitorHealthkit.requestAuthorization({
-            all: authTypes,
+            all: [], // Không dùng 'all' vì nó sẽ xin quyền GHI (Write) cho tất cả mọi thứ gây lỗi
             read: authTypes,
-            write: ['activity', 'calories', 'distance', 'weight', 'bodyFat']
+            write: [] // Tạm thời không xin quyền ghi để tránh crash, chỉ tập trung đọc data
         });
         log('✅ Authorization granted (or previously granted)');
     } catch (authErr: any) {
