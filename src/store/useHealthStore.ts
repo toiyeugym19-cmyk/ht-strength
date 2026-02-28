@@ -82,7 +82,9 @@ async function syncFromHealthKit(log: (msg: string) => void): Promise<Partial<Da
         log('✅ Authorization granted (or previously granted)');
     } catch (authErr: any) {
         log('❌ Authorization FAILED: ' + (authErr?.message || JSON.stringify(authErr)));
-        throw new Error('HealthKit Authorization thất bại: ' + (authErr?.message || 'Không rõ lỗi'));
+        throw new Error(
+            'Không thể cấp quyền HealthKit. Vui lòng mở Xcode -> Tab Signing & Capabilities -> Bấm dấu + Góc trái trên -> Thêm HealthKit. Sau đó Build lại app trên điện thoại iOS! Lỗi gốc: ' + (authErr?.message || 'Unknown')
+        );
     }
 
     // ---- Step 2: Query data ----
@@ -342,6 +344,11 @@ export const useHealthStore = create<HealthState>()(
 
                     // ---- iOS: Use HealthKit ----
                     if (isNative && platform === 'ios') {
+                        try {
+                            await CapacitorHealthkit.isAvailable();
+                        } catch (e) {
+                            throw new Error('Thiết bị này không hỗ trợ Apple Health (Có thể bạn đang dùng iPad hoặc ứng dụng Sức Khoẻ chưa được cài).');
+                        }
                         healthData = await syncFromHealthKit(log);
                         set({ connectedSource: 'apple' });
                     }
