@@ -42,3 +42,10 @@ diff --git a/node_modules/@perfood/capacitor-healthkit/ios/Plugin/CapacitorHealt
 similarity index 100%
 rename from node_modules/@perfood/capacitor-healthkit/ios/Plugin/CapacitorHealthkitPlugin.m
 rename to node_modules/@perfood/capacitor-healthkit/ios/PluginObjc/CapacitorHealthkitPlugin.m
+diff --git a/node_modules/@perfood/capacitor-healthkit/ios/PluginObjc/include/PluginObjc.h b/node_modules/@perfood/capacitor-healthkit/ios/PluginObjc/include/PluginObjc.h
+new file mode 100644
+index 0000000..0b8c4b8
+--- /dev/null
++++ b/node_modules/@perfood/capacitor-healthkit/ios/PluginObjc/include/PluginObjc.h
+@@ -0,0 +1 @@
++#import <Foundation/Foundation.h>
