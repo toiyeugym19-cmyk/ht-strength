@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anatomy of Fitness & Bodybuilding - Workout Animations</title>
+    <meta name="description"
+        content="Interactive workout anatomy animations showing muscle activation during exercises">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        :root {
+            --bg: #030014;
+            --surface: rgba(255, 255, 255, 0.04);
+            --surface-hover: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #e2e8f0;
+            --text-dim: #64748b;
+            --accent: #6366f1;
+            --accent2: #a855f7;
+            --accent3: #ec4899;
+            --red: #ef4444;
+            --orange: #f97316;
+            --green: #22c55e;
+            --cyan: #06b6d4;
+            --muscle-active: #ef4444;
+            --muscle-secondary: #f97316;
+            --muscle-rest: rgba(100, 116, 139, 0.3);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.3)
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden
+        }
+
+        body {
+            background: radial-gradient(ellipse at 20% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 100%, rgba(168, 85, 247, 0.06) 0%, transparent 50%), var(--bg)
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px 20px;
+            position: relative
+        }
+
+        header h1 {
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px
+        }
+
+        header p {
+            color: var(--text-dim);
+            font-size: 1rem;
+            margin-top: 8px;
+            font-weight: 300
+        }
+
+        .exercise-nav {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 20px 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            justify-content: center;
+            flex-wrap: wrap
+        }
+
+        .exercise-nav::-webkit-scrollbar {
+            display: none
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-dim);
+            cursor: pointer;
+            font-family: 'Outfit';
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all .3s;
+            white-space: nowrap
+        }
+
+        .nav-btn:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+            border-color: rgba(99, 102, 241, 0.3)
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.2));
+            border-color: var(--accent);
+            color: #fff;
+            box-shadow: var(--glow)
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+            align-items: start
+        }
+
+        @media(max-width:900px) {
+            .main-content {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .anatomy-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center
+        }
+
+        .anatomy-panel h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text)
+        }
+
+        .anatomy-panel .view-toggle {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px
+        }
+
+        .view-btn {
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-family: 'Outfit';
+            font-size: 0.75rem;
+            transition: all .3s
+        }
+
+        .view-btn.active {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--accent);
+            border-color: var(--accent)
+        }
+
+        .body-svg-container {
+            width: 100%;
+            max-width: 300px;
+            position: relative
+        }
+
+        .body-svg-container svg {
+            width: 100%;
+            height: auto
+        }
+
+        .muscle-group {
+            transition: fill 0.5s ease, opacity 0.5s ease;
+            cursor: pointer
+        }
+
+        .muscle-group:hover {
+            filter: brightness(1.3)
+        }
+
+        .muscle-group.active {
+            animation: musclePulse 1.5s ease-in-out infinite
+        }
+
+        .muscle-group.secondary {
+            animation: muscleGlow 2s ease-in-out infinite
+        }
+
+        @keyframes musclePulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: 0.6
+            }
+        }
+
+        @keyframes muscleGlow {
+
+            0%,
+            100% {
+                opacity: 0.8
+            }
+
+            50% {
+                opacity: 0.5
+            }
+        }
+
+        .muscle-legend {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+            justify-content: center
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: var(--text-dim)
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%
+        }
+
+        .info-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 16px
+        }
+
+        .exercise-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            backdrop-filter: blur(10px)
+        }
+
+        .exercise-card h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        .exercise-card .category {
+            font-size: 0.8rem;
+            color: var(--accent2);
+            font-weight: 500;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px
+        }
+
+        .exercise-card p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            line-height: 1.6
+        }
+
+        .muscles-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            backdrop-filter: blur(10px)
+        }
+
+        .muscles-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text)
+        }
+
+        .muscle-tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px
+        }
+
+        .muscle-tag {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 500
+        }
+
+        .muscle-tag.primary {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3)
+        }
+
+        .muscle-tag.secondary-tag {
+            background: rgba(249, 115, 22, 0.15);
+            color: #f97316;
+            border: 1px solid rgba(249, 115, 22, 0.3)
+        }
+
+        .animation-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            backdrop-filter: blur(10px)
+        }
+
+        .animation-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text)
+        }
+
+        .animation-canvas-wrap {
+            width: 100%;
+            aspect-ratio: 16/10;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative
+        }
+
+        .animation-canvas-wrap canvas {
+            width: 100%;
+            height: 100%
+        }
+
+        .anim-controls {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            align-items: center
+        }
+
+        .anim-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            font-family: 'Outfit';
+            font-size: 0.8rem;
+            transition: all .3s
+        }
+
+        .anim-btn:hover {
+            background: var(--surface-hover);
+            border-color: var(--accent)
+        }
+
+        .anim-btn.playing {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--accent);
+            color: var(--accent)
+        }
+
+        .speed-label {
+            margin-left: auto;
+            font-size: 0.75rem;
+            color: var(--text-dim)
+        }
+
+        .steps-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            backdrop-filter: blur(10px)
+        }
+
+        .steps-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text)
+        }
+
+        .step-item {
+            display: flex;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .step-item:last-child {
+            border-bottom: none
+        }
+
+        .step-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 2px
+        }
+
+        .step-text {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.5
+        }
+
+        .tips-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(168, 85, 247, 0.08));
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            border-radius: 20px;
+            padding: 24px
+        }
+
+        .tips-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--accent)
+        }
+
+        .tip-item {
+            padding: 8px 0;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+            display: flex;
+            gap: 8px
+        }
+
+        .tip-icon {
+            flex-shrink: 0;
+            color: var(--accent)
+        }
+
+        .recording-notice {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: #ef4444;
+            z-index: 100;
+            animation: fadeIn .5s
+        }
+
+        .rec-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ef4444;
+            animation: blink 1s infinite
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: 0.3
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-dim);
+            font-size: 0.8rem
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container" id="app">
+        <header>
+            <h1>💪 Anatomy of Fitness & Bodybuilding</h1>
+            <p>Interactive muscle activation animations for every exercise</p>
+        </header>
+        <nav class="exercise-nav" id="exerciseNav"></nav>
+        <div class="main-content">
+            <div class="anatomy-panel">
+                <h2 id="anatomyTitle">Muscle Map</h2>
+                <div class="view-toggle">
+                    <button class="view-btn active" onclick="setView('front')">Front</button>
+                    <button class="view-btn" onclick="setView('back')">Back</button>
+                </div>
+                <div class="body-svg-container" id="bodySvg"></div>
+                <div class="muscle-legend">
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background:#ef4444"></div>Primary
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background:#f97316"></div>Secondary
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background:rgba(100,116,139,0.5)"></div>Inactive
+                    </div>
+                </div>
+            </div>
+            <div class="info-panel" id="infoPanel"></div>
+        </div>
+        <footer>HT Strength — Anatomy of Fitness & Bodybuilding © 2026</footer>
+    </div>
+
+    <script>
+        // ─── EXERCISE DATABASE ───
+        const exercises = [
+            {
+                id: 'bench-press', name: 'Bench Press', category: 'Chest',
+                primary: ['pectorals'], secondary: ['front-deltoids', 'triceps'],
+                description: 'The bench press is the king of chest exercises. It targets the pectoralis major with significant tricep and front deltoid involvement.',
+                steps: ['Lie flat on bench, feet planted firmly on the floor', 'Grip barbell slightly wider than shoulder width', 'Unrack and lower bar to mid-chest with control', 'Press up explosively to full lockout', 'Keep shoulder blades retracted throughout'],
+                tips: ['Arch your back slightly for better chest activation', 'Keep wrists straight and elbows at 45°', 'Breathe in on the descent, exhale on the press'],
+                animFrames: 'benchPress'
+            },
+            {
+                id: 'squat', name: 'Barbell Squat', category: 'Legs',
+                primary: ['quadriceps', 'glutes'], secondary: ['hamstrings', 'core', 'lower-back'],
+                description: 'The barbell squat is the foundational lower body exercise. It engages nearly every muscle in the body with emphasis on quadriceps and glutes.',
+                steps: ['Position bar on upper traps, stand shoulder width', 'Brace core and begin descent by pushing hips back', 'Lower until thighs are parallel or below', 'Drive through heels to stand back up', 'Maintain neutral spine throughout'],
+                tips: ['Keep knees tracking over toes', 'Depth is more important than weight', 'Squeeze glutes at the top of each rep'],
+                animFrames: 'squat'
+            },
+            {
+                id: 'deadlift', name: 'Deadlift', category: 'Back / Posterior Chain',
+                primary: ['hamstrings', 'glutes', 'lower-back'], secondary: ['traps', 'forearms', 'core'],
+                description: 'The deadlift is the ultimate posterior chain builder. It works everything from your traps down to your calves with emphasis on the hamstrings and erectors.',
+                steps: ['Stand with feet hip-width, bar over mid-foot', 'Hinge at hips, grip bar just outside knees', 'Brace core, flatten back, chest up', 'Drive through floor, extending hips and knees together', 'Lock out at top with shoulders back'],
+                tips: ['Keep the bar close to your body at all times', 'Do not round your lower back', 'Think about pushing the floor away'],
+                animFrames: 'deadlift'
+            },
+            {
+                id: 'overhead-press', name: 'Overhead Press', category: 'Shoulders',
+                primary: ['front-deltoids', 'side-deltoids'], secondary: ['triceps', 'core', 'traps'],
+                description: 'The overhead press builds powerful shoulders and overall upper body strength. It primarily targets all three heads of the deltoid.',
+                steps: ['Start with bar at collarbone height', 'Grip slightly wider than shoulders', 'Brace core and press bar overhead', 'Lock out arms fully above head', 'Lower with control back to start'],
+                tips: ['Squeeze glutes to stabilize your base', 'Move your head through once bar clears', 'Avoid excessive back lean'],
+                animFrames: 'ohp'
+            },
+            {
+                id: 'barbell-row', name: 'Barbell Row', category: 'Back',
+                primary: ['lats', 'rhomboids'], secondary: ['rear-deltoids', 'biceps', 'forearms'],
+                description: 'The barbell row is essential for building a thick, powerful back. It targets the lats and rhomboids for width and depth.',
+                steps: ['Hinge forward about 45 degrees', 'Grip bar slightly wider than shoulder width', 'Pull bar toward lower chest / upper abs', 'Squeeze shoulder blades at the top', 'Lower with control, full stretch at bottom'],
+                tips: ['Keep your torso stable—don\'t jerk upward', 'Lead with elbows, not hands', 'Use straps if grip is limiting'],
+                animFrames: 'row'
+            },
+            {
+                id: 'bicep-curl', name: 'Bicep Curl', category: 'Arms',
+                primary: ['biceps'], secondary: ['forearms'],
+                description: 'The bicep curl isolates the biceps brachii. It builds arm size and strength with focus on the elbow flexors.',
+                steps: ['Stand upright, arms at sides, palms forward', 'Curl dumbbells up by flexing at the elbows', 'Squeeze biceps at the top of the movement', 'Lower slowly with full control', 'Keep elbows pinned to your sides'],
+                tips: ['Don\'t swing your body for momentum', 'Supinate your wrist at the top for peak contraction', 'Control the eccentric for maximum growth'],
+                animFrames: 'curl'
+            },
+            {
+                id: 'pull-up', name: 'Pull-Up', category: 'Back / Arms',
+                primary: ['lats', 'biceps'], secondary: ['rhomboids', 'rear-deltoids', 'forearms', 'core'],
+                description: 'The pull-up is the ultimate bodyweight back exercise. It builds a wide V-taper by targeting the latissimus dorsi.',
+                steps: ['Hang from bar with overhand grip, shoulder width', 'Retract and depress shoulder blades', 'Pull yourself up until chin clears bar', 'Squeeze lats at the top', 'Lower slowly to full dead hang'],
+                tips: ['Avoid kipping—use strict form', 'Think about driving elbows down, not pulling with hands', 'Add weight once you can do 12+ clean reps'],
+                animFrames: 'pullup'
+            },
+            {
+                id: 'plank', name: 'Plank', category: 'Core',
+                primary: ['core'], secondary: ['front-deltoids', 'glutes', 'quadriceps'],
+                description: 'The plank is the foundational core isometric exercise. It strengthens the transverse abdominis and builds endurance in the stabilizer muscles.',
+                steps: ['Start on forearms and toes, body straight', 'Brace core as if bracing for a punch', 'Keep hips level—don\'t sag or pike', 'Hold position while breathing normally', 'Aim for time under tension'],
+                tips: ['Squeeze your glutes to help maintain alignment', 'Look at the floor to keep neutral neck', 'Progress by adding time or using a weighted vest'],
+                animFrames: 'plank'
+            }
+        ];
+
+        // ─── MUSCLE MAP SVG (Front + Back) ───
+        function getMuscleColor(muscleId, exercise) {
+            if (!exercise) return 'rgba(100,116,139,0.3)';
+            if (exercise.primary.includes(muscleId)) return '#ef4444';
+            if (exercise.secondary.includes(muscleId)) return '#f97316';
+            return 'rgba(100,116,139,0.3)';
+        }
+        function getMuscleClass(muscleId, exercise) {
+            if (!exercise) return '';
+            if (exercise.primary.includes(muscleId)) return 'active';
+            if (exercise.secondary.includes(muscleId)) return 'secondary';
+            return '';
+        }
+
+        const frontMuscles = [
+            { id: 'traps', d: 'M130,95 Q150,80 170,95 L165,110 Q150,100 135,110Z', label: 'Traps' },
+            { id: 'front-deltoids', d: 'M110,100 Q105,88 115,82 L130,95 L125,115 Q115,110 110,100Z', label: 'Front Deltoids' },
+            { id: 'front-deltoids-r', mapTo: 'front-deltoids', d: 'M190,100 Q195,88 185,82 L170,95 L175,115 Q185,110 190,100Z' },
+            { id: 'pectorals', d: 'M125,108 L150,100 L150,140 L120,135 Q115,120 125,108Z', label: 'Pectorals' },
+            { id: 'pectorals-r', mapTo: 'pectorals', d: 'M175,108 L150,100 L150,140 L180,135 Q185,120 175,108Z' },
+            { id: 'biceps', d: 'M105,118 L112,115 L115,155 L102,155 Q100,135 105,118Z', label: 'Biceps' },
+            { id: 'biceps-r', mapTo: 'biceps', d: 'M195,118 L188,115 L185,155 L198,155 Q200,135 195,118Z' },
+            { id: 'forearms', d: 'M100,158 L115,158 L112,205 L98,200Z', label: 'Forearms' },
+            { id: 'forearms-r', mapTo: 'forearms', d: 'M200,158 L185,158 L188,205 L202,200Z' },
+            { id: 'core', d: 'M135,142 L165,142 L163,200 L137,200Z', label: 'Core' },
+            { id: 'quadriceps', d: 'M125,210 L148,205 L145,290 L120,285 Q118,245 125,210Z', label: 'Quads' },
+            { id: 'quadriceps-r', mapTo: 'quadriceps', d: 'M175,210 L152,205 L155,290 L180,285 Q182,245 175,210Z' },
+            { id: 'side-deltoids', d: 'M106,95 Q100,90 98,100 L105,118 L112,115 L110,100Z', label: 'Side Delts' },
+            { id: 'side-deltoids-r', mapTo: 'side-deltoids', d: 'M194,95 Q200,90 202,100 L195,118 L188,115 L190,100Z' },
+            { id: 'triceps', d: 'M100,118 Q96,125 97,155 L102,155 L105,130 Z', label: 'Triceps (front view)' },
+        ];
+
+        const backMuscles = [
+            { id: 'traps', d: 'M125,85 Q150,70 175,85 L170,105 Q150,95 130,105Z', label: 'Traps' },
+            { id: 'rear-deltoids', d: 'M110,95 Q105,85 115,80 L130,92 L125,112 Q115,108 110,95Z', label: 'Rear Delts' },
+            { id: 'rear-deltoids-r', mapTo: 'rear-deltoids', d: 'M190,95 Q195,85 185,80 L170,92 L175,112 Q185,108 190,95Z' },
+            { id: 'lats', d: 'M125,110 L140,105 L140,170 L120,160 Q115,130 125,110Z', label: 'Lats' },
+            { id: 'lats-r', mapTo: 'lats', d: 'M175,110 L160,105 L160,170 L180,160 Q185,130 175,110Z' },
+            { id: 'rhomboids', d: 'M140,100 L160,100 L160,130 L140,130Z', label: 'Rhomboids' },
+            { id: 'lower-back', d: 'M138,135 L162,135 L160,195 L140,195Z', label: 'Lower Back' },
+            { id: 'glutes', d: 'M125,200 L150,195 L150,230 L122,225 Q120,210 125,200Z', label: 'Glutes' },
+            { id: 'glutes-r', mapTo: 'glutes', d: 'M175,200 L150,195 L150,230 L178,225 Q180,210 175,200Z' },
+            { id: 'hamstrings', d: 'M122,235 L148,230 L145,310 L120,305 Q118,270 122,235Z', label: 'Hamstrings' },
+            { id: 'hamstrings-r', mapTo: 'hamstrings', d: 'M178,235 L152,230 L155,310 L180,305 Q182,270 178,235Z' },
+        ];
+
+        let currentView = 'front';
+        let currentExercise = exercises[0];
+        let animPlaying = true;
+        let animSpeed = 1;
+        let animFrame = 0;
+
+        function setView(v) {
+            currentView = v;
+            document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase() === v));
+            renderBody();
+        }
+
+        function renderBody() {
+            const container = document.getElementById('bodySvg');
+            const muscles = currentView === 'front' ? frontMuscles : backMuscles;
+            let svg = `<svg viewBox="60 40 180 320" xmlns="http://www.w3.org/2000/svg">`;
+            // Body outline
+            svg += `<path d="M150,50 Q165,48 170,55 L172,72 Q175,78 185,80 Q205,85 205,105 L200,160 L205,210 Q208,215 200,220 L195,205 L188,210 L182,200 L178,195 Q175,195 170,195 L165,200 L162,215 L158,290 Q160,305 165,320 Q168,335 160,340 L145,340 L148,320 L150,310 L150,290 Q148,270 150,250 L150,250 Q152,270 150,290 L150,310 L152,320 L155,340 L140,340 Q132,335 135,320 L138,290 L135,215 L132,200 L128,195 Q125,195 122,195 L118,200 L112,210 L105,205 L100,220 Q92,215 95,210 L100,160 L95,105 Q95,85 115,80 Q125,78 128,72 L130,55 Q135,48 150,50Z" fill="rgba(148,163,184,0.08)" stroke="rgba(148,163,184,0.2)" stroke-width="1"/>`;
+
+            muscles.forEach(m => {
+                const mId = m.mapTo || m.id;
+                const color = getMuscleColor(mId, currentExercise);
+                const cls = getMuscleClass(mId, currentExercise);
+                svg += `<path class="muscle-group ${cls}" d="${m.d}" fill="${color}" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" data-muscle="${mId}">
+      <title>${m.label || mId}</title></path>`;
+            });
+            svg += `</svg>`;
+            container.innerHTML = svg;
+        }
+
+        // ─── STICK FIGURE EXERCISE ANIMATION ───
+        function drawStickFigure(ctx, w, h, exercise, frame) {
+            ctx.clearRect(0, 0, w, h);
+            const cx = w / 2, cy = h / 2;
+            const t = (Math.sin(frame * 0.06 * animSpeed) + 1) / 2; // 0-1 oscillation
+
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            // Draw based on exercise
+            const poses = getExercisePoses(exercise.animFrames, t, cx, cy);
+
+            // Glow effect for active muscles
+            ctx.shadowColor = '#6366f1';
+            ctx.shadowBlur = 15;
+
+            // Draw body segments
+            ctx.strokeStyle = 'rgba(99,102,241,0.6)';
+            ctx.lineWidth = 3;
+
+            // Equipment first (bar, floor line etc)
+            if (poses.equipment) {
+                ctx.strokeStyle = 'rgba(148,163,184,0.4)';
+                ctx.lineWidth = 4;
+                poses.equipment.forEach(eq => {
+                    ctx.beginPath();
+                    ctx.moveTo(eq[0], eq[1]);
+                    ctx.lineTo(eq[2], eq[3]);
+                    ctx.stroke();
+                });
+            }
+
+            // Torso
+            ctx.strokeStyle = 'rgba(226,232,240,0.7)';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(poses.neck[0], poses.neck[1]);
+            ctx.lineTo(poses.hip[0], poses.hip[1]);
+            ctx.stroke();
+
+            // Draw limbs with muscle-color highlighting
+            const limbSets = [
+                { from: poses.neck, to: poses.lShoulder, color: 'rgba(226,232,240,0.5)' },
+                { from: poses.neck, to: poses.rShoulder, color: 'rgba(226,232,240,0.5)' },
+                { from: poses.lShoulder, to: poses.lElbow, color: getSegColor(exercise, ['front-deltoids', 'biceps', 'triceps']) },
+                { from: poses.rShoulder, to: poses.rElbow, color: getSegColor(exercise, ['front-deltoids', 'biceps', 'triceps']) },
+                { from: poses.lElbow, to: poses.lHand, color: getSegColor(exercise, ['biceps', 'forearms', 'triceps']) },
+                { from: poses.rElbow, to: poses.rHand, color: getSegColor(exercise, ['biceps', 'forearms', 'triceps']) },
+                { from: poses.hip, to: poses.lKnee, color: getSegColor(exercise, ['quadriceps', 'hamstrings', 'glutes']) },
+                { from: poses.hip, to: poses.rKnee, color: getSegColor(exercise, ['quadriceps', 'hamstrings', 'glutes']) },
+                { from: poses.lKnee, to: poses.lFoot, color: getSegColor(exercise, ['quadriceps', 'hamstrings']) },
+                { from: poses.rKnee, to: poses.rFoot, color: getSegColor(exercise, ['quadriceps', 'hamstrings']) },
+            ];
+
+            limbSets.forEach(limb => {
+                ctx.strokeStyle = limb.color;
+                ctx.lineWidth = 3.5;
+                ctx.shadowColor = limb.color;
+                ctx.shadowBlur = 8;
+                ctx.beginPath();
+                ctx.moveTo(limb.from[0], limb.from[1]);
+                ctx.lineTo(limb.to[0], limb.to[1]);
+                ctx.stroke();
+            });
+
+            // Head
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = 'rgba(226,232,240,0.7)';
+            ctx.beginPath();
+            ctx.arc(poses.head[0], poses.head[1], 12, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Joints
+            ctx.fillStyle = 'rgba(99,102,241,0.8)';
+            const joints = [poses.lShoulder, poses.rShoulder, poses.lElbow, poses.rElbow,
+            poses.lHand, poses.rHand, poses.hip, poses.lKnee, poses.rKnee, poses.lFoot, poses.rFoot];
+            joints.forEach(j => {
+                ctx.beginPath();
+                ctx.arc(j[0], j[1], 4, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Exercise name label
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = 'rgba(226,232,240,0.6)';
+            ctx.font = '600 14px Outfit';
+            ctx.textAlign = 'center';
+            ctx.fillText(exercise.name, cx, h - 15);
+
+            // Phase indicator
+            const phase = t < 0.5 ? 'Eccentric ↓' : 'Concentric ↑';
+            ctx.fillStyle = t < 0.5 ? 'rgba(249,115,22,0.7)' : 'rgba(34,197,94,0.7)';
+            ctx.font = '500 11px Outfit';
+            ctx.fillText(phase, cx, 20);
+        }
+
+        function getSegColor(exercise, muscleIds) {
+            for (const m of muscleIds) {
+                if (exercise.primary.includes(m)) return 'rgba(239,68,68,0.9)';
+                if (exercise.secondary.includes(m)) return 'rgba(249,115,22,0.7)';
+            }
+            return 'rgba(226,232,240,0.5)';
+        }
+
+        function lerp(a, b, t) { return a + (b - a) * t; }
+
+        function getExercisePoses(type, t, cx, cy) {
+            const p = {};
+            switch (type) {
+                case 'benchPress': {
+                    // Lying on bench
+                    p.head = [cx - 60, cy - 5];
+                    p.neck = [cx - 45, cy - 5];
+                    p.hip = [cx + 40, cy - 5];
+                    p.lShoulder = [cx - 40, cy - 20];
+                    p.rShoulder = [cx - 40, cy + 10];
+                    const elbowAngle = lerp(-30, 5, t);
+                    p.lElbow = [cx - 40 + lerp(-5, 15, t), cy - 20 - lerp(25, 40, t)];
+                    p.rElbow = [cx - 40 + lerp(-5, 15, t), cy + 10 + lerp(25, 40, t)];
+                    p.lHand = [cx - 25 + lerp(0, 20, t), cy - 20 - lerp(45, 55, t)];
+                    p.rHand = [cx - 25 + lerp(0, 20, t), cy + 10 + lerp(45, 55, t)];
+                    p.lKnee = [cx + 55, cy + 20];
+                    p.rKnee = [cx + 55, cy + 20];
+                    p.lFoot = [cx + 55, cy + 50];
+                    p.rFoot = [cx + 55, cy + 50];
+                    p.equipment = [[cx - 80, cy - 20 - lerp(45, 55, t), cx + 10, cy - 20 - lerp(45, 55, t)],
+                    [cx - 60, cy - 5, cx + 60, cy - 5]]; // bench
+                    break;
+                }
+                case 'squat': {
+                    const depth = t;
+                    p.head = [cx, cy - lerp(90, 50, depth)];
+                    p.neck = [cx, cy - lerp(80, 42, depth)];
+                    p.hip = [cx, cy - lerp(30, 5, depth)];
+                    p.lShoulder = [cx - 18, cy - lerp(75, 38, depth)];
+                    p.rShoulder = [cx + 18, cy - lerp(75, 38, depth)];
+                    p.lElbow = [cx - 15, cy - lerp(55, 20, depth)];
+                    p.rElbow = [cx + 15, cy - lerp(55, 20, depth)];
+                    p.lHand = [cx - 12, cy - lerp(78, 42, depth)];
+                    p.rHand = [cx + 12, cy - lerp(78, 42, depth)];
+                    p.lKnee = [cx - lerp(18, 30, depth), cy + lerp(15, 10, depth)];
+                    p.rKnee = [cx + lerp(18, 30, depth), cy + lerp(15, 10, depth)];
+                    p.lFoot = [cx - 20, cy + 55];
+                    p.rFoot = [cx + 20, cy + 55];
+                    p.equipment = [[cx - 25, cy - lerp(78, 42, depth), cx + 25, cy - lerp(78, 42, depth)]];
+                    break;
+                }
+                case 'deadlift': {
+                    const lift = t;
+                    p.head = [cx, cy - lerp(30, 85, lift)];
+                    p.neck = [cx, cy - lerp(22, 75, lift)];
+                    p.hip = [cx, cy - lerp(5, 25, lift)];
+                    p.lShoulder = [cx - 15, cy - lerp(18, 70, lift)];
+                    p.rShoulder = [cx + 15, cy - lerp(18, 70, lift)];
+                    p.lElbow = [cx - 12, cy - lerp(5, 45, lift)];
+                    p.rElbow = [cx + 12, cy - lerp(5, 45, lift)];
+                    p.lHand = [cx - 10, cy + lerp(30, -20, lift)];
+                    p.rHand = [cx + 10, cy + lerp(30, -20, lift)];
+                    p.lKnee = [cx - lerp(22, 15, lift), cy + lerp(25, 20, lift)];
+                    p.rKnee = [cx + lerp(22, 15, lift), cy + lerp(25, 20, lift)];
+                    p.lFoot = [cx - 15, cy + 55];
+                    p.rFoot = [cx + 15, cy + 55];
+                    p.equipment = [[cx - 35, cy + lerp(30, -20, lift), cx + 35, cy + lerp(30, -20, lift)]];
+                    break;
+                }
+                case 'ohp': {
+                    p.head = [cx, cy - 60];
+                    p.neck = [cx, cy - 52];
+                    p.hip = [cx, cy + 10];
+                    p.lShoulder = [cx - 18, cy - 48];
+                    p.rShoulder = [cx + 18, cy - 48];
+                    p.lElbow = [cx - lerp(22, 18, t), cy - lerp(30, 65, t)];
+                    p.rElbow = [cx + lerp(22, 18, t), cy - lerp(30, 65, t)];
+                    p.lHand = [cx - lerp(15, 14, t), cy - lerp(48, 95, t)];
+                    p.rHand = [cx + lerp(15, 14, t), cy - lerp(48, 95, t)];
+                    p.lKnee = [cx - 12, cy + 40];
+                    p.rKnee = [cx + 12, cy + 40];
+                    p.lFoot = [cx - 15, cy + 65];
+                    p.rFoot = [cx + 15, cy + 65];
+                    p.equipment = [[cx - 35, cy - lerp(48, 95, t), cx + 35, cy - lerp(48, 95, t)]];
+                    break;
+                }
+                case 'row': {
+                    const pull = t;
+                    p.head = [cx, cy - 50];
+                    p.neck = [cx - 5, cy - 42];
+                    p.hip = [cx + 15, cy - 10];
+                    p.lShoulder = [cx - 15, cy - 35];
+                    p.rShoulder = [cx + 5, cy - 38];
+                    p.lElbow = [cx - lerp(18, 5, pull), cy - lerp(10, 25, pull)];
+                    p.rElbow = [cx + lerp(5, 18, pull), cy - lerp(15, 28, pull)];
+                    p.lHand = [cx - lerp(15, 5, pull), cy + lerp(15, -15, pull)];
+                    p.rHand = [cx + lerp(5, 10, pull), cy + lerp(12, -18, pull)];
+                    p.lKnee = [cx - 5, cy + 25];
+                    p.rKnee = [cx + 25, cy + 20];
+                    p.lFoot = [cx - 15, cy + 55];
+                    p.rFoot = [cx + 30, cy + 55];
+                    p.equipment = [[cx - 30, cy + lerp(15, -15, pull), cx + 30, cy + lerp(12, -18, pull)]];
+                    break;
+                }
+                case 'curl': {
+                    p.head = [cx, cy - 70];
+                    p.neck = [cx, cy - 60];
+                    p.hip = [cx, cy];
+                    p.lShoulder = [cx - 18, cy - 55];
+                    p.rShoulder = [cx + 18, cy - 55];
+                    p.lElbow = [cx - 18, cy - 25];
+                    p.rElbow = [cx + 18, cy - 25];
+                    p.lHand = [cx - lerp(18, 15, t), cy - lerp(-5, 48, t)];
+                    p.rHand = [cx + lerp(18, 15, t), cy - lerp(-5, 48, t)];
+                    p.lKnee = [cx - 12, cy + 30];
+                    p.rKnee = [cx + 12, cy + 30];
+                    p.lFoot = [cx - 14, cy + 58];
+                    p.rFoot = [cx + 14, cy + 58];
+                    break;
+                }
+                case 'pullup': {
+                    const pull = t;
+                    p.head = [cx, cy - lerp(20, 60, pull)];
+                    p.neck = [cx, cy - lerp(12, 52, pull)];
+                    p.hip = [cx, cy + lerp(35, 0, pull)];
+                    p.lShoulder = [cx - lerp(20, 16, pull), cy - lerp(8, 45, pull)];
+                    p.rShoulder = [cx + lerp(20, 16, pull), cy - lerp(8, 45, pull)];
+                    p.lElbow = [cx - lerp(30, 22, pull), cy - lerp(40, 20, pull)];
+                    p.rElbow = [cx + lerp(30, 22, pull), cy - lerp(40, 20, pull)];
+                    p.lHand = [cx - 25, cy - 65];
+                    p.rHand = [cx + 25, cy - 65];
+                    p.lKnee = [cx - 10, cy + lerp(60, 30, pull)];
+                    p.rKnee = [cx + 10, cy + lerp(60, 30, pull)];
+                    p.lFoot = [cx - 8, cy + lerp(85, 55, pull)];
+                    p.rFoot = [cx + 8, cy + lerp(85, 55, pull)];
+                    p.equipment = [[cx - 40, cy - 68, cx + 40, cy - 68]];
+                    break;
+                }
+                case 'plank': {
+                    p.head = [cx - 65, cy - 25];
+                    p.neck = [cx - 52, cy - 18];
+                    p.hip = [cx + 20, cy - 18];
+                    p.lShoulder = [cx - 48, cy - 15];
+                    p.rShoulder = [cx - 48, cy - 22];
+                    p.lElbow = [cx - 48, cy + lerp(10, 12, t)];
+                    p.rElbow = [cx - 48, cy + lerp(10, 12, t)];
+                    p.lHand = [cx - 55, cy + lerp(10, 12, t)];
+                    p.rHand = [cx - 42, cy + lerp(10, 12, t)];
+                    p.lKnee = [cx + 38, cy + lerp(-2, 0, t)];
+                    p.rKnee = [cx + 38, cy + lerp(-2, 0, t)];
+                    p.lFoot = [cx + 62, cy + lerp(10, 12, t)];
+                    p.rFoot = [cx + 62, cy + lerp(10, 12, t)];
+                    break;
+                }
+                default: {
+                    // Standing default
+                    p.head = [cx, cy - 70];
+                    p.neck = [cx, cy - 60];
+                    p.hip = [cx, cy];
+                    p.lShoulder = [cx - 20, cy - 55];
+                    p.rShoulder = [cx + 20, cy - 55];
+                    p.lElbow = [cx - 22, cy - 30];
+                    p.rElbow = [cx + 22, cy - 30];
+                    p.lHand = [cx - 20, cy - 5];
+                    p.rHand = [cx + 20, cy - 5];
+                    p.lKnee = [cx - 12, cy + 30];
+                    p.rKnee = [cx + 12, cy + 30];
+                    p.lFoot = [cx - 14, cy + 58];
+                    p.rFoot = [cx + 14, cy + 58];
+                }
+            }
+            return p;
+        }
+
+        // ─── RENDER UI ───
+        function renderNav() {
+            const nav = document.getElementById('exerciseNav');
+            nav.innerHTML = exercises.map(e =>
+                `<button class="nav-btn ${e.id === currentExercise.id ? 'active' : ''}" onclick="selectExercise('${e.id}')" id="nav-${e.id}">${e.name}</button>`
+            ).join('');
+        }
+
+        function renderInfo() {
+            const panel = document.getElementById('infoPanel');
+            const e = currentExercise;
+            panel.innerHTML = `
+    <div class="exercise-card">
+      <div class="category">${e.category}</div>
+      <h2>${e.name}</h2>
+      <p>${e.description}</p>
+    </div>
+    <div class="animation-card">
+      <h3>🎬 Exercise Animation</h3>
+      <div class="animation-canvas-wrap">
+        <canvas id="animCanvas" width="500" height="310"></canvas>
+      </div>
+      <div class="anim-controls">
+        <button class="anim-btn ${animPlaying ? 'playing' : ''}" onclick="toggleAnim()" id="playBtn">${animPlaying ? '⏸ Pause' : '▶ Play'}</button>
+        <button class="anim-btn" onclick="changeSpeed()">⚡ ${animSpeed}x</button>
+        <span class="speed-label">Speed: ${animSpeed}x</span>
+      </div>
+    </div>
+    <div class="muscles-card">
+      <h3>🔴 Primary Muscles</h3>
+      <div class="muscle-tag-list">${e.primary.map(m => `<span class="muscle-tag primary">${formatMuscle(m)}</span>`).join('')}</div>
+      <h3>🟠 Secondary Muscles</h3>
+      <div class="muscle-tag-list">${e.secondary.map(m => `<span class="muscle-tag secondary-tag">${formatMuscle(m)}</span>`).join('')}</div>
+    </div>
+    <div class="steps-card">
+      <h3>📋 How to Perform</h3>
+      ${e.steps.map((s, i) => `<div class="step-item"><div class="step-num">${i + 1}</div><div class="step-text">${s}</div></div>`).join('')}
+    </div>
+    <div class="tips-card">
+      <h3>💡 Pro Tips</h3>
+      ${e.tips.map(t => `<div class="tip-item"><span class="tip-icon">→</span>${t}</div>`).join('')}
+    </div>
+  `;
+            startAnimLoop();
+        }
+
+        function formatMuscle(m) {
+            return m.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
+
+        function selectExercise(id) {
+            currentExercise = exercises.find(e => e.id === id);
+            animFrame = 0;
+            renderNav();
+            renderBody();
+            renderInfo();
+        }
+
+        function toggleAnim() {
+            animPlaying = !animPlaying;
+            document.getElementById('playBtn').textContent = animPlaying ? '⏸ Pause' : '▶ Play';
+            document.getElementById('playBtn').classList.toggle('playing', animPlaying);
+        }
+
+        function changeSpeed() {
+            const speeds = [0.5, 1, 1.5, 2];
+            const idx = (speeds.indexOf(animSpeed) + 1) % speeds.length;
+            animSpeed = speeds[idx];
+            renderInfo();
+        }
+
+        let animId;
+        function startAnimLoop() {
+            if (animId) cancelAnimationFrame(animId);
+            const canvas = document.getElementById('animCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = 500 * dpr;
+            canvas.height = 310 * dpr;
+            ctx.scale(dpr, dpr);
+
+            function loop() {
+                if (animPlaying) animFrame++;
+                drawStickFigure(ctx, 500, 310, currentExercise, animFrame);
+                animId = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // ─── INIT ───
+        renderNav();
+        renderBody();
+        renderInfo();
+    </script>
+</body>
+
+</html>

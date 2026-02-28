@@ -14,6 +14,12 @@ import SettingsPage from './pages/SettingsPage';
 import KnowledgePage from './pages/KnowledgePage';
 import ReviewHubPage from './pages/ReviewHubPage';
 import MembersPage from './pages/MembersPage';
+import CalorieTrackerPage from './pages/CalorieTrackerPage';
+import StepCounterPage from './pages/StepCounterPage';
+import MeditationPage from './pages/MeditationPage';
+import ProgressPage from './pages/ProgressPage';
+import SocialPage from './pages/SocialPage';
+import ProfilePage from './pages/ProfilePage';
 
 import PrivateRoute from './components/PrivateRoute';
 import LoginPage from './pages/LoginPage';
@@ -40,6 +46,12 @@ function App() {
                             <Route path="analytics" element={<AnalyticsPage />} />
                             <Route path="knowledge" element={<KnowledgePage />} />
                             <Route path="review-hub" element={<ReviewHubPage />} />
+                            <Route path="calories" element={<CalorieTrackerPage />} />
+                            <Route path="steps" element={<StepCounterPage />} />
+                            <Route path="meditation" element={<MeditationPage />} />
+                            <Route path="progress" element={<ProgressPage />} />
+                            <Route path="social" element={<SocialPage />} />
+                            <Route path="profile" element={<ProfilePage />} />
 
                             <Route path="settings" element={<SettingsPage />} />
                             <Route path="*" element={<Navigate to="/" replace />} />

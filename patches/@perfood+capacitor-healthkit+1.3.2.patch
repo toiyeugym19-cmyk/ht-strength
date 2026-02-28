@@ -1,0 +1,31 @@
+diff --git a/node_modules/@perfood/capacitor-healthkit/Package.swift b/node_modules/@perfood/capacitor-healthkit/Package.swift
+new file mode 100644
+index 0000000..c5ba698
+--- /dev/null
++++ b/node_modules/@perfood/capacitor-healthkit/Package.swift
+@@ -0,0 +1,25 @@
++// swift-tools-version: 5.9
++import PackageDescription
++
++let package = Package(
++    name: "PerfoodCapacitorHealthkit",
++    platforms: [.iOS(.v14)],
++    products: [
++        .library(
++            name: "PerfoodCapacitorHealthkit",
++            targets: ["CapacitorHealthkitPlugin"])
++    ],
++    dependencies: [
++        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", branch: "main")
++    ],
++    targets: [
++        .target(
++            name: "CapacitorHealthkitPlugin",
++            dependencies: [
++                .product(name: "Capacitor", package: "capacitor-swift-pm"),
++                .product(name: "Cordova", package: "capacitor-swift-pm")
++            ],
++            path: "ios/Plugin"
++        )
++    ]
++)

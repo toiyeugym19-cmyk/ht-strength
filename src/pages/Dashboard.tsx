@@ -5,18 +5,19 @@ import { useMemberStore } from '../store/useMemberStore';
 import { format, subDays, isSameDay, startOfWeek, addDays, getMonth } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import {
-    Flame, Timer, Target, X, Zap, Droplets, Moon,
-    Users, Briefcase, Utensils, Activity, Calendar as CalendarIcon,
-    ChevronRight, Dumbbell, Heart, TrendingUp, Clock, Plus
+    Flame, Timer, Target, Droplets, Moon,
+    Dumbbell, Heart, TrendingUp, Clock, ChevronRight,
+    SquareCheckBig, CalendarDays, Apple, BookOpenText, BookMarked,
+    Star, Sparkles, Footprints, Brain, Trophy, UserCircle,
+    BarChart3, Users
 } from 'lucide-react';
-import { AreaChart, Area, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { AreaChart, Area, ResponsiveContainer } from 'recharts';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { analyzePerformance } from '../utils/intelligence';
 import { oneRepMax } from 'fitness-calculator';
 import HealthBenchmarkWidget from '../components/HealthBenchmarkWidget';
-import { useDeviceDetect } from '../hooks/useDeviceDetect';
 
 // ============================================================
 //  iOS 18 DASHBOARD - Native Design
@@ -31,10 +32,10 @@ const getGreeting = (hour: number) => {
 };
 
 export default function Dashboard() {
-    const { userProfile, logs, weeklyPlan } = useGymStore();
+    const { logs, weeklyPlan } = useGymStore();
     const { dailyStats, syncWithDevice } = useHealthStore();
     const { members } = useMemberStore();
-    const device = useDeviceDetect();
+
 
     const [activeTool, setActiveTool] = useState<string | null>(null);
     const [currentTime, setCurrentTime] = useState(new Date());
@@ -103,7 +104,7 @@ export default function Dashboard() {
                     <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
                     <div className="relative z-10">
                         <p className="text-white/80 text-sm font-medium">{greeting} 👋</p>
-                        <h2 className="text-white text-2xl font-bold mt-1">{userProfile.name || 'Chiến binh'}</h2>
+                        <h2 className="text-white text-2xl font-bold mt-1">{'Chiến binh'}</h2>
                         <div className="flex items-center gap-2 mt-2">
                             <Clock size={14} className="text-white/70" />
                             <span className="text-white/70 text-xs">{format(currentTime, 'HH:mm • EEEE, dd/MM', { locale: vi })}</span>
@@ -121,7 +122,7 @@ export default function Dashboard() {
             <div className="mx-4">
                 <div className="grid grid-cols-4 gap-3">
                     <QuickStat icon={Flame} value={streak} label="Chuỗi" color="#FF9500" />
-                    <QuickStat icon={Target} value={`${((todayStats?.volume || 0) / 1000).toFixed(0)}k`} label="Volume" color="#0A84FF" />
+                    <QuickStat icon={Target} value={`${((todayStats?.caloriesBurned || 0) / 100).toFixed(0)}`} label="Calo (x100)" color="#0A84FF" />
                     <QuickStat icon={Moon} value={todayStats?.sleepHours || '--'} label="Giấc ngủ" color="#BF5AF2" />
                     <QuickStat icon={Droplets} value={todayStats?.waterMl ? `${(todayStats.waterMl / 1000).toFixed(1)}` : '0'} label="Nước (L)" color="#64D2FF" />
                 </div>
@@ -168,7 +169,7 @@ export default function Dashboard() {
             {/* ===== QUICK ACTIONS ===== */}
             <div className="mx-4">
                 <IOSSectionHeader title="Hành động nhanh" />
-                <div className={`grid gap-3 ${device.isTablet ? 'grid-cols-4' : 'grid-cols-2'}`}>
+                <div className={`grid gap-3 grid-cols-2`}>
                     <Link to="/gym" className="bg-[var(--ios-card-bg)] rounded-2xl p-4 flex items-center gap-3 active:scale-95 transition-transform">
                         <div className="w-10 h-10 rounded-xl bg-[#FF6B35]/20 flex items-center justify-center">
                             <Dumbbell size={20} className="text-[var(--ios-tint)]" />
@@ -211,8 +212,49 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            {/* ===== MEMBER + ANALYTICS (side-by-side on iPad) ===== */}
-            <div className={`mx-4 ${device.isTablet ? 'grid grid-cols-2 gap-4' : 'space-y-4'}`}>
+            {/* ===== APP GRID — iOS Homescreen Style ===== */}
+            <div className="mx-4">
+                <IOSSectionHeader title="Ứng dụng" />
+
+                {/* Row 1: Quản lý */}
+                <div className="mb-3">
+                    <p className="text-[11px] text-[var(--ios-text-tertiary)] font-medium mb-2 uppercase tracking-wide">Quản lý</p>
+                    <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
+                        <AppIcon to="/members" icon={Users} label="Hội Viên" color="#0A84FF" />
+                        <AppIcon to="/work" icon={SquareCheckBig} label="Nhiệm Vụ" color="#FF3B30" />
+                        <AppIcon to="/calendar" icon={CalendarDays} label="Lịch" color="#FF9500" />
+                        <AppIcon to="/analytics" icon={BarChart3} label="Phân Tích" color="#BF5AF2" />
+                    </div>
+                </div>
+
+                {/* Row 2: Sức khoẻ & Fitness */}
+                <div className="mb-3">
+                    <p className="text-[11px] text-[var(--ios-text-tertiary)] font-medium mb-2 uppercase tracking-wide">Sức khoẻ & Fitness</p>
+                    <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
+                        <AppIcon to="/nutrition" icon={Apple} label="Dinh Dưỡng" color="#30D158" />
+                        <AppIcon to="/calories" icon={Flame} label="Calories" color="#FF6B00" />
+                        <AppIcon to="/steps" icon={Footprints} label="Bước Chân" color="#EC4899" />
+                        <AppIcon to="/meditation" icon={Brain} label="Thiền" color="#8B5CF6" />
+                        <AppIcon to="/progress" icon={TrendingUp} label="Tiến Trình" color="#22C55E" />
+                        <AppIcon to="/profile" icon={UserCircle} label="Hồ Sơ" color="#6366F1" />
+                    </div>
+                </div>
+
+                {/* Row 3: Tiện ích */}
+                <div className="mb-1">
+                    <p className="text-[11px] text-[var(--ios-text-tertiary)] font-medium mb-2 uppercase tracking-wide">Tiện ích</p>
+                    <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
+                        <AppIcon to="/knowledge" icon={BookOpenText} label="Kiến Thức" color="#FF9F0A" />
+                        <AppIcon to="/journal" icon={BookMarked} label="Nhật Ký" color="#BF5AF2" />
+                        <AppIcon to="/review-hub" icon={Star} label="Review" color="#FFD60A" />
+                        <AppIcon to="/social" icon={Trophy} label="Thưởng" color="#F59E0B" />
+                        <AppIcon to="/ecosystem" icon={Sparkles} label="Hệ Sinh Thái" color="#64D2FF" />
+                    </div>
+                </div>
+            </div>
+
+            {/* ===== MEMBER + ANALYTICS ===== */}
+            <div className={`mx-4 space-y-4`}>
                 {/* MEMBER CARD */}
                 <div>
                     <IOSSectionHeader title="Hội viên" link="/members" />
@@ -277,7 +319,7 @@ export default function Dashboard() {
             </div>
 
             {/* ===== NUTRITION + TASKS (side-by-side on iPad) ===== */}
-            <div className={`mx-4 ${device.isTablet ? 'grid grid-cols-2 gap-4' : 'space-y-4'}`}>
+            <div className={`mx-4 space-y-4`}>
                 <div>
                     <IOSSectionHeader title="Dinh dưỡng" link="/nutrition" />
                     <NutritionCard />
@@ -314,6 +356,20 @@ function IOSSectionHeader({ title, link }: { title: string; link?: string }) {
                 </Link>
             )}
         </div>
+    );
+}
+
+function AppIcon({ to, icon: Icon, label, color }: { to: string; icon: any; label: string; color: string }) {
+    return (
+        <Link to={to} className="flex flex-col items-center gap-1.5 min-w-[64px] active:scale-90 transition-transform">
+            <div className="w-[52px] h-[52px] rounded-[14px] flex items-center justify-center shadow-lg"
+                style={{ background: color }}>
+                <Icon size={24} color="white" strokeWidth={1.8} />
+            </div>
+            <span className="text-[10px] font-medium text-[var(--ios-text-secondary)] text-center leading-tight max-w-[64px] truncate">
+                {label}
+            </span>
+        </Link>
     );
 }
 

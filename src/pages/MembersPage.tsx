@@ -1,7 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMemberStore, type Member } from '../store/useMemberStore';
-import { useDeviceDetect } from '../hooks/useDeviceDetect';
 import {
     Users,
     UserCheck,
@@ -57,7 +56,6 @@ const getMemberRank = (sessionsUsed: number = 0) => {
 
 export default function MembersPage() {
     const { members, deleteMember, performCheckIn } = useMemberStore();
-    const device = useDeviceDetect();
 
     const handleCheckIn = (member: Member) => {
         if (!member) return;
@@ -196,7 +194,7 @@ export default function MembersPage() {
                 <AnimatePresence mode="wait">
                     {activeTab === 'overview' && (
                         <motion.div key="overview" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
-                            <div className={`grid gap-3 ${device.isTablet ? 'grid-cols-4' : 'grid-cols-2'}`}>
+                            <div className={`grid gap-3 grid-cols-2`}>
                                 <IOSStatCard label="Tổng" value={safeMembers.length} icon={Users} color="#0A84FF" />
                                 <IOSStatCard label="Hoạt Động" value={activeMembersCount} icon={UserCheck} color="#30D158" />
                                 <IOSStatCard label="Hết Hạn" value={expiredCount} icon={AlertTriangle} color="#FF453A" />
@@ -238,8 +236,8 @@ export default function MembersPage() {
                             {/* Member List */}
                             <div style={{
                                 display: 'grid',
-                                gridTemplateColumns: device.isTablet ? '1fr 1fr' : '1fr',
-                                gap: device.isTablet ? 12 : 0
+                                gridTemplateColumns: '1fr',
+                                gap: 0
                             }}>
                                 <AnimatePresence mode="popLayout">
                                     {paginatedMembers.map((member, idx) => (
@@ -247,7 +245,7 @@ export default function MembersPage() {
                                             key={member.id}
                                             member={member}
                                             index={idx}
-                                            view={device.isTablet ? 'tablet' : 'mobile'}
+                                            view={'mobile'}
                                             selected={selectedMemberIds.has(member.id)}
                                             onSelect={() => {
                                                 const nextSet = new Set(selectedMemberIds);

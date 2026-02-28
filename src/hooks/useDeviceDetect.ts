@@ -29,7 +29,6 @@ function detectDevice(): DeviceInfo {
 
     if (isNative) {
         if (platform === 'ios') {
-            // iPad detection: screen width >= 768 in portrait, or userAgent
             const ua = navigator.userAgent || '';
             const isIPad = ua.includes('iPad') ||
                 (ua.includes('Macintosh') && 'ontouchend' in document) ||
@@ -41,14 +40,10 @@ function detectDevice(): DeviceInfo {
             isTablet = Math.min(w, h) >= 600;
         }
     } else {
-        // Web: detect by screen size
-        const ua = navigator.userAgent || '';
-        if (ua.includes('iPad') || (ua.includes('Macintosh') && 'ontouchend' in document)) {
-            type = 'ipad';
-            isTablet = true;
-        } else if (Math.min(w, h) >= 768) {
-            isTablet = true;
-        }
+        // Web browser: ALWAYS use mobile mode
+        // Even on desktop, we show mobile UI since the app targets mobile users
+        type = 'web';
+        isTablet = false;
     }
 
     return { type, isTablet, isNative, platform, screenWidth: w, screenHeight: h };
