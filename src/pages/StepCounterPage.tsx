@@ -1,214 +1,231 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { format } from 'date-fns';
+import { format, subDays } from 'date-fns';
 import { vi } from 'date-fns/locale';
-import {
-    Footprints, Flame, Clock, MapPin, TrendingUp,
-    Zap, Trophy
-} from 'lucide-react';
+import { Footprints, Flame, Clock, MapPin, TrendingUp, Trophy, Plus, Target } from 'lucide-react';
 import { useStepStore } from '../store/useStepStore';
+import { useHealthStore } from '../store/useHealthStore';
+import { toast } from 'sonner';
 
 // ============================================================
-//  STEP COUNTER PAGE
+//  STEP COUNTER PAGE — Mibro Fit Dark Theme
 // ============================================================
 export default function StepCounterPage() {
-    const [view, setView] = useState<'daily' | 'weekly' | 'monthly'>('daily');
-    const [selectedDate] = useState(new Date());
-    const today = format(selectedDate, 'yyyy-MM-dd');
+    const stepStore = useStepStore();
+    const healthStore = useHealthStore();
+    const today = format(new Date(), 'yyyy-MM-dd');
+    const todayEntry = stepStore.getStepsForDate(today);
+    const todayHealth = healthStore.dailyStats[today];
+    const steps = todayHealth?.steps || todayEntry.steps || 0;
+    const goal = stepStore.stepGoal.dailySteps;
+    const progress = Math.min(steps / goal, 1);
+    const distance = todayEntry.distance || (steps * 0.0008);
+    const calories = todayEntry.calories || Math.round(steps * 0.04);
 
-    const { getStepsForDate, getWeeklySteps, stepGoal, currentStreak, bestStreak, achievements, updateSteps } = useStepStore();
-    const todayData = getStepsForDate(today);
-    const weekData = getWeeklySteps(today);
-    const progress = Math.min(1, todayData.steps / stepGoal.dailySteps);
+    // Manual input
+    const [showInput, setShowInput] = useState(false);
+    const [inputSteps, setInputSteps] = useState('');
 
-    // Demo: Add random steps button
-    const addDemoSteps = () => {
-        const current = todayData.steps;
-        updateSteps(today, current + Math.floor(Math.random() * 2000) + 500);
+    const handleAddSteps = () => {
+        const val = parseInt(inputSteps);
+        if (!val || val <= 0) return;
+        const newTotal = steps + val;
+        stepStore.updateSteps(today, newTotal);
+        healthStore.updateStat(today, { steps: newTotal });
+        toast.success(`+${val.toLocaleString()} bước chân! 🚶`);
+        setInputSteps('');
+        setShowInput(false);
     };
 
-    const weeklyTotal = weekData.reduce((s, d) => s + d.steps, 0);
-    const weeklyAvg = Math.round(weeklyTotal / 7);
-    const maxWeekDay = Math.max(...weekData.map(d => d.steps), 1);
+    // Weekly data
+    const weekData = Array.from({ length: 7 }, (_, i) => {
+        const d = format(subDays(new Date(), 6 - i), 'yyyy-MM-dd');
+        const entry = stepStore.getStepsForDate(d);
+        return { date: d, steps: entry.steps, day: format(subDays(new Date(), 6 - i), 'EEE', { locale: vi }) };
+    });
+    const maxWeek = Math.max(...weekData.map(d => d.steps), goal);
 
+    // Goal editor
+    const [editGoal, setEditGoal] = useState(false);
+    const [newGoal, setNewGoal] = useState(goal.toString());
 
+    // Achievements
+    const unlockedCount = stepStore.achievements.filter(a => a.unlockedAt).length;
+
+    const ringSize = 200;
+    const strokeW = 14;
+    const radius = (ringSize - strokeW) / 2;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference - (progress * circumference);
+
+    const fadeUp = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.3 } } };
+    const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.06 } } };
 
     return (
-        <div className="min-h-screen pb-24" style={{ background: '#0a0a1a' }}>
-            {/* Header */}
-            <div className="px-4 pt-4 pb-2">
-                <h1 className="text-xl font-bold text-white flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center"
-                        style={{ background: 'linear-gradient(135deg, #EC4899, #8B5CF6)' }}>
-                        <Footprints size={16} className="text-white" />
-                    </div>
-                    Steps
-                </h1>
-                <p className="text-gray-500 text-xs mt-1">{format(selectedDate, 'EEEE, dd MMMM yyyy', { locale: vi })}</p>
-            </div>
+        <div className="h-full overflow-y-auto pb-28 no-scrollbar" style={{ background: 'var(--bg-app)' }}>
+            <motion.div variants={stagger} initial="hidden" animate="show" className="px-5 pt-6 space-y-5">
 
-            {/* View Toggle */}
-            <div className="px-4 mb-4">
-                <div className="flex gap-1 p-1 rounded-xl" style={{ background: 'rgba(255,255,255,0.04)' }}>
-                    {(['daily', 'weekly', 'monthly'] as const).map(v => (
-                        <button key={v} onClick={() => setView(v)}
-                            className="flex-1 py-2 rounded-lg text-xs font-semibold transition-all"
-                            style={{
-                                background: view === v ? 'linear-gradient(135deg, #EC4899, #8B5CF6)' : 'transparent',
-                                color: view === v ? '#fff' : '#6B7280',
-                            }}>{v.charAt(0).toUpperCase() + v.slice(1)}</button>
-                    ))}
-                </div>
-            </div>
+                {/* Header */}
+                <motion.div variants={fadeUp} className="flex items-center justify-between">
+                    <h1 className="text-2xl font-bold">Bước chân</h1>
+                    <motion.button whileTap={{ scale: 0.9 }} onClick={() => setShowInput(!showInput)}
+                        className="w-10 h-10 rounded-full flex items-center justify-center"
+                        style={{ background: 'rgba(48,209,88,0.15)', border: '1px solid rgba(48,209,88,0.2)' }}>
+                        <Plus size={18} className="text-[#30D158]" />
+                    </motion.button>
+                </motion.div>
 
-            {/* Main Circle */}
-            <div className="px-4 mb-6">
-                <div className="rounded-3xl p-6 text-center" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                    <div className="relative w-52 h-52 mx-auto mb-4">
-                        <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="7" />
-                            <motion.circle cx="50" cy="50" r="42" fill="none"
-                                stroke="url(#pinkGrad)" strokeWidth="7" strokeLinecap="round"
-                                strokeDasharray={`${progress * 264} 264`}
-                                initial={{ strokeDasharray: '0 264' }}
-                                animate={{ strokeDasharray: `${progress * 264} 264` }}
-                                transition={{ duration: 1.2, ease: 'easeOut' }}
-                            />
-                            <defs>
-                                <linearGradient id="pinkGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stopColor="#EC4899" />
-                                    <stop offset="100%" stopColor="#8B5CF6" />
-                                </linearGradient>
-                            </defs>
+                {/* Manual Input */}
+                {showInput && (
+                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
+                        className="rounded-2xl p-4 space-y-3" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+                        <p className="text-sm font-semibold">Nhập bước chân thủ công</p>
+                        <div className="flex gap-2">
+                            <input type="number" value={inputSteps} onChange={e => setInputSteps(e.target.value)}
+                                placeholder="VD: 5000" className="input-clean flex-1 !py-2.5" />
+                            <button onClick={handleAddSteps} className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
+                                style={{ background: '#30D158' }}>Thêm</button>
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* Activity Ring */}
+                <motion.div variants={fadeUp} className="rounded-3xl p-6 flex flex-col items-center"
+                    style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+                    <div className="relative" style={{ width: ringSize, height: ringSize }}>
+                        <svg width={ringSize} height={ringSize} style={{ transform: 'rotate(-90deg)' }}>
+                            <circle cx={ringSize / 2} cy={ringSize / 2} r={radius}
+                                fill="none" stroke="rgba(48,209,88,0.12)" strokeWidth={strokeW} />
+                            <circle cx={ringSize / 2} cy={ringSize / 2} r={radius}
+                                fill="none" stroke="#30D158" strokeWidth={strokeW} strokeLinecap="round"
+                                strokeDasharray={circumference} strokeDashoffset={offset}
+                                style={{ transition: 'stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1)' }} />
                         </svg>
                         <div className="absolute inset-0 flex flex-col items-center justify-center">
-                            <Footprints className="text-pink-400 mb-1" size={22} />
-                            <motion.span className="text-4xl font-black text-white"
-                                key={todayData.steps}
-                                initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
-                                {todayData.steps.toLocaleString()}
-                            </motion.span>
-                            <span className="text-gray-500 text-xs mt-1">/ {stepGoal.dailySteps.toLocaleString()} Steps</span>
+                            <Footprints size={20} className="text-[#30D158] mb-1" />
+                            <span className="text-3xl font-bold">{steps.toLocaleString()}</span>
+                            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>/ {goal.toLocaleString()}</span>
                         </div>
                     </div>
-
-                    {/* Quick Stats */}
-                    <div className="grid grid-cols-3 gap-3">
-                        <QuickStat icon={<Flame size={14} className="text-orange-400" />} value={todayData.calories} label="Calories" />
-                        <QuickStat icon={<Clock size={14} className="text-cyan-400" />} value={`${todayData.activeMinutes}m`} label="Time" />
-                        <QuickStat icon={<MapPin size={14} className="text-green-400" />} value={`${todayData.distance}km`} label="Distance" />
+                    <div className="flex justify-center gap-6 mt-5">
+                        <StatPill icon={<MapPin size={14} />} value={`${distance.toFixed(1)} km`} color="#0A84FF" />
+                        <StatPill icon={<Flame size={14} />} value={`${calories} kcal`} color="#FF9F0A" />
+                        <StatPill icon={<Clock size={14} />} value={`${todayEntry.activeMinutes} phút`} color="#BF5AF2" />
                     </div>
-                </div>
-            </div>
+                </motion.div>
 
-            {/* Demo Button */}
-            <div className="px-4 mb-4">
-                <motion.button whileTap={{ scale: 0.97 }} onClick={addDemoSteps}
-                    className="w-full py-3 rounded-xl text-sm font-semibold text-white"
-                    style={{ background: 'linear-gradient(135deg, #EC4899, #8B5CF6)' }}>
-                    + Add Steps (Demo)
-                </motion.button>
-            </div>
+                {/* Goal Edit */}
+                <motion.div variants={fadeUp} className="rounded-2xl p-4 flex items-center justify-between"
+                    style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(255,159,10,0.15)' }}>
+                            <Target size={18} className="text-[#FF9F0A]" />
+                        </div>
+                        <div>
+                            <p className="text-sm font-semibold">Mục tiêu hàng ngày</p>
+                            {!editGoal ? (
+                                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{goal.toLocaleString()} bước</p>
+                            ) : (
+                                <input type="number" value={newGoal} onChange={e => setNewGoal(e.target.value)}
+                                    className="input-clean !py-1 !px-2 !text-xs w-24 mt-1" />
+                            )}
+                        </div>
+                    </div>
+                    <button onClick={() => {
+                        if (editGoal) {
+                            stepStore.setStepGoal({ dailySteps: parseInt(newGoal) || goal });
+                            toast.success('Đã cập nhật mục tiêu!');
+                        }
+                        setEditGoal(!editGoal);
+                    }} className="px-4 py-2 rounded-xl text-xs font-semibold"
+                        style={{ background: editGoal ? '#30D158' : 'var(--bg-card-alt)', color: editGoal ? 'white' : 'var(--text-secondary)' }}>
+                        {editGoal ? 'Lưu' : 'Sửa'}
+                    </button>
+                </motion.div>
 
-            {/* Weekly Chart */}
-            <div className="px-4 mb-6">
-                <div className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                {/* Weekly Chart */}
+                <motion.div variants={fadeUp}>
+                    <h2 className="text-base font-bold mb-3">Tuần này</h2>
+                    <div className="rounded-2xl p-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+                        <div className="flex items-end justify-between gap-2 h-32">
+                            {weekData.map((d, i) => {
+                                const h = maxWeek > 0 ? (d.steps / maxWeek) * 100 : 0;
+                                const isToday = i === 6;
+                                return (
+                                    <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                                        <span className="text-[9px] font-medium" style={{ color: 'var(--text-hint)' }}>
+                                            {d.steps > 0 ? (d.steps / 1000).toFixed(1) + 'k' : ''}
+                                        </span>
+                                        <div className="w-full rounded-t-lg transition-all duration-500"
+                                            style={{
+                                                height: `${Math.max(h, 4)}%`,
+                                                background: isToday ? '#30D158' : d.steps >= goal ? 'rgba(48,209,88,0.5)' : 'var(--bg-card-alt)',
+                                                minHeight: 4
+                                            }} />
+                                        <span className="text-[10px] font-medium" style={{ color: isToday ? '#30D158' : 'var(--text-muted)' }}>
+                                            {d.day}
+                                        </span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        {/* Goal line indicator */}
+                        <div className="flex items-center gap-2 mt-3 pt-3" style={{ borderTop: '1px solid var(--border-color)' }}>
+                            <div className="w-2 h-2 rounded-full" style={{ background: '#30D158' }} />
+                            <span className="text-[11px]" style={{ color: 'var(--text-muted)' }}>Đạt mục tiêu ({goal.toLocaleString()})</span>
+                            <span className="ml-auto text-[11px] font-medium" style={{ color: 'var(--text-secondary)' }}>
+                                Streak: {stepStore.currentStreak} 🔥
+                            </span>
+                        </div>
+                    </div>
+                </motion.div>
+
+                {/* Achievements */}
+                <motion.div variants={fadeUp}>
                     <div className="flex items-center justify-between mb-3">
-                        <span className="text-white font-semibold text-sm">This Week</span>
-                        <span className="text-pink-400 text-xs font-semibold">{weeklyTotal.toLocaleString()} total</span>
+                        <h2 className="text-base font-bold">Thành tựu</h2>
+                        <span className="text-xs font-medium" style={{ color: '#FF9F0A' }}>{unlockedCount}/{stepStore.achievements.length}</span>
                     </div>
+                    <div className="grid grid-cols-5 gap-2">
+                        {stepStore.achievements.map(a => (
+                            <div key={a.id} className="flex flex-col items-center p-2 rounded-xl"
+                                style={{
+                                    background: a.unlockedAt ? 'rgba(255,159,10,0.1)' : 'var(--bg-card)',
+                                    border: `1px solid ${a.unlockedAt ? 'rgba(255,159,10,0.3)' : 'var(--border-color)'}`,
+                                    opacity: a.unlockedAt ? 1 : 0.4
+                                }}>
+                                <span className="text-lg">{a.icon}</span>
+                                <span className="text-[8px] mt-1 text-center font-medium" style={{ color: 'var(--text-muted)' }}>
+                                    {a.title}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </motion.div>
 
-                    {/* Bar Chart */}
-                    <div className="flex items-end gap-2 h-32 mb-2">
-                        {weekData.map((d, i) => {
-                            const h = maxWeekDay > 0 ? (d.steps / maxWeekDay) * 100 : 0;
-                            const isToday = d.date === today;
-                            const metGoal = d.steps >= stepGoal.dailySteps;
-                            return (
-                                <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                                    <span className="text-[9px] text-gray-500">{d.steps > 0 ? (d.steps / 1000).toFixed(1) + 'k' : ''}</span>
-                                    <motion.div
-                                        className="w-full rounded-t-lg"
-                                        initial={{ height: 0 }} animate={{ height: `${h}%` }}
-                                        transition={{ duration: 0.6, delay: i * 0.08 }}
-                                        style={{
-                                            background: metGoal
-                                                ? 'linear-gradient(180deg, #EC4899, #8B5CF6)'
-                                                : isToday
-                                                    ? 'rgba(236,72,153,0.4)' : 'rgba(255,255,255,0.08)',
-                                            minHeight: d.steps > 0 ? 4 : 0,
-                                        }}
-                                    />
-                                    <span className={`text-[10px] font-medium ${isToday ? 'text-pink-400' : 'text-gray-500'}`}>
-                                        {format(new Date(d.date || new Date()), 'EEE', { locale: vi }).slice(0, 2)}
-                                    </span>
-                                </div>
-                            );
-                        })}
+                {/* Quick Stats */}
+                <motion.div variants={fadeUp} className="grid grid-cols-2 gap-3">
+                    <div className="rounded-2xl p-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+                        <TrendingUp size={16} className="text-[#30D158] mb-2" />
+                        <p className="text-xl font-bold">{stepStore.getTotalSteps().toLocaleString()}</p>
+                        <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>Tổng bước chân</p>
                     </div>
-
-                    <div className="flex justify-between text-xs text-gray-500 mt-2 pt-2 border-t border-white/5">
-                        <span>Avg: {weeklyAvg.toLocaleString()} / day</span>
-                        <span>Goal: {stepGoal.dailySteps.toLocaleString()}</span>
+                    <div className="rounded-2xl p-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+                        <Trophy size={16} className="text-[#FF9F0A] mb-2" />
+                        <p className="text-xl font-bold">{stepStore.bestStreak}</p>
+                        <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>Chuỗi kỷ lục</p>
                     </div>
-                </div>
-            </div>
-
-            {/* Streak & Total */}
-            <div className="px-4 grid grid-cols-2 gap-3 mb-6">
-                <div className="rounded-2xl p-4" style={{ background: 'rgba(236,72,153,0.08)', border: '1px solid rgba(236,72,153,0.15)' }}>
-                    <div className="flex items-center gap-2 mb-2">
-                        <Zap size={16} className="text-pink-400" />
-                        <span className="text-white text-sm font-semibold">Streak</span>
-                    </div>
-                    <p className="text-3xl font-black text-pink-400">{currentStreak}</p>
-                    <p className="text-gray-500 text-xs">Best: {bestStreak} days</p>
-                </div>
-                <div className="rounded-2xl p-4" style={{ background: 'rgba(139,92,246,0.08)', border: '1px solid rgba(139,92,246,0.15)' }}>
-                    <div className="flex items-center gap-2 mb-2">
-                        <TrendingUp size={16} className="text-purple-400" />
-                        <span className="text-white text-sm font-semibold">Total Steps</span>
-                    </div>
-                    <p className="text-3xl font-black text-purple-400">{(useStepStore.getState().getTotalSteps() / 1000).toFixed(1)}k</p>
-                    <p className="text-gray-500 text-xs">All time</p>
-                </div>
-            </div>
-
-            {/* Achievements */}
-            <div className="px-4">
-                <h3 className="text-white font-semibold text-sm mb-3 flex items-center gap-2">
-                    <Trophy size={16} className="text-yellow-400" /> Achievements
-                </h3>
-                <div className="grid grid-cols-5 gap-2 mb-3">
-                    {achievements.map(a => (
-                        <motion.div key={a.id}
-                            whileTap={{ scale: 0.9 }}
-                            className="aspect-square rounded-xl flex flex-col items-center justify-center p-1"
-                            style={{
-                                background: a.unlockedAt ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.02)',
-                                border: `1px solid ${a.unlockedAt ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.04)'}`,
-                                opacity: a.unlockedAt ? 1 : 0.4,
-                            }}
-                        >
-                            <span className="text-lg">{a.icon}</span>
-                            <span className="text-[8px] text-gray-500 mt-0.5 text-center leading-tight">{a.title}</span>
-                        </motion.div>
-                    ))}
-                </div>
-            </div>
+                </motion.div>
+            </motion.div>
         </div>
     );
 }
 
-// ============================================================
-//  QUICK STAT
-// ============================================================
-function QuickStat({ icon, value, label }: { icon: React.ReactNode; value: string | number; label: string }) {
+function StatPill({ icon, value, color }: { icon: React.ReactNode; value: string; color: string }) {
     return (
-        <div className="rounded-xl p-2.5 text-center" style={{ background: 'rgba(255,255,255,0.04)' }}>
-            <div className="flex items-center justify-center gap-1 mb-1">{icon}</div>
-            <p className="text-white font-bold text-sm">{value}</p>
-            <p className="text-gray-500 text-[10px]">{label}</p>
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ background: `${color}15` }}>
+            <span style={{ color }}>{icon}</span>
+            <span className="text-xs font-medium" style={{ color }}>{value}</span>
         </div>
     );
 }

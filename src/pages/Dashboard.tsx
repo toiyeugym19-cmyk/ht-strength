@@ -1,343 +1,433 @@
-import { useState, useEffect, useMemo } from 'react';
-import { useGymStore } from '../store/useGymStore';
+import { useState, useEffect } from 'react';
 import { useHealthStore } from '../store/useHealthStore';
-import { useMemberStore } from '../store/useMemberStore';
-import { format, subDays, isSameDay, startOfWeek, addDays, getMonth } from 'date-fns';
+import { useCalorieStore } from '../store/useCalorieStore';
+import { useStepStore } from '../store/useStepStore';
+import { useBoardStore } from '../store/useBoardStore';
+import { useGymStore } from '../store/useGymStore';
+
+import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
-import {
-    Flame, Timer, Target, Droplets, Moon,
-    Dumbbell, Heart, TrendingUp, Clock, ChevronRight,
-    SquareCheckBig, CalendarDays, Apple, BookOpenText, BookMarked,
-    Star, Sparkles, Footprints, Brain, Trophy, UserCircle,
-    BarChart3, Users
-} from 'lucide-react';
-import { AreaChart, Area, ResponsiveContainer } from 'recharts';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import {
+    Heart, Moon, Droplets, Footprints,
+    ChevronRight, Plus, Dumbbell, Target,
+    Wind, Timer, RefreshCw, Scale
+} from 'lucide-react';
 import { toast } from 'sonner';
-import { analyzePerformance } from '../utils/intelligence';
-import { oneRepMax } from 'fitness-calculator';
-import HealthBenchmarkWidget from '../components/HealthBenchmarkWidget';
 
 // ============================================================
-//  iOS 18 DASHBOARD - Native Design
+//  ACTIVITY RING SVG COMPONENT
 // ============================================================
-
-// Lời chào theo giờ
-const getGreeting = (hour: number) => {
-    if (hour < 12) return 'Chào buổi sáng';
-    if (hour < 17) return 'Chào buổi chiều';
-    if (hour < 21) return 'Chào buổi tối';
-    return 'Chúc ngủ ngon';
-};
-
-export default function Dashboard() {
-    const { logs, weeklyPlan } = useGymStore();
-    const { dailyStats, syncWithDevice } = useHealthStore();
-    const { members } = useMemberStore();
-
-
-    const [activeTool, setActiveTool] = useState<string | null>(null);
-    const [currentTime, setCurrentTime] = useState(new Date());
-
-    useEffect(() => {
-        const timer = setInterval(() => setCurrentTime(new Date()), 60000);
-        return () => clearInterval(timer);
-    }, []);
-
-    const todayStr = format(new Date(), 'yyyy-MM-dd');
-    const todayStats = dailyStats[todayStr];
-    const hour = currentTime.getHours();
-    const greeting = getGreeting(hour);
-    const performanceInsights = useMemo(() => analyzePerformance(todayStats, logs), [todayStats, logs]);
-
-    // Streak calculation
-    const streak = useMemo(() => {
-        let count = 0;
-        let d = new Date();
-        while (logs.some(l => isSameDay(new Date(l.date), d))) {
-            count++;
-            d = subDays(d, 1);
-        }
-        return count;
-    }, [logs]);
-
-    // Weekly schedule
-    const weekStart = startOfWeek(new Date(), { weekStartsOn: 1 });
-    const weekDays = [...Array(7)].map((_, i) => {
-        const d = addDays(weekStart, i);
-        return {
-            date: d,
-            label: format(d, 'EEE', { locale: vi }),
-            dayNum: format(d, 'd'),
-            isToday: isSameDay(d, new Date()),
-            hasWorkout: logs.some(l => isSameDay(new Date(l.date), d)),
-            plan: weeklyPlan[i] || 'Rest'
-        };
-    });
-
-    // Member stats
-    const memberStats = useMemo(() => {
-        const currentMonth = getMonth(new Date());
-        return {
-            active: members.filter(m => m.status === 'Active').length,
-            expiring: members.filter(m => m.expiryDate && new Date(m.expiryDate) < addDays(new Date(), 7)).length,
-            newThisMonth: members.filter(m => getMonth(new Date(m.joinDate)) === currentMonth).length,
-            total: members.length
-        };
-    }, [members]);
-
-    const handleQuickSync = async () => {
-        toast.promise(syncWithDevice(), {
-            loading: 'Đang đồng bộ...',
-            success: 'Đồng bộ thành công!',
-            error: 'Lỗi kết nối'
-        });
-    };
+function ActivityRing({ progress, size = 160, strokeWidth = 10, color, bgColor, children }: {
+    progress: number; size?: number; strokeWidth?: number;
+    color: string; bgColor: string; children?: React.ReactNode;
+}) {
+    const radius = (size - strokeWidth) / 2;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference - (Math.min(progress, 1) * circumference);
 
     return (
-        <div className="ios-animate-in space-y-5 pb-4">
-
-            {/* ===== GREETING CARD ===== */}
-            <div className="mx-4 mt-2">
-                <div className="bg-gradient-to-br from-[var(--ios-tint)] to-[#FF8B5C] rounded-2xl p-5 relative overflow-hidden">
-                    <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
-                    <div className="relative z-10">
-                        <p className="text-white/80 text-sm font-medium">{greeting} 👋</p>
-                        <h2 className="text-white text-2xl font-bold mt-1">{'Chiến binh'}</h2>
-                        <div className="flex items-center gap-2 mt-2">
-                            <Clock size={14} className="text-white/70" />
-                            <span className="text-white/70 text-xs">{format(currentTime, 'HH:mm • EEEE, dd/MM', { locale: vi })}</span>
-                        </div>
-                        {performanceInsights.advice && (
-                            <p className="text-white/90 text-sm mt-3 bg-white/15 rounded-xl px-3 py-2">
-                                💡 {performanceInsights.advice}
-                            </p>
-                        )}
-                    </div>
-                </div>
+        <div className="relative" style={{ width: size, height: size }}>
+            <svg width={size} height={size} className="activity-ring">
+                <circle cx={size / 2} cy={size / 2} r={radius}
+                    fill="none" stroke={bgColor} strokeWidth={strokeWidth} />
+                <circle cx={size / 2} cy={size / 2} r={radius}
+                    fill="none" stroke={color} strokeWidth={strokeWidth}
+                    strokeLinecap="round" strokeDasharray={circumference}
+                    strokeDashoffset={offset}
+                    style={{ transition: 'stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1)' }} />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                {children}
             </div>
+        </div>
+    );
+}
 
-            {/* ===== QUICK STATS ===== */}
-            <div className="mx-4">
-                <div className="grid grid-cols-4 gap-3">
-                    <QuickStat icon={Flame} value={streak} label="Chuỗi" color="#FF9500" />
-                    <QuickStat icon={Target} value={`${((todayStats?.caloriesBurned || 0) / 100).toFixed(0)}`} label="Calo (x100)" color="#0A84FF" />
-                    <QuickStat icon={Moon} value={todayStats?.sleepHours || '--'} label="Giấc ngủ" color="#BF5AF2" />
-                    <QuickStat icon={Droplets} value={todayStats?.waterMl ? `${(todayStats.waterMl / 1000).toFixed(1)}` : '0'} label="Nước (L)" color="#64D2FF" />
-                </div>
+// ============================================================
+//  TRIPLE RING (Steps + Calo + Active)
+// ============================================================
+function TripleRing({ steps, stepsGoal, calo, caloGoal, activeMin, activeGoal }: {
+    steps: number; stepsGoal: number; calo: number; caloGoal: number;
+    activeMin: number; activeGoal: number;
+}) {
+    return (
+        <div className="relative" style={{ width: 180, height: 180 }}>
+            {/* Outer: Steps (Green) */}
+            <div className="absolute inset-0">
+                <ActivityRing progress={steps / stepsGoal} size={180} strokeWidth={12}
+                    color="#30D158" bgColor="rgba(48,209,88,0.12)" />
             </div>
-
-            {/* ===== WEEKLY SCHEDULE ===== */}
-            <div className="mx-4">
-                <IOSSectionHeader title="Lịch tuần này" link="/calendar" />
-                <div className="bg-[var(--ios-card-bg)] rounded-2xl p-4">
-                    <div className="flex justify-between items-center">
-                        {weekDays.map((day, i) => {
-                            const planLabels: Record<string, string> = {
-                                'Rest': '', 'Push': 'Đẩy', 'Pull': 'Kéo', 'Legs': 'Chân',
-                                'Upper': 'Trên', 'Lower': 'Dưới', 'Cardio': 'Tim', 'FullBody': 'All'
-                            };
-                            const planColors: Record<string, string> = {
-                                'Push': '#0A84FF', 'Pull': '#FF9F0A', 'Legs': '#BF5AF2',
-                                'Upper': '#30D158', 'Lower': '#FF375F', 'Cardio': '#FF453A', 'FullBody': '#64D2FF'
-                            };
-                            return (
-                                <div key={i} className="flex flex-col items-center gap-1.5">
-                                    <span className="text-[11px] font-medium text-[var(--ios-text-secondary)] capitalize">{day.label}</span>
-                                    <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${day.isToday
-                                        ? 'bg-[var(--ios-tint)] text-white'
-                                        : day.hasWorkout
-                                            ? 'bg-[var(--ios-fill-tertiary)] text-white'
-                                            : 'text-[var(--ios-text-secondary)]'
-                                        }`}>
-                                        {day.dayNum}
-                                    </div>
-                                    {day.plan !== 'Rest' && (
-                                        <span className="text-[9px] font-semibold" style={{ color: planColors[day.plan] || '#8E8E93' }}>
-                                            {planLabels[day.plan]}
-                                        </span>
-                                    )}
-                                    {day.plan === 'Rest' && <span className="text-[9px] h-[13px]">&nbsp;</span>}
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
+            {/* Middle: Calories (Orange) */}
+            <div className="absolute" style={{ top: 16, left: 16 }}>
+                <ActivityRing progress={calo / caloGoal} size={148} strokeWidth={12}
+                    color="#FF9F0A" bgColor="rgba(255,159,10,0.12)" />
             </div>
-
-            {/* ===== QUICK ACTIONS ===== */}
-            <div className="mx-4">
-                <IOSSectionHeader title="Hành động nhanh" />
-                <div className={`grid gap-3 grid-cols-2`}>
-                    <Link to="/gym" className="bg-[var(--ios-card-bg)] rounded-2xl p-4 flex items-center gap-3 active:scale-95 transition-transform">
-                        <div className="w-10 h-10 rounded-xl bg-[#FF6B35]/20 flex items-center justify-center">
-                            <Dumbbell size={20} className="text-[var(--ios-tint)]" />
-                        </div>
-                        <div>
-                            <p className="text-white font-semibold text-[15px]">Bắt đầu tập</p>
-                            <p className="text-[var(--ios-text-secondary)] text-xs">Phòng Gym</p>
-                        </div>
-                    </Link>
-
-                    <button onClick={() => setActiveTool('1rm')} className="bg-[var(--ios-card-bg)] rounded-2xl p-4 flex items-center gap-3 active:scale-95 transition-transform text-left">
-                        <div className="w-10 h-10 rounded-xl bg-[#0A84FF]/20 flex items-center justify-center">
-                            <Target size={20} className="text-[#0A84FF]" />
-                        </div>
-                        <div>
-                            <p className="text-white font-semibold text-[15px]">Tính 1RM</p>
-                            <p className="text-[var(--ios-text-secondary)] text-xs">Công cụ</p>
-                        </div>
-                    </button>
-
-                    <button onClick={() => setActiveTool('timer')} className="bg-[var(--ios-card-bg)] rounded-2xl p-4 flex items-center gap-3 active:scale-95 transition-transform text-left">
-                        <div className="w-10 h-10 rounded-xl bg-[#30D158]/20 flex items-center justify-center">
-                            <Timer size={20} className="text-[#30D158]" />
-                        </div>
-                        <div>
-                            <p className="text-white font-semibold text-[15px]">Bấm giờ nghỉ</p>
-                            <p className="text-[var(--ios-text-secondary)] text-xs">Công cụ</p>
-                        </div>
-                    </button>
-
-                    <button onClick={handleQuickSync} className="bg-[var(--ios-card-bg)] rounded-2xl p-4 flex items-center gap-3 active:scale-95 transition-transform text-left">
-                        <div className="w-10 h-10 rounded-xl bg-[#BF5AF2]/20 flex items-center justify-center">
-                            <Heart size={20} className="text-[#BF5AF2]" />
-                        </div>
-                        <div>
-                            <p className="text-white font-semibold text-[15px]">Đồng bộ</p>
-                            <p className="text-[var(--ios-text-secondary)] text-xs">Sức khoẻ</p>
-                        </div>
-                    </button>
-                </div>
+            {/* Inner: Active Minutes (Pink) */}
+            <div className="absolute" style={{ top: 32, left: 32 }}>
+                <ActivityRing progress={activeMin / activeGoal} size={116} strokeWidth={12}
+                    color="#FF6482" bgColor="rgba(255,100,130,0.12)" />
             </div>
-
-            {/* ===== APP GRID — iOS Homescreen Style ===== */}
-            <div className="mx-4">
-                <IOSSectionHeader title="Ứng dụng" />
-
-                {/* Row 1: Quản lý */}
-                <div className="mb-3">
-                    <p className="text-[11px] text-[var(--ios-text-tertiary)] font-medium mb-2 uppercase tracking-wide">Quản lý</p>
-                    <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
-                        <AppIcon to="/members" icon={Users} label="Hội Viên" color="#0A84FF" />
-                        <AppIcon to="/work" icon={SquareCheckBig} label="Nhiệm Vụ" color="#FF3B30" />
-                        <AppIcon to="/calendar" icon={CalendarDays} label="Lịch" color="#FF9500" />
-                        <AppIcon to="/analytics" icon={BarChart3} label="Phân Tích" color="#BF5AF2" />
-                    </div>
-                </div>
-
-                {/* Row 2: Sức khoẻ & Fitness */}
-                <div className="mb-3">
-                    <p className="text-[11px] text-[var(--ios-text-tertiary)] font-medium mb-2 uppercase tracking-wide">Sức khoẻ & Fitness</p>
-                    <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
-                        <AppIcon to="/nutrition" icon={Apple} label="Dinh Dưỡng" color="#30D158" />
-                        <AppIcon to="/calories" icon={Flame} label="Calories" color="#FF6B00" />
-                        <AppIcon to="/steps" icon={Footprints} label="Bước Chân" color="#EC4899" />
-                        <AppIcon to="/meditation" icon={Brain} label="Thiền" color="#8B5CF6" />
-                        <AppIcon to="/progress" icon={TrendingUp} label="Tiến Trình" color="#22C55E" />
-                        <AppIcon to="/profile" icon={UserCircle} label="Hồ Sơ" color="#6366F1" />
-                    </div>
-                </div>
-
-                {/* Row 3: Tiện ích */}
-                <div className="mb-1">
-                    <p className="text-[11px] text-[var(--ios-text-tertiary)] font-medium mb-2 uppercase tracking-wide">Tiện ích</p>
-                    <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
-                        <AppIcon to="/knowledge" icon={BookOpenText} label="Kiến Thức" color="#FF9F0A" />
-                        <AppIcon to="/journal" icon={BookMarked} label="Nhật Ký" color="#BF5AF2" />
-                        <AppIcon to="/review-hub" icon={Star} label="Review" color="#FFD60A" />
-                        <AppIcon to="/social" icon={Trophy} label="Thưởng" color="#F59E0B" />
-                        <AppIcon to="/ecosystem" icon={Sparkles} label="Hệ Sinh Thái" color="#64D2FF" />
-                    </div>
-                </div>
+            {/* Center text */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <Footprints size={18} className="text-[#30D158] mb-1" />
+                <span className="text-2xl font-bold text-white">{steps.toLocaleString()}</span>
+                <span className="text-[10px] text-[#A0A0AB]">/ {stepsGoal.toLocaleString()}</span>
             </div>
+        </div>
+    );
+}
 
-            {/* ===== MEMBER + ANALYTICS ===== */}
-            <div className={`mx-4 space-y-4`}>
-                {/* MEMBER CARD */}
-                <div>
-                    <IOSSectionHeader title="Hội viên" link="/members" />
-                    <Link to="/members" className="block">
-                        <div className="bg-[var(--ios-card-bg)] rounded-2xl p-4 active:scale-[0.98] transition-transform">
-                            <div className="grid grid-cols-3 gap-3">
-                                <div className="text-center">
-                                    <p className="text-2xl font-bold text-white">{memberStats.active}</p>
-                                    <p className="text-[11px] text-[var(--ios-text-secondary)] mt-1">Hoạt động</p>
-                                </div>
-                                <div className="text-center">
-                                    <p className="text-2xl font-bold text-[#30D158]">+{memberStats.newThisMonth}</p>
-                                    <p className="text-[11px] text-[var(--ios-text-secondary)] mt-1">Mới tháng này</p>
-                                </div>
-                                <div className="text-center">
-                                    <p className="text-2xl font-bold text-[#FF453A]">{memberStats.expiring}</p>
-                                    <p className="text-[11px] text-[var(--ios-text-secondary)] mt-1">Sắp hết hạn</p>
-                                </div>
+// ============================================================
+//  HEALTH METRIC CARD
+// ============================================================
+function MetricCard({ icon: Icon, label, value, unit, color, dimColor, onClick, subtext }: {
+    icon: any; label: string; value: string | number; unit: string;
+    color: string; dimColor: string; onClick?: () => void; subtext?: string;
+}) {
+    return (
+        <motion.div
+            whileTap={{ scale: 0.96 }}
+            onClick={onClick}
+            className="p-4 rounded-2xl cursor-pointer"
+            style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}
+        >
+            <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: dimColor }}>
+                    <Icon size={16} style={{ color }} />
+                </div>
+                <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>{label}</span>
+            </div>
+            <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-bold" style={{ color }}>{value}</span>
+                <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{unit}</span>
+            </div>
+            {subtext && <span className="text-[10px] mt-1 block" style={{ color: 'var(--text-hint)' }}>{subtext}</span>}
+        </motion.div>
+    );
+}
+
+// ============================================================
+//  MINI PROGRESS BAR
+// ============================================================
+function MiniProgress({ value, max, color }: { value: number; max: number; color: string }) {
+    const pct = Math.min((value / max) * 100, 100);
+    return (
+        <div className="w-full h-1.5 rounded-full mt-2" style={{ background: 'var(--bg-card-alt)' }}>
+            <div className="h-full rounded-full transition-all duration-700" style={{ width: `${pct}%`, background: color }} />
+        </div>
+    );
+}
+
+// ============================================================
+//  DASHBOARD (MIBRO FIT STYLE)
+// ============================================================
+export default function Dashboard() {
+    const healthStore = useHealthStore();
+    const calorieStore = useCalorieStore();
+    const stepStore = useStepStore();
+    const boardStore = useBoardStore();
+    const gymStore = useGymStore();
+
+    const today = format(new Date(), 'yyyy-MM-dd');
+    const todayHealth = healthStore.dailyStats[today] || {
+        steps: 0, heartRateAvg: 0, sleepHours: 0, caloriesBurned: 0,
+        weight: 0, bodyFat: 0, oxygenSaturation: 0, restingHeartRate: 0,
+        activeMinutes: 0, waterMl: 0, bloodPressureSystolic: 0, bloodPressureDiastolic: 0
+    };
+
+    // Merge steps from stepStore if health store is empty
+    const totalSteps = todayHealth.steps || stepStore.getStepsForDate(today).steps || 0;
+    const totalCalories = todayHealth.caloriesBurned || calorieStore.getDayTotals(today)?.calories || 0;
+    const activeMin = todayHealth.activeMinutes || 0;
+
+    // Goals
+    const stepsGoal = 8000;
+    const caloGoal = 500;
+    const activeGoal = 30;
+    const waterGoal = 2000;
+    const sleepGoal = 8;
+
+    // Water tracking state (local, simple)
+    const [waterMl, setWaterMl] = useState(todayHealth.waterMl || 0);
+    const addWater = (ml: number) => {
+        const newVal = waterMl + ml;
+        setWaterMl(newVal);
+        healthStore.updateStat(today, { waterMl: newVal });
+        toast.success(`+${ml}ml nước 💧`);
+    };
+
+    // Manual input states
+    const [showManualInput, setShowManualInput] = useState(false);
+    const [manualSteps, setManualSteps] = useState('');
+    const [manualWeight, setManualWeight] = useState('');
+    const [manualHR, setManualHR] = useState('');
+
+    const saveManualData = () => {
+        const updates: any = {};
+        if (manualSteps) updates.steps = (todayHealth.steps || 0) + parseInt(manualSteps);
+        if (manualWeight) updates.weight = parseFloat(manualWeight);
+        if (manualHR) updates.heartRateAvg = parseInt(manualHR);
+        if (Object.keys(updates).length > 0) {
+            healthStore.updateStat(today, updates);
+            toast.success('Đã cập nhật dữ liệu sức khoẻ!');
+            setShowManualInput(false);
+            setManualSteps(''); setManualWeight(''); setManualHR('');
+        }
+    };
+
+    // Greeting
+    const hour = new Date().getHours();
+    const greeting = hour < 12 ? 'Chào buổi sáng' : hour < 18 ? 'Chào buổi chiều' : 'Chào buổi tối';
+    const greetEmoji = hour < 12 ? '🌅' : hour < 18 ? '☀️' : '🌙';
+
+    // Pending tasks
+    const pendingTasks = Object.values(boardStore.tasks || {}).filter((t: any) => !t.completed).length;
+
+    // Today's workout
+    const dayIndex = new Date().getDay();
+    const todayPlan = gymStore.weeklyPlan?.[dayIndex === 0 ? 6 : dayIndex - 1];
+
+    // Syncing
+    const handleSync = async () => {
+        try {
+            await healthStore.syncWithDevice();
+            toast.success('Đồng bộ thành công!');
+        } catch {
+            toast.error('Lỗi đồng bộ');
+        }
+    };
+
+    // Timer state
+    const [timerSec, setTimerSec] = useState(0);
+    const [timerRunning, setTimerRunning] = useState(false);
+    const [timerGoal, setTimerGoal] = useState(90);
+
+    useEffect(() => {
+        if (!timerRunning) return;
+        const id = setInterval(() => setTimerSec(s => {
+            if (s <= 0) { setTimerRunning(false); toast('⏰ Hết giờ nghỉ!'); return 0; }
+            return s - 1;
+        }), 1000);
+        return () => clearInterval(id);
+    }, [timerRunning]);
+
+    const formatTimer = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
+
+    const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.06 } } };
+    const fadeUp = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.35 } } };
+
+    return (
+        <div className="h-full overflow-y-auto pb-28 no-scrollbar" style={{ background: 'var(--bg-app)' }}>
+            <motion.div variants={stagger} initial="hidden" animate="show" className="px-5 pt-6 space-y-5">
+
+                {/* ── HEADER ── */}
+                <motion.div variants={fadeUp} className="flex items-center justify-between">
+                    <div>
+                        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{greeting} {greetEmoji}</p>
+                        <h1 className="text-2xl font-bold mt-0.5">HT Strength</h1>
+                    </div>
+                    <div className="flex gap-2">
+                        <motion.button whileTap={{ scale: 0.9 }} onClick={handleSync}
+                            className="w-10 h-10 rounded-full flex items-center justify-center"
+                            style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+                            <RefreshCw size={16} className={healthStore.isSyncing ? 'animate-spin' : ''} style={{ color: 'var(--text-secondary)' }} />
+                        </motion.button>
+                        <motion.button whileTap={{ scale: 0.9 }} onClick={() => setShowManualInput(!showManualInput)}
+                            className="w-10 h-10 rounded-full flex items-center justify-center"
+                            style={{ background: 'var(--primary-dim)', border: '1px solid rgba(48,209,88,0.2)' }}>
+                            <Plus size={16} style={{ color: '#30D158' }} />
+                        </motion.button>
+                    </div>
+                </motion.div>
+
+                {/* ── MANUAL INPUT PANEL ── */}
+                {showManualInput && (
+                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
+                        className="rounded-2xl p-4 space-y-3"
+                        style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+                        <p className="text-sm font-semibold">📝 Nhập dữ liệu sức khoẻ</p>
+                        <div className="grid grid-cols-3 gap-2">
+                            <div>
+                                <label className="text-[10px] block mb-1" style={{ color: 'var(--text-muted)' }}>Bước chân</label>
+                                <input type="number" value={manualSteps} onChange={e => setManualSteps(e.target.value)}
+                                    placeholder="0" className="input-clean text-center !py-2 !text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-[10px] block mb-1" style={{ color: 'var(--text-muted)' }}>Cân nặng (kg)</label>
+                                <input type="number" value={manualWeight} onChange={e => setManualWeight(e.target.value)}
+                                    placeholder="0" className="input-clean text-center !py-2 !text-sm" step="0.1" />
+                            </div>
+                            <div>
+                                <label className="text-[10px] block mb-1" style={{ color: 'var(--text-muted)' }}>Nhịp tim</label>
+                                <input type="number" value={manualHR} onChange={e => setManualHR(e.target.value)}
+                                    placeholder="0" className="input-clean text-center !py-2 !text-sm" />
                             </div>
                         </div>
-                    </Link>
-                </div>
+                        <button onClick={saveManualData} className="w-full py-2.5 rounded-xl text-sm font-semibold text-white"
+                            style={{ background: 'var(--primary)' }}>
+                            Lưu dữ liệu
+                        </button>
+                    </motion.div>
+                )}
 
-                {/* ANALYTICS PREVIEW */}
-                <div>
-                    <IOSSectionHeader title="Phân tích" link="/analytics" />
-                    <div className="bg-[var(--ios-card-bg)] rounded-2xl p-4">
-                        <div className="flex items-center justify-between mb-3">
-                            <div className="flex items-center gap-2">
-                                <TrendingUp size={16} className="text-[#0A84FF]" />
-                                <span className="text-sm font-medium text-white">Volume 7 buổi gần nhất</span>
+                {/* ── ACTIVITY RINGS ── */}
+                <motion.div variants={fadeUp} className="rounded-3xl p-6 flex items-center gap-6"
+                    style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+                    <TripleRing steps={totalSteps} stepsGoal={stepsGoal}
+                        calo={totalCalories} caloGoal={caloGoal}
+                        activeMin={activeMin} activeGoal={activeGoal} />
+                    <div className="flex-1 space-y-3">
+                        <RingStat color="#30D158" label="Bước chân"
+                            value={totalSteps.toLocaleString()} goal={`/${stepsGoal.toLocaleString()}`} />
+                        <RingStat color="#FF9F0A" label="Calo đốt"
+                            value={`${totalCalories}`} goal={`/${caloGoal} kcal`} />
+                        <RingStat color="#FF6482" label="Hoạt động"
+                            value={`${activeMin}`} goal={`/${activeGoal} phút`} />
+                    </div>
+                </motion.div>
+
+                {/* ── HEALTH METRICS GRID ── */}
+                <motion.div variants={fadeUp}>
+                    <SectionTitle title="Chỉ số sức khoẻ" />
+                    <div className="grid grid-cols-2 gap-3 mt-3">
+                        <MetricCard icon={Heart} label="Nhịp tim" value={todayHealth.heartRateAvg || '--'}
+                            unit="BPM" color="#FF375F" dimColor="rgba(255,55,95,0.15)"
+                            subtext={todayHealth.restingHeartRate ? `Nghỉ: ${todayHealth.restingHeartRate} BPM` : undefined} />
+                        <MetricCard icon={Moon} label="Giấc ngủ" value={todayHealth.sleepHours || '--'}
+                            unit="giờ" color="#BF5AF2" dimColor="rgba(191,90,242,0.15)"
+                            subtext={todayHealth.sleepHours ? `Mục tiêu: ${sleepGoal}h` : undefined} />
+                        <MetricCard icon={Wind} label="SpO₂" value={todayHealth.oxygenSaturation || '--'}
+                            unit="%" color="#64D2FF" dimColor="rgba(100,210,255,0.15)" />
+                        <MetricCard icon={Scale} label="Cân nặng" value={todayHealth.weight || '--'}
+                            unit="kg" color="#AC8E68" dimColor="rgba(172,142,104,0.15)"
+                            subtext={todayHealth.bodyFat ? `Mỡ: ${todayHealth.bodyFat}%` : undefined} />
+                    </div>
+                </motion.div>
+
+                {/* ── WATER TRACKER ── */}
+                <motion.div variants={fadeUp} className="rounded-2xl p-4"
+                    style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+                    <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'rgba(10,132,255,0.15)' }}>
+                                <Droplets size={16} className="text-[#0A84FF]" />
                             </div>
+                            <span className="text-sm font-medium">Lượng nước</span>
                         </div>
-                        <div className="h-[140px] w-full">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={[
-                                    { name: '1', vol: 12000 }, { name: '2', vol: 15000 },
-                                    { name: '3', vol: 11000 }, { name: '4', vol: 18000 },
-                                    { name: '5', vol: 21000 }, { name: '6', vol: 19000 },
-                                    { name: '7', vol: 22000 }
-                                ]}>
-                                    <defs>
-                                        <linearGradient id="colorVol" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#0A84FF" stopOpacity={0.4} />
-                                            <stop offset="95%" stopColor="#0A84FF" stopOpacity={0} />
-                                        </linearGradient>
-                                    </defs>
-                                    <Area type="monotone" dataKey="vol" stroke="#0A84FF" strokeWidth={2} fillOpacity={1} fill="url(#colorVol)" />
-                                </AreaChart>
-                            </ResponsiveContainer>
+                        <span className="text-lg font-bold text-[#0A84FF]">{waterMl} <span className="text-xs font-normal" style={{ color: 'var(--text-muted)' }}>/ {waterGoal}ml</span></span>
+                    </div>
+                    <MiniProgress value={waterMl} max={waterGoal} color="#0A84FF" />
+                    <div className="flex gap-2 mt-3">
+                        {[150, 200, 250, 500].map(ml => (
+                            <motion.button key={ml} whileTap={{ scale: 0.9 }}
+                                onClick={() => addWater(ml)}
+                                className="flex-1 py-2 rounded-xl text-xs font-semibold"
+                                style={{ background: 'rgba(10,132,255,0.1)', color: '#0A84FF' }}>
+                                +{ml}ml
+                            </motion.button>
+                        ))}
+                    </div>
+                </motion.div>
+
+                {/* ── REST TIMER ── */}
+                <motion.div variants={fadeUp} className="rounded-2xl p-4"
+                    style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+                    <div className="flex items-center gap-2 mb-3">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'rgba(255,159,10,0.15)' }}>
+                            <Timer size={16} className="text-[#FF9F0A]" />
+                        </div>
+                        <span className="text-sm font-medium">Đồng hồ nghỉ</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <div className="flex gap-2">
+                            {[60, 90, 120, 180].map(s => (
+                                <button key={s} onClick={() => { setTimerGoal(s); setTimerSec(s); }}
+                                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${timerGoal === s ? 'text-white' : ''}`}
+                                    style={{
+                                        background: timerGoal === s ? '#FF9F0A' : 'var(--bg-card-alt)',
+                                        color: timerGoal === s ? 'white' : 'var(--text-secondary)'
+                                    }}>
+                                    {s}s
+                                </button>
+                            ))}
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <span className="text-2xl font-bold font-mono" style={{ color: timerRunning ? '#FF9F0A' : 'var(--text-main)' }}>
+                                {formatTimer(timerSec || timerGoal)}
+                            </span>
+                            <motion.button whileTap={{ scale: 0.9 }}
+                                onClick={() => {
+                                    if (!timerRunning && timerSec === 0) setTimerSec(timerGoal);
+                                    setTimerRunning(!timerRunning);
+                                }}
+                                className="w-10 h-10 rounded-full flex items-center justify-center text-white"
+                                style={{ background: timerRunning ? '#FF375F' : '#30D158' }}>
+                                {timerRunning ? '⏸' : '▶'}
+                            </motion.button>
                         </div>
                     </div>
-                </div>
-            </div>
+                </motion.div>
 
-            {/* ===== HEALTH BENCHMARK ===== */}
-            <div className="mx-0">
-                <div className="mx-4">
-                    <IOSSectionHeader title="Sức khỏe hôm nay" />
-                </div>
-                <HealthBenchmarkWidget />
-            </div>
+                {/* ── TODAY'S WORKOUT ── */}
+                <motion.div variants={fadeUp}>
+                    <SectionTitle title="Lịch tập hôm nay" link="/gym" />
+                    <Link to="/gym" className="block mt-3 rounded-2xl p-4"
+                        style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+                        <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(48,209,88,0.15)' }}>
+                                <Dumbbell size={22} className="text-[#30D158]" />
+                            </div>
+                            <div className="flex-1">
+                                <p className="text-sm font-semibold">{todayPlan || 'Nghỉ ngơi'}</p>
+                                <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                                    {todayPlan ? 'Bấm để xem chi tiết' : 'Hôm nay là ngày nghỉ'}
+                                </p>
+                            </div>
+                            <ChevronRight size={18} style={{ color: 'var(--text-hint)' }} />
+                        </div>
+                    </Link>
+                </motion.div>
 
-            {/* ===== NUTRITION + TASKS (side-by-side on iPad) ===== */}
-            <div className={`mx-4 space-y-4`}>
-                <div>
-                    <IOSSectionHeader title="Dinh dưỡng" link="/nutrition" />
-                    <NutritionCard />
-                </div>
-                <div>
-                    <IOSSectionHeader title="Nhiệm vụ" link="/work" />
-                    <TasksCard />
-                </div>
-            </div>
+                {/* ── PENDING TASKS ── */}
+                <motion.div variants={fadeUp}>
+                    <SectionTitle title="Việc cần làm" link="/work" />
+                    <Link to="/work" className="block mt-3 rounded-2xl p-4"
+                        style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+                        <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(10,132,255,0.15)' }}>
+                                <Target size={22} className="text-[#0A84FF]" />
+                            </div>
+                            <div className="flex-1">
+                                <p className="text-sm font-semibold">{pendingTasks} việc chưa xong</p>
+                                <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>Bấm để quản lý</p>
+                            </div>
+                            <ChevronRight size={18} style={{ color: 'var(--text-hint)' }} />
+                        </div>
+                    </Link>
+                </motion.div>
 
-            {/* ===== TOOL MODALS ===== */}
-            <IOSToolSheet title="Tính 1RM" isOpen={activeTool === '1rm'} onClose={() => setActiveTool(null)}>
-                <OneRMTool />
-            </IOSToolSheet>
+                {/* ── QUICK LINKS ── */}
+                <motion.div variants={fadeUp}>
+                    <SectionTitle title="Truy cập nhanh" />
+                    <div className="grid grid-cols-4 gap-3 mt-3">
+                        <QuickLink to="/calories" icon="🔥" label="Calories" color="rgba(255,159,10,0.15)" />
+                        <QuickLink to="/nutrition" icon="🥗" label="Dinh dưỡng" color="rgba(48,209,88,0.15)" />
+                        <QuickLink to="/journal" icon="📝" label="Nhật ký" color="rgba(191,90,242,0.15)" />
+                        <QuickLink to="/steps" icon="👟" label="Bước chân" color="rgba(100,210,255,0.15)" />
+                    </div>
+                </motion.div>
 
-            <IOSToolSheet title="Bấm giờ nghỉ" isOpen={activeTool === 'timer'} onClose={() => setActiveTool(null)}>
-                <RestTimerTool />
-            </IOSToolSheet>
+                {/* ── LAST SYNC INFO ── */}
+                {healthStore.lastSyncTime && (
+                    <motion.div variants={fadeUp} className="text-center py-2">
+                        <p className="text-[10px]" style={{ color: 'var(--text-hint)' }}>
+                            Đồng bộ lần cuối: {format(new Date(healthStore.lastSyncTime), 'HH:mm dd/MM', { locale: vi })}
+                        </p>
+                    </motion.div>
+                )}
+            </motion.div>
         </div>
     );
 }
@@ -345,13 +435,12 @@ export default function Dashboard() {
 // ============================================================
 //  SUB-COMPONENTS
 // ============================================================
-
-function IOSSectionHeader({ title, link }: { title: string; link?: string }) {
+function SectionTitle({ title, link }: { title: string; link?: string }) {
     return (
-        <div className="flex items-center justify-between mb-2">
-            <h3 className="text-[13px] font-medium text-[var(--ios-text-secondary)] uppercase">{title}</h3>
+        <div className="flex items-center justify-between">
+            <h2 className="text-base font-bold">{title}</h2>
             {link && (
-                <Link to={link} className="text-[13px] font-medium text-[var(--ios-tint)] flex items-center gap-0.5">
+                <Link to={link} className="flex items-center gap-1 text-xs font-medium" style={{ color: 'var(--primary)' }}>
                     Xem tất cả <ChevronRight size={14} />
                 </Link>
             )}
@@ -359,229 +448,30 @@ function IOSSectionHeader({ title, link }: { title: string; link?: string }) {
     );
 }
 
-function AppIcon({ to, icon: Icon, label, color }: { to: string; icon: any; label: string; color: string }) {
+function RingStat({ color, label, value, goal }: {
+    color: string; label: string; value: string; goal: string;
+}) {
     return (
-        <Link to={to} className="flex flex-col items-center gap-1.5 min-w-[64px] active:scale-90 transition-transform">
-            <div className="w-[52px] h-[52px] rounded-[14px] flex items-center justify-center shadow-lg"
-                style={{ background: color }}>
-                <Icon size={24} color="white" strokeWidth={1.8} />
+        <div className="flex items-center gap-2.5">
+            <div className="w-3 h-3 rounded-full" style={{ background: color }} />
+            <div className="flex-1">
+                <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>{label}</p>
+                <p className="text-sm font-bold">
+                    {value} <span className="text-[10px] font-normal" style={{ color: 'var(--text-hint)' }}>{goal}</span>
+                </p>
             </div>
-            <span className="text-[10px] font-medium text-[var(--ios-text-secondary)] text-center leading-tight max-w-[64px] truncate">
-                {label}
-            </span>
+        </div>
+    );
+}
+
+function QuickLink({ to, icon, label, color }: { to: string; icon: string; label: string; color: string }) {
+    return (
+        <Link to={to} className="flex flex-col items-center gap-1.5 p-3 rounded-2xl active:scale-95 transition-all"
+            style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg" style={{ background: color }}>
+                {icon}
+            </div>
+            <span className="text-[10px] font-medium" style={{ color: 'var(--text-secondary)' }}>{label}</span>
         </Link>
-    );
-}
-
-function QuickStat({ icon: Icon, value, label, color }: { icon: any; value: string | number; label: string; color: string }) {
-    return (
-        <div className="bg-[var(--ios-card-bg)] rounded-2xl p-3 text-center">
-            <div className="w-8 h-8 rounded-lg mx-auto flex items-center justify-center mb-1.5" style={{ background: `${color}20` }}>
-                <Icon size={16} style={{ color }} />
-            </div>
-            <p className="text-lg font-bold text-white tabular-nums">{value}</p>
-            <p className="text-[10px] text-[var(--ios-text-secondary)] mt-0.5">{label}</p>
-        </div>
-    );
-}
-
-function NutritionCard() {
-    const macros = [
-        { name: 'Protein', value: 140, color: '#0A84FF', unit: 'g' },
-        { name: 'Carbs', value: 200, color: '#FFD60A', unit: 'g' },
-        { name: 'Fat', value: 60, color: '#FF453A', unit: 'g' },
-    ];
-    const totalCals = 1850;
-    const goalCals = 2500;
-    const pct = Math.round((totalCals / goalCals) * 100);
-
-    return (
-        <div className="bg-[var(--ios-card-bg)] rounded-2xl p-4">
-            <div className="flex items-center gap-4">
-                {/* Ring */}
-                <div className="relative w-20 h-20 flex-shrink-0">
-                    <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
-                        <circle cx="18" cy="18" r="15" fill="none" stroke="var(--ios-fill-tertiary)" strokeWidth="3" />
-                        <circle cx="18" cy="18" r="15" fill="none" stroke="var(--ios-tint)" strokeWidth="3"
-                            strokeDasharray={`${pct} ${100 - pct}`} strokeLinecap="round" />
-                    </svg>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <span className="text-lg font-bold text-white">{totalCals}</span>
-                        <span className="text-[9px] text-[var(--ios-text-secondary)]">kcal</span>
-                    </div>
-                </div>
-
-                {/* Macros */}
-                <div className="flex-1 space-y-2.5">
-                    {macros.map(m => (
-                        <div key={m.name} className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <div className="w-2.5 h-2.5 rounded-full" style={{ background: m.color }} />
-                                <span className="text-[13px] text-[var(--ios-text-secondary)]">{m.name}</span>
-                            </div>
-                            <span className="text-[13px] font-semibold text-white tabular-nums">{m.value}{m.unit}</span>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
-}
-
-function TasksCard() {
-    const tasks = [
-        { id: 1, title: 'Hoàn thiện slide Q3', due: 'Hôm nay', urgent: true },
-        { id: 2, title: 'Code Review layout mới', due: 'Ngày mai', urgent: false },
-        { id: 3, title: 'Gửi email báo cáo', due: 'Thứ 6', urgent: false },
-    ];
-    return (
-        <div className="bg-[var(--ios-card-bg)] rounded-2xl overflow-hidden">
-            {tasks.map((t, i) => (
-                <div key={t.id} className={`flex items-center gap-3 p-4 ${i < tasks.length - 1 ? 'border-b border-[var(--ios-separator)]' : ''}`}>
-                    <div className={`w-3 h-3 rounded-full flex-shrink-0 ${t.urgent ? 'bg-[#FF453A]' : 'bg-[var(--ios-fill-tertiary)]'}`} />
-                    <span className="flex-1 text-[15px] text-white">{t.title}</span>
-                    <span className="text-[13px] text-[var(--ios-text-secondary)]">{t.due}</span>
-                    <ChevronRight size={16} className="text-[var(--ios-text-tertiary)]" />
-                </div>
-            ))}
-        </div>
-    );
-}
-
-// ============================================================
-//  iOS TOOL SHEET (Bottom Sheet Modal)
-// ============================================================
-function IOSToolSheet({ title, isOpen, onClose, children }: { title: string; isOpen: boolean; onClose: () => void; children: React.ReactNode }) {
-    return (
-        <AnimatePresence>
-            {isOpen && (
-                <>
-                    <motion.div
-                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black/40 z-[300]"
-                        onClick={onClose}
-                    />
-                    <motion.div
-                        initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
-                        transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-                        className="fixed bottom-0 left-0 right-0 z-[301] bg-[var(--ios-sheet-bg)] rounded-t-[14px] overflow-hidden"
-                        style={{ paddingBottom: 'env(safe-area-inset-bottom, 20px)' }}
-                    >
-                        {/* Handle */}
-                        <div className="flex justify-center pt-2 pb-1">
-                            <div className="w-9 h-[5px] rounded-full bg-[var(--ios-separator-opaque)]" />
-                        </div>
-                        {/* Header */}
-                        <div className="p-4 border-b border-[var(--ios-separator)] flex justify-between items-center">
-                            <div className="w-[60px]" />
-                            <h3 className="text-[17px] font-semibold text-white">{title}</h3>
-                            <button onClick={onClose} className="text-[var(--ios-tint)] text-[17px] font-medium w-[60px] text-right">Xong</button>
-                        </div>
-                        {/* Content */}
-                        <div className="p-6">
-                            {children}
-                        </div>
-                    </motion.div>
-                </>
-            )}
-        </AnimatePresence>
-    );
-}
-
-// ============================================================
-//  1RM TOOL
-// ============================================================
-function OneRMTool() {
-    const [w, setW] = useState('');
-    const [r, setR] = useState('');
-    let calculated1RM = 0;
-    if (Number(w) > 0 && Number(r) > 0) {
-        try { calculated1RM = oneRepMax(Number(w), Number(r)); } catch { calculated1RM = 0; }
-    }
-    return (
-        <div className="space-y-5">
-            <div className="grid grid-cols-2 gap-4">
-                <div>
-                    <label className="text-[13px] text-[var(--ios-text-secondary)] mb-1.5 block">Trọng lượng (kg)</label>
-                    <input type="number" value={w} onChange={e => setW(e.target.value)}
-                        className="w-full bg-[var(--ios-fill-tertiary)] rounded-xl p-3.5 text-white text-[17px] outline-none border-none" placeholder="0" />
-                </div>
-                <div>
-                    <label className="text-[13px] text-[var(--ios-text-secondary)] mb-1.5 block">Số reps</label>
-                    <input type="number" value={r} onChange={e => setR(e.target.value)}
-                        className="w-full bg-[var(--ios-fill-tertiary)] rounded-xl p-3.5 text-white text-[17px] outline-none border-none" placeholder="0" />
-                </div>
-            </div>
-            <div className="bg-[var(--ios-tint)]/15 rounded-2xl p-5 text-center border border-[var(--ios-tint)]/20">
-                <p className="text-[13px] text-[var(--ios-tint)] font-semibold mb-1">1RM ước tính</p>
-                <p className="text-4xl font-bold text-white">{Math.round(calculated1RM)} <span className="text-lg text-[var(--ios-text-secondary)]">kg</span></p>
-            </div>
-        </div>
-    );
-}
-
-// ============================================================
-//  REST TIMER TOOL
-// ============================================================
-function RestTimerTool() {
-    const [ms, setMs] = useState(0);
-    const [running, setRunning] = useState(false);
-
-    useEffect(() => {
-        let interval: any;
-        if (running) interval = setInterval(() => setMs(m => m + 1000), 1000);
-        return () => clearInterval(interval);
-    }, [running]);
-
-    const formatTime = (timeMs: number) => {
-        const secs = Math.floor(timeMs / 1000);
-        const m = Math.floor(secs / 60);
-        const s = secs % 60;
-        return `${m}:${s < 10 ? '0' : ''}${s}`;
-    };
-
-    const pct = Math.min(100, (ms / 180000) * 100); // 3 minutes = 100%
-
-    return (
-        <div className="text-center space-y-6">
-            {/* Timer Ring */}
-            <div className="relative w-48 h-48 mx-auto">
-                <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="42" fill="none" stroke="var(--ios-fill-tertiary)" strokeWidth="6" />
-                    <circle cx="50" cy="50" r="42" fill="none" stroke="var(--ios-tint)" strokeWidth="6"
-                        strokeDasharray={`${pct * 2.64} ${264 - pct * 2.64}`} strokeLinecap="round"
-                        className="transition-all duration-1000" />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-5xl font-bold text-white tabular-nums">{formatTime(ms)}</span>
-                </div>
-            </div>
-
-            {/* Controls */}
-            <div className="grid grid-cols-2 gap-3">
-                <button
-                    onClick={() => setRunning(!running)}
-                    className={`py-4 rounded-2xl font-semibold text-[17px] transition-all ${running ? 'bg-[var(--ios-fill-tertiary)] text-white' : 'bg-[var(--ios-tint)] text-white'}`}
-                >
-                    {running ? 'Tạm dừng' : 'Bắt đầu'}
-                </button>
-                <button
-                    onClick={() => { setRunning(false); setMs(0); }}
-                    className="py-4 rounded-2xl bg-[var(--ios-fill-tertiary)] text-white font-semibold text-[17px]"
-                >
-                    Đặt lại
-                </button>
-            </div>
-
-            {/* Presets */}
-            <div className="flex justify-center gap-3">
-                {[60, 90, 120, 180].map(s => (
-                    <button key={s} onClick={() => { setMs(s * 1000); setRunning(true); }}
-                        className="px-4 py-2 rounded-xl bg-[var(--ios-fill-tertiary)] text-[13px] text-[var(--ios-text-secondary)] font-medium active:scale-95 transition-transform">
-                        {s < 60 ? `${s}s` : `${s / 60}p`}
-                    </button>
-                ))}
-            </div>
-        </div>
     );
 }
