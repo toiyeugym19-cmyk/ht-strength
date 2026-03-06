@@ -1,7 +1,9 @@
 // ========================================
 // THE MONOLITH: UNIVERSAL EXERCISE DATABASE
-// INTEGRATION SOURCE: Combined logic from Wger, ExerciseDB, and MuscleWiki
+// INTEGRATION SOURCE: Combined logic from Wger, ExerciseDB, MuscleWiki
+// + yuhonas/free-exercise-db (GitHub, 869 bài tập)
 // ========================================
+import { EXTRA_EXERCISE_DB } from './mega_database_extra';
 
 export type ExerciseType = 'cardio' | 'olympic_weightlifting' | 'plyometrics' | 'powerlifting' | 'strength' | 'stretching' | 'strongman';
 export type MuscleGroup = 'abdominals' | 'abductors' | 'adductors' | 'biceps' | 'calves' | 'chest' | 'forearms' | 'glutes' | 'hamstrings' | 'lats' | 'lower_back' | 'middle_back' | 'neck' | 'quadriceps' | 'shoulders' | 'traps' | 'triceps';
@@ -198,17 +200,23 @@ export const MEGA_EXERCISE_DB: UniversalExercise[] = [
         equipment: 'machine',
         difficulty: 'expert',
         instructions: ['Legs, Hips, Arms. Reverse on way back.']
-    }
+    },
+    // Spread GitHub exercises
+    ...EXTRA_EXERCISE_DB,
 ];
 
 // --- INTEGRATION HELPERS ---
 
 export const getExercisesByMuscle = (muscle: MuscleGroup) => MEGA_EXERCISE_DB.filter(e => e.muscle === muscle);
 export const getExercisesByType = (type: ExerciseType) => MEGA_EXERCISE_DB.filter(e => e.type === type);
-export const searchExercises = (query: string) => MEGA_EXERCISE_DB.filter(e =>
-    e.name.toLowerCase().includes(query.toLowerCase()) ||
-    e.muscle.includes(query.toLowerCase())
-);
+export const searchExercises = (query: string) => {
+    const q = query.toLowerCase();
+    return MEGA_EXERCISE_DB.filter(e =>
+        e.name.toLowerCase().includes(q) ||
+        e.muscle.includes(q) ||
+        e.equipment.toLowerCase().includes(q)
+    );
+};
 
 // --- "FUSION" LOGIC (Simulating Multi-Repo Integration) ---
 export const SYSTEM_MODULES = [

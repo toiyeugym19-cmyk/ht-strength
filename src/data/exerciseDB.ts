@@ -1234,6 +1234,7 @@ export const EXERCISE_DB: Exercise[] = [
             'Hạ xuống chậm, tránh đung đưa người.'
         ]
     }
+
 ];
 
 export const CALCULATORS = [
