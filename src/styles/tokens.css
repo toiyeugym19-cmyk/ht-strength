@@ -1,0 +1,142 @@
+/* ============================================================
+   SUPERAPP DESIGN TOKENS — Block 0
+   Đỉnh cao công nghệ, đơn giản nhưng đỉnh cao.
+   Single source of truth: color, typography, spacing, radius, shadow, motion.
+   ============================================================ */
+
+:root {
+  /* ----- COLOR — Light mode default ----- */
+  --sa-primary: #0A84FF;
+  --sa-primary-hover: #409CFF;
+  --sa-primary-muted: rgba(10, 132, 255, 0.12);
+  --sa-secondary: #5E5CE6;
+  --sa-secondary-muted: rgba(94, 92, 230, 0.12);
+  --sa-accent-success: #30D158;
+  --sa-accent-warning: #FF9F0A;
+  --sa-accent-error: #FF453A;
+  --sa-accent-info: #64D2FF;
+
+  --sa-bg: #FFFFFF;
+  --sa-bg-elevated: #F2F2F7;
+  --sa-bg-overlay: rgba(0, 0, 0, 0.4);
+  --sa-surface: #FFFFFF;
+  --sa-surface-2: #F2F2F7;
+  --sa-surface-glass: rgba(255, 255, 255, 0.72);
+  --sa-border: #E5E5EA;
+  --sa-border-strong: #C7C7CC;
+
+  --sa-text: #1C1C1E;
+  --sa-text-secondary: #8E8E93;
+  --sa-text-tertiary: #AEAEB2;
+  --sa-text-inverse: #FFFFFF;
+
+  /* ----- TYPOGRAPHY ----- */
+  --sa-font: 'Inter', -apple-system, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+  --sa-font-mono: ui-monospace, 'SF Mono', monospace;
+
+  --sa-text-h1: 1.75rem;      /* 28px */
+  --sa-text-h2: 1.375rem;    /* 22px */
+  --sa-text-h3: 1.125rem;    /* 18px */
+  --sa-text-body: 1rem;      /* 16px */
+  --sa-text-caption: 0.875rem; /* 14px */
+  --sa-text-label: 0.8125rem;  /* 13px */
+  --sa-text-tiny: 0.6875rem;   /* 11px */
+
+  --sa-weight-regular: 400;
+  --sa-weight-medium: 500;
+  --sa-weight-semibold: 600;
+  --sa-weight-bold: 700;
+
+  --sa-leading-tight: 1.25;
+  --sa-leading-normal: 1.4;
+  --sa-leading-relaxed: 1.5;
+
+  /* ----- SPACING (4px base) ----- */
+  --sa-space-0: 0;
+  --sa-space-1: 4px;
+  --sa-space-2: 8px;
+  --sa-space-3: 12px;
+  --sa-space-4: 16px;
+  --sa-space-5: 20px;
+  --sa-space-6: 24px;
+  --sa-space-8: 32px;
+  --sa-space-10: 40px;
+  --sa-space-12: 48px;
+  --sa-space-16: 64px;
+  --sa-page-x: 16px;
+  --sa-page-y: 16px;
+
+  /* ----- BORDER RADIUS ----- */
+  --sa-radius-xs: 6px;
+  --sa-radius-sm: 8px;
+  --sa-radius-md: 12px;
+  --sa-radius-lg: 16px;
+  --sa-radius-xl: 20px;
+  --sa-radius-2xl: 24px;
+  --sa-radius-full: 9999px;
+
+  /* ----- SHADOW ----- */
+  --sa-shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --sa-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --sa-shadow-modal: 0 12px 40px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+  --sa-shadow-glow: 0 0 24px -4px rgba(10, 132, 255, 0.25);
+
+  /* ----- MOTION ----- */
+  --sa-duration-fast: 150ms;
+  --sa-duration-normal: 250ms;
+  --sa-duration-slow: 400ms;
+  --sa-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --sa-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --sa-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* ----- Z-INDEX ----- */
+  --sa-z-base: 0;
+  --sa-z-dropdown: 100;
+  --sa-z-sticky: 200;
+  --sa-z-overlay: 300;
+  --sa-z-modal: 400;
+  --sa-z-toast: 500;
+  --sa-z-max: 999;
+}
+
+/* Dark mode — override for [data-theme="dark"] */
+[data-theme="dark"] {
+  --sa-bg: #09090B;
+  --sa-bg-elevated: #1C1C1E;
+  --sa-surface: #1C1C1E;
+  --sa-surface-2: #2C2C2E;
+  --sa-surface-glass: rgba(28, 28, 30, 0.72);
+  --sa-border: rgba(255, 255, 255, 0.08);
+  --sa-border-strong: rgba(255, 255, 255, 0.12);
+  --sa-text: #F5F5F7;
+  --sa-text-secondary: #AEAEB2;
+  --sa-text-tertiary: #8E8E93;
+  --sa-shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --sa-shadow-card: 0 4px 16px rgba(0, 0, 0, 0.24), 0 1px 3px rgba(0, 0, 0, 0.12);
+  --sa-shadow-modal: 0 24px 48px rgba(0, 0, 0, 0.4);
+}
+
+/* Utility classes from tokens */
+.sa-card {
+  background: var(--sa-surface);
+  border-radius: var(--sa-radius-md);
+  border: 1px solid var(--sa-border);
+  box-shadow: var(--sa-shadow-subtle);
+}
+.sa-card-elevated {
+  background: var(--sa-surface);
+  border-radius: var(--sa-radius-lg);
+  border: 1px solid var(--sa-border);
+  box-shadow: var(--sa-shadow-card);
+}
+.sa-tap {
+  transition: transform var(--sa-duration-fast) var(--sa-ease-out);
+}
+.sa-tap:active {
+  transform: scale(0.98);
+}
+.sa-page {
+  padding-left: var(--sa-page-x);
+  padding-right: var(--sa-page-x);
+  padding-bottom: calc(70px + env(safe-area-inset-bottom, 20px) + var(--sa-space-6));
+}
