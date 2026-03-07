@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { User, Camera, Award, Flame, Dumbbell, Heart, LogOut, ChevronRight, Save } from 'lucide-react';
+import { Camera, Trophy, Flame, Barbell, Heart, SignOut, CaretRight, FloppyDisk, Bell, Shield, DeviceMobile, Globe, Gear } from '@phosphor-icons/react';
 import { useHealthStore } from '../store/useHealthStore';
 import { useStepStore } from '../store/useStepStore';
 import { useCalorieStore } from '../store/useCalorieStore';
@@ -100,9 +100,9 @@ export default function ProfilePage() {
 
                 {/* Quick Stats */}
                 <motion.div variants={fadeUp} className="grid grid-cols-3 gap-3">
-                    <QuickStat icon={<Flame size={18} className="text-[#FF9F0A]" />} value={`${streak}`} label="Chuỗi ngày" />
-                    <QuickStat icon={<Award size={18} className="text-[#FFD60A]" />} value={`${achievements}`} label="Thành tựu" />
-                    <QuickStat icon={<Dumbbell size={18} className="text-[#BF5AF2]" />} value={`${(totalSteps / 1000).toFixed(0)}k`} label="Tổng bước" />
+                    <QuickStat icon={<Flame size={18} weight="duotone" className="text-[#FF9F0A]" />} value={`${streak}`} label="Chuỗi ngày" />
+                    <QuickStat icon={<Trophy size={18} weight="duotone" className="text-[#FFD60A]" />} value={`${achievements}`} label="Thành tựu" />
+                    <QuickStat icon={<Barbell size={18} weight="duotone" className="text-[#BF5AF2]" />} value={`${(totalSteps / 1000).toFixed(0)}k`} label="Tổng bước" />
                 </motion.div>
 
                 {/* Personal Info */}
@@ -114,7 +114,7 @@ export default function ProfilePage() {
                         ) : (
                             <button onClick={handleSave} className="flex items-center gap-1 text-xs font-medium text-white px-3 py-1.5 rounded-lg"
                                 style={{ background: '#30D158' }}>
-                                <Save size={12} /> Lưu
+                                <FloppyDisk size={12} weight="duotone" /> Lưu
                             </button>
                         )}
                     </div>
@@ -154,10 +154,22 @@ export default function ProfilePage() {
                 <motion.div variants={fadeUp}>
                     <h2 className="text-base font-bold mb-3">Sức khoẻ hôm nay</h2>
                     <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
-                        <HealthRow icon={<Heart size={16} className="text-[#FF375F]" />} label="Nhịp tim"
+                        <HealthRow icon={<Heart size={16} weight="duotone" className="text-[#FF375F]" />} label="Nhịp tim"
                             value={todayHealth?.heartRateAvg ? `${todayHealth.heartRateAvg} BPM` : '--'} />
-                        <HealthRow icon={<Dumbbell size={16} className="text-[#30D158]" />} label="Bước chân"
+                        <HealthRow icon={<Barbell size={16} weight="duotone" className="text-[#30D158]" />} label="Bước chân"
                             value={todayHealth?.steps ? todayHealth.steps.toLocaleString() : '--'} />
+                    </div>
+                </motion.div>
+
+                {/* Cài đặt (Settings - restored from old profile) */}
+                <motion.div variants={fadeUp}>
+                    <h2 className="text-base font-bold mb-3">Cài đặt</h2>
+                    <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+                        <SettingsRow icon={<Bell size={16} weight="duotone" className="text-[#FF9F0A]" />} label="Thông báo & Nhắc nhở" />
+                        <SettingsRow icon={<Shield size={16} weight="duotone" className="text-[#30D158]" />} label="Quyền riêng tư" />
+                        <SettingsRow icon={<DeviceMobile size={16} weight="duotone" className="text-[#0A84FF]" />} label="Thiết bị kết nối" />
+                        <SettingsRow icon={<Globe size={16} weight="duotone" className="text-[#64D2FF]" />} label="Ngôn ngữ" />
+                        <SettingsRow icon={<Gear size={16} weight="duotone" className="text-[#A0A0AB]" />} label="Cài đặt chung" hideBorder={true} />
                     </div>
                 </motion.div>
 
@@ -166,7 +178,7 @@ export default function ProfilePage() {
                     <button onClick={handleLogout}
                         className="w-full py-3.5 rounded-2xl flex items-center justify-center gap-2 text-sm font-semibold"
                         style={{ background: 'rgba(255,55,95,0.1)', color: '#FF375F', border: '1px solid rgba(255,55,95,0.2)' }}>
-                        <LogOut size={16} /> Đăng xuất
+                        <SignOut size={16} weight="duotone" /> Đăng xuất
                     </button>
                 </motion.div>
             </motion.div>
@@ -212,5 +224,21 @@ function HealthRow({ icon, label, value }: { icon: React.ReactNode; label: strin
             </div>
             <span className="text-sm font-medium">{value}</span>
         </div>
+    );
+}
+
+// Sub-component for Settings (Restored)
+function SettingsRow({ icon, label, hideBorder }: { icon: React.ReactNode; label: string; hideBorder?: boolean }) {
+    return (
+        <button className="w-full flex items-center justify-between px-4 py-3.5 active:bg-white/5 transition-colors"
+            style={{ borderBottom: hideBorder ? 'none' : '1px solid var(--border-subtle)' }}>
+            <div className="flex items-center gap-3">
+                <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'var(--bg-card-alt)' }}>
+                    {icon}
+                </div>
+                <span className="text-sm font-medium text-left">{label}</span>
+            </div>
+            <CaretRight size={16} weight="bold" style={{ color: 'var(--text-hint)' }} />
+        </button>
     );
 }

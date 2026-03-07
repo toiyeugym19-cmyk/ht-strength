@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Download, X } from 'lucide-react';
+import { Download, X } from '@phosphor-icons/react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function InstallPWA() {
@@ -58,7 +58,7 @@ export default function InstallPWA() {
                                 onClick={() => setShowBanner(false)}
                                 className="p-1 hover:bg-white/10 rounded-lg transition-colors"
                             >
-                                <X className="text-zinc-500" size={16} />
+                                <X className="text-zinc-500" size={16} weight="bold" />
                             </button>
                         </div>
 

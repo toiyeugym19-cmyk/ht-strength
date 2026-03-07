@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Activity } from 'lucide-react';
+import { ChartLineUp } from '@phosphor-icons/react';
 
 interface MuscleData {
     name: string;
@@ -14,7 +14,7 @@ export function GymHeatmap({ muscles }: GymHeatmapProps) {
     return (
         <div className="glass-panel p-6 border border-white/5 relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
-                <Activity size={80} />
+                <ChartLineUp size={80} weight="duotone" />
             </div>
 
             <div className="flex items-center justify-between mb-6">

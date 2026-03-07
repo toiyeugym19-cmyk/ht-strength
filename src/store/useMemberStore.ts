@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { MEMBERS_20 } from '../data/mockGymData';
 
 export interface Member {
     id: string;
@@ -12,6 +13,7 @@ export interface Member {
     startDate: string;
     expiryDate: string;
     joinDate: string;
+    dateOfBirth?: string;
 
     // Session tracking for PT/Class packs
     sessionsTotal: number;
@@ -25,10 +27,53 @@ export interface Member {
     lastCheckIn: string | null;
     notes?: string;
 
+    assignedPT?: string; // Tên PT phụ trách
+
     // Physical Stats (Optional tracking)
     height?: number;
     weight?: number;
     goals?: string[];
+
+    // Admin-assigned plans (member follows)
+    assignedWorkoutPlanId?: string; // e.g. 'fullbody_basic', 'push', 'pull', 'legs'
+    assignedMealPlan?: {
+        name: string;
+        dailyCalories: number;
+        protein: number;
+        carbs: number;
+        fat: number;
+        meals: string[];
+    };
+
+    // Body metrics over time (before/during/after package)
+    bodyMetrics?: Array<{
+        date: string;
+        weight?: number;
+        waist?: number;
+        hip?: number;
+        chest?: number;
+        arm?: number;
+    }>;
+
+    // Goal targets for the package (e.g. weight 68→65, hip +2cm)
+    goalTargets?: {
+        weightFrom?: number;
+        weightTo?: number;
+        waistFrom?: number;
+        waistTo?: number;
+        hipFrom?: number;
+        hipTo?: number;
+        note?: string;
+    };
+
+    // Simple workout log for member-side training
+    workoutHistory?: Array<{
+        id: string;
+        date: string;
+        planName: string;
+        totalSets: number;
+        durationMinutes: number;
+    }>;
 }
 
 interface MemberState {
@@ -39,59 +84,19 @@ interface MemberState {
     updateMember: (id: string, updates: Partial<Member>) => void;
     deleteMember: (id: string) => void;
     performCheckIn: (id: string, type?: string) => void;
+    performCheckOut: (id: string) => void; // Uncheck (double-click)
     refreshMemberStatus: () => void; // Auto check expiry
+
+    setMemberWorkoutPlan: (memberId: string, planId: string | null) => void;
+    setMemberMealPlan: (memberId: string, plan: Member['assignedMealPlan'] | null) => void;
+    setMemberGoalTargets: (memberId: string, targets: Member['goalTargets'] | null) => void;
+    addMemberBodyMetric: (memberId: string, metric: NonNullable<Member['bodyMetrics']>[number]) => void;
 }
 
 export const useMemberStore = create<MemberState>()(
     persist(
-        (set, get) => ({
-            members: [
-                {
-                    id: 'm1',
-                    name: 'Nguyễn Văn A',
-                    phone: '0901234567',
-                    status: 'Active',
-                    membershipType: 'Gói 1 Năm',
-                    startDate: '2024-01-01',
-                    expiryDate: '2025-01-01',
-                    joinDate: '2024-01-01',
-                    sessionsTotal: 365,
-                    sessionsUsed: 42,
-                    checkInHistory: [],
-                    lastCheckIn: '2024-02-02T08:30:00',
-                    avatar: 'https://ui-avatars.com/api/?name=Nguyen+Van+A&background=random',
-                },
-                {
-                    id: 'm2',
-                    name: 'Trần Thị B',
-                    phone: '0912345678',
-                    status: 'Active',
-                    membershipType: 'Gói 3 Tháng',
-                    startDate: '2024-02-01',
-                    expiryDate: '2024-05-01',
-                    joinDate: '2024-02-01',
-                    sessionsTotal: 90,
-                    sessionsUsed: 5,
-                    checkInHistory: [],
-                    lastCheckIn: '2024-02-03T17:00:00',
-                    avatar: 'https://ui-avatars.com/api/?name=Tran+Thi+B&background=random',
-                },
-                {
-                    id: 'm3',
-                    name: 'Lê Văn C',
-                    phone: '0987654321',
-                    status: 'Expired',
-                    membershipType: 'Gói 1 Tháng',
-                    startDate: '2023-12-01',
-                    expiryDate: '2024-01-01',
-                    joinDate: '2023-12-01',
-                    sessionsTotal: 30,
-                    sessionsUsed: 28,
-                    checkInHistory: [],
-                    lastCheckIn: '2023-12-30T09:00:00',
-                    avatar: 'https://ui-avatars.com/api/?name=Le+Van+C&background=random',
-                }
-            ],
+        (set) => ({
+            members: MEMBERS_20,
 
             addMember: (memberData) => set((state) => ({
                 members: [
@@ -115,7 +120,7 @@ export const useMemberStore = create<MemberState>()(
                 members: state.members.filter(m => m.id !== id)
             })),
 
-            performCheckIn: (id, type = 'Gym Access') => set((state) => ({
+            performCheckIn: (id, type = 'Check-in') => set((state) => ({
                 members: state.members.map(m => {
                     if (m.id !== id) return m;
 
@@ -132,21 +137,70 @@ export const useMemberStore = create<MemberState>()(
                 })
             })),
 
-            refreshMemberStatus: () => set((state) => {
-                const now = new Date();
+            performCheckOut: (id) => set((state) => {
+                const today = new Date().toDateString();
                 return {
                     members: state.members.map(m => {
-                        const expiry = new Date(m.expiryDate);
-                        if (m.status !== 'Banned' && expiry < now) {
-                            return { ...m, status: 'Expired' };
-                        }
-                        return m;
+                        if (m.id !== id) return m;
+                        if (!m.lastCheckIn || m.lastCheckIn === 'N/A') return m;
+
+                        const lastDate = new Date(m.lastCheckIn);
+                        if (lastDate.toDateString() !== today) return m;
+                        if (m.sessionsUsed <= 0) return m;
+
+                        const newHistory = m.checkInHistory.filter((_, i) => i !== 0);
+                        const prevCheckIn = newHistory[0]?.date || null;
+                        return {
+                            ...m,
+                            sessionsUsed: m.sessionsUsed - 1,
+                            lastCheckIn: prevCheckIn,
+                            checkInHistory: newHistory
+                        };
                     })
                 };
-            })
+            }),
+
+            refreshMemberStatus: () => set((state) => ({
+                members: state.members.map(m => {
+                    if (m.status === 'Banned') return m;
+                    const exhausted = (m.sessionsTotal ?? 0) > 0 && (m.sessionsUsed ?? 0) >= (m.sessionsTotal ?? 0);
+                    if (exhausted) return { ...m, status: 'Expired' as const };
+                    return m;
+                })
+            })),
+
+            setMemberWorkoutPlan: (memberId, planId) => set((state) => ({
+                members: state.members.map(m =>
+                    m.id === memberId ? { ...m, assignedWorkoutPlanId: planId ?? undefined } : m
+                )
+            })),
+
+            setMemberMealPlan: (memberId, plan) => set((state) => ({
+                members: state.members.map(m =>
+                    m.id === memberId ? { ...m, assignedMealPlan: plan ?? undefined } : m
+                )
+            })),
+
+            setMemberGoalTargets: (memberId, targets) => set((state) => ({
+                members: state.members.map(m =>
+                    m.id === memberId ? { ...m, goalTargets: targets ?? undefined } : m
+                )
+            })),
+
+            addMemberBodyMetric: (memberId, metric) => set((state) => ({
+                members: state.members.map(m => {
+                    if (m.id !== memberId) return m;
+                    const list = [...(m.bodyMetrics || [])];
+                    const existing = list.findIndex(x => x.date === metric.date);
+                    if (existing >= 0) list[existing] = { ...list[existing], ...metric };
+                    else list.push(metric);
+                    list.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+                    return { ...m, bodyMetrics: list };
+                })
+            }))
         }),
         {
-            name: 'lifeos-member-store',
+            name: 'lifeos-member-store-v2',
         }
     )
 );

@@ -227,16 +227,24 @@ export default function NutritionPage() {
     // ========== DESKTOP VIEW ==========
     return (
         <div className="space-y-8 pb-32 max-w-7xl mx-auto">
+            {/* ─── Phân biệt rõ vs CalorieTrackerPage ─── */}
+            <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl mx-0" style={{ background: 'rgba(48,209,88,0.08)', border: '0.5px solid rgba(48,209,88,0.2)' }}>
+                <span className="text-[11px] font-medium" style={{ color: 'rgba(48,209,88,0.9)' }}>
+                    🥗 <strong>Kế Hoạch Dinh Dưỡng</strong> — Thiết lập mục tiêu macro, phase tập (Bulk/Cut/Maintain), chế độ ăn dài hạn.
+                    Xem <strong>Nhật Ký Ăn</strong> tại tab Calories để ghi theo ngày.
+                </span>
+            </div>
+
             {/* Header Area */}
             <div className="flex flex-col md:flex-row items-end justify-between gap-6 pb-6 border-b border-white/5">
                 <div>
                     <h1 className="text-4xl font-[900] text-white italic uppercase tracking-tighter leading-none mb-2">
-                        CHẾ ĐỘ <span className="text-emerald-500">DINH DƯỠNG</span>
+                        KẾ HOẠCH <span className="text-emerald-500">DINH DƯỠNG</span>
                     </h1>
                     <p className="text-text-muted text-xs font-medium flex items-center gap-2">
                         {format(today, 'EEEE, d MMMM, yyyy', { locale: vi })}
                         <span className="w-1 h-1 rounded-full bg-white/20" />
-                        Mục tiêu: <span className="text-emerald-400 font-bold uppercase">{currentPhase}</span>
+                        Phase: <span className="text-emerald-400 font-bold uppercase">{currentPhase}</span>
                     </p>
                 </div>
 

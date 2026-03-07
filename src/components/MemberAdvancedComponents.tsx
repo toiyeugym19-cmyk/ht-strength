@@ -15,6 +15,15 @@ import {
     Printer, Copy
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { subDays as dateFnsSubDays } from 'date-fns';
+
+// Deterministic random for purity
+const detRandom = (seed: string, offset: number = 0) => {
+    let combinedSeed = seed + offset.toString();
+    let hash = 0;
+    for (let i = 0; i < combinedSeed.length; i++) hash = ((hash << 5) - hash) + combinedSeed.charCodeAt(i) | 0;
+    return Math.abs(hash % 1000) / 1000;
+};
 
 
 /**
@@ -211,16 +220,17 @@ export function MemberPayments() {
             const statuses: Array<'paid' | 'pending' | 'overdue'> = ['paid', 'paid', 'pending', 'overdue'];
 
             for (let i = 0; i < 2; i++) {
+                const seed = member.id + i;
                 invoices.push({
                     id: `INV-${member.id}-${i}`,
                     memberId: member.id,
                     memberName: member.name,
                     memberAvatar: member.avatar,
-                    type: types[Math.floor(Math.random() * types.length)],
-                    amount: Math.floor(Math.random() * 5000000) + 500000,
-                    status: statuses[Math.floor(Math.random() * statuses.length)],
-                    date: format(subDays(new Date(), Math.floor(Math.random() * 30)), 'yyyy-MM-dd'),
-                    dueDate: format(subDays(new Date(), Math.floor(Math.random() * 10) - 5), 'yyyy-MM-dd')
+                    type: types[Math.floor(detRandom(seed, 1) * types.length)],
+                    amount: Math.floor(detRandom(seed, 2) * 5000000) + 500000,
+                    status: statuses[Math.floor(detRandom(seed, 3) * statuses.length)],
+                    date: format(dateFnsSubDays(new Date(2025, 0, 1), Math.floor(detRandom(seed, 4) * 30)), 'yyyy-MM-dd'),
+                    dueDate: format(dateFnsSubDays(new Date(2025, 0, 1), Math.floor(detRandom(seed, 5) * 10) - 5), 'yyyy-MM-dd')
                 });
             }
             return invoices;

@@ -6,8 +6,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const articlesPath = path.join('d:/tap gyp/src/data/articles.json');
-const qaPath = path.join('d:/tap gyp/src/data/qa.json');
+const articlesPath = path.join(__dirname, '../src/data/articles.json');
+const qaPath = path.join(__dirname, '../src/data/qa.json');
 
 // Helper to get random item from array
 const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];

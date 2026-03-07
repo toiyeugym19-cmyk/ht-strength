@@ -1,13 +1,23 @@
 export interface Exercise {
     id: string;
     name: string;
+    nameEn?: string;
     target: string;
     equipment: string;
     gifUrl?: string;
+    videoUrl?: string;
     instructions: string[];
     difficulty: 'beginner' | 'intermediate' | 'advanced';
+    category?: 'strength' | 'cardio' | 'stretching' | 'plyometric' | 'calisthenics';
     primaryMuscle?: string;
     secondaryMuscles?: string[];
+    tips?: string[];
+    commonMistakes?: string[];
+    suggestedSets?: string;
+    restSeconds?: number;
+    caloriesPer10Min?: number;
+    variations?: string[];
+    supersetWith?: string[];
 }
 
 export const EXERCISE_DB: Exercise[] = [
@@ -15,10 +25,13 @@ export const EXERCISE_DB: Exercise[] = [
     {
         id: 'chest-001',
         name: 'Đẩy Ngực Ngang (Barbell)',
+        nameEn: 'Barbell Bench Press',
         target: 'Gym/Ngực',
         equipment: 'Thanh đòn',
         difficulty: 'intermediate',
-        gifUrl: '/bench_press_technique_new_1768227996228.png',
+        category: 'strength',
+        gifUrl: 'https://static.exercisedb.dev/media/00251kr.gif',
+        videoUrl: '/videos/exercises/bench-press.mp4',
         primaryMuscle: 'Cơ Ngực Lớn',
         secondaryMuscles: ['Tay Sau', 'Vai Trước'],
         instructions: [
@@ -26,59 +39,99 @@ export const EXERCISE_DB: Exercise[] = [
             'Nắm thanh đòn rộng hơn vai một chút.',
             'Hạ tạ xuống giữa ngực trong khi hít vào.',
             'Đẩy tạ lên mạnh mẽ trong khi thở ra.'
-        ]
+        ],
+        tips: [
+            'Ép bả vai lại và xuống ghế để tạo vòm ngực tự nhiên',
+            'Giữ cổ tay thẳng hàng với cẳng tay, không gập ngược',
+            'Hít vào khi hạ tạ, thở ra mạnh khi đẩy lên'
+        ],
+        commonMistakes: [
+            'Bật mông khỏi ghế khi đẩy nặng',
+            'Hạ tạ quá nhanh không kiểm soát',
+            'Nắm thanh đòn quá rộng gây áp lực lên vai'
+        ],
+        suggestedSets: '4 sets × 6-10 reps',
+        restSeconds: 120,
+        caloriesPer10Min: 85,
+        variations: ['Đẩy ngực tạ đơn', 'Đẩy ngực trên dốc', 'Close Grip Bench Press']
     },
-    {
-        id: 'chest-004',
-        name: 'Banh Ngực Tạ Đơn',
-        target: 'Gym/Ngực',
-        equipment: 'Tạ đơn',
-        difficulty: 'beginner',
-        primaryMuscle: 'Cơ Ngực Lớn',
-        secondaryMuscles: ['Vai Trước'],
-        instructions: [
-            'Nằm trên ghế, cầm tạ đơn phía trên ngực, khuỷu tay hơi cong.',
-            'Hạ tạ sang hai bên theo hình vòng cung rộng cho đến khi ngực căng.',
-            'Đưa tạ trở lại vị trí bắt đầu, như đang ôm một cái cây lớn.'
-        ]
-    },
+
 
     // Back
     {
         id: 'back-001',
         name: 'Hít Xà Đơn',
+        nameEn: 'Pull Up',
         target: 'Gym/Lưng',
         equipment: 'Bodyweight',
         difficulty: 'advanced',
+        category: 'calisthenics',
+        gifUrl: 'https://static.exercisedb.dev/media/06521kr.gif',
+        videoUrl: '/videos/exercises/pull-up.mp4',
         primaryMuscle: 'Xô (Lats)',
         secondaryMuscles: ['Tay Trước (Biceps)', 'Lưng Giữa'],
         instructions: [
             'Treo người trên xà với tay rộng hơn vai.',
             'Kéo ngực lên phía xà bằng cách ép khuỷu tay xuống.',
             'Hạ xuống có kiểm soát cho đến khi tay duỗi thẳng.'
-        ]
+        ],
+        tips: [
+            'Bắt đầu từ tư thế treo hoàn toàn, tay duỗi thẳng',
+            'Tập trung kéo bằng cơ lưng, không phải tay',
+            'Nếu chưa kéo được, dùng dây kháng lực hỗ trợ'
+        ],
+        commonMistakes: [
+            'Không kéo hết biên độ, cằm không qua xà',
+            'Đung đưa người để lấy đà',
+            'Chỉ dùng lực tay mà không kích hoạt cơ lưng'
+        ],
+        suggestedSets: '3-4 sets × 5-12 reps',
+        restSeconds: 120,
+        caloriesPer10Min: 90,
+        variations: ['Chin Up', 'Wide Grip Pull Up', 'Assisted Pull Up']
     },
     {
         id: 'back-003',
         name: 'Kéo Xà Cáp (Lat Pulldown)',
+        nameEn: 'Lat Pulldown',
         target: 'Gym/Lưng',
         equipment: 'Máy cáp',
         difficulty: 'beginner',
+        category: 'strength',
+        gifUrl: 'https://static.exercisedb.dev/media/04931kr.gif',
+        videoUrl: '/videos/exercises/lat-pulldown.mp4',
         primaryMuscle: 'Xô (Lats)',
         secondaryMuscles: ['Tay Trước (Biceps)', 'Lưng Trên'],
         instructions: [
             'Ngồi vào máy, nắm thanh đòn rộng tay.',
             'Kéo thanh đòn xuống phía ngực trên, hơi ngả người ra sau.',
             'Siết cơ xô ở điểm thấp nhất và thả từ từ.'
-        ]
+        ],
+        tips: [
+            'Ngả người ra sau khoảng 15-20 độ khi kéo',
+            'Kéo thanh đòn về phía ngực trên, không phải sau cổ',
+            'Siết bả vai lại ở điểm thấp nhất'
+        ],
+        commonMistakes: [
+            'Kéo thanh đòn ra sau gáy gây chấn thương vai',
+            'Dùng đà đung đưa thân người quá nhiều',
+            'Nắm thanh đòn quá hẹp hoặc quá rộng'
+        ],
+        suggestedSets: '3-4 sets × 8-12 reps',
+        restSeconds: 90,
+        caloriesPer10Min: 65,
+        variations: ['Close Grip Pulldown', 'Reverse Grip Pulldown', 'Single Arm Pulldown']
     },
     {
         id: 'back-004',
         name: 'Deadlift (Kéo Tạ)',
+        nameEn: 'Deadlift',
         target: 'Gym/Lưng',
         equipment: 'Thanh đòn',
         difficulty: 'advanced',
-        gifUrl: '/deadlift_technique_1768227973188.png',
+        category: 'strength',
+        gifUrl: 'https://static.exercisedb.dev/media/00321kr.gif',
+        videoUrl: '/videos/exercises/deadlift.mp4',
         primaryMuscle: 'Lưng Dưới',
         secondaryMuscles: ['Đùi Sau', 'Mông', 'Cầu Vai'],
         instructions: [
@@ -86,229 +139,264 @@ export const EXERCISE_DB: Exercise[] = [
             'Gập hông và gối, nắm lấy thanh đòn.',
             'Nâng tạ bằng cách duỗi hông và gối, giữ thanh đòn sát cơ thể.',
             'Đứng thẳng, sau đó hạ tạ xuống sàn.'
-        ]
+        ],
+        tips: [
+            'Giữ thanh đòn sát cơ thể trong suốt động tác',
+            'Hít một hơi sâu trước khi kéo để cố định core',
+            'Đẩy sàn bằng chân thay vì kéo bằng lưng'
+        ],
+        commonMistakes: [
+            'Cong lưng khi kéo tạ nặng',
+            'Để thanh đòn xa cơ thể',
+            'Nâng bằng lưng dưới thay vì dùng hông và chân'
+        ],
+        suggestedSets: '3-5 sets × 3-6 reps',
+        restSeconds: 180,
+        caloriesPer10Min: 100,
+        variations: ['Sumo Deadlift', 'Romanian Deadlift', 'Trap Bar Deadlift']
     },
 
     // Legs
     {
         id: 'leg-001',
         name: 'Gánh Tạ (Squat)',
+        nameEn: 'Barbell Back Squat',
         target: 'Gym/Chân',
         equipment: 'Thanh đòn',
         difficulty: 'advanced',
-        gifUrl: '/squat_technique_1768227949619.png',
+        category: 'strength',
+        gifUrl: 'https://static.exercisedb.dev/media/00271kr.gif',
+        videoUrl: '/videos/exercises/squat.mp4',
         primaryMuscle: 'Đùi Trước',
         secondaryMuscles: ['Mông', 'Đùi Sau', 'Core'],
         instructions: [
             'Thanh đòn nằm trên cầu vai, chân rộng bằng vai.',
             'Ngồi xuống và ra sau cho đến khi đùi song song với sàn.',
             'Đạp mạnh gót chân để đứng dậy.'
-        ]
+        ],
+        tips: [
+            'Giữ ngực ưỡn và mắt nhìn thẳng phía trước',
+            'Đẩy đầu gối ra ngoài theo hướng mũi chân',
+            'Hít sâu vào bụng trước khi ngồi xuống'
+        ],
+        commonMistakes: [
+            'Gối chụm vào trong khi đứng lên',
+            'Không ngồi đủ sâu (dưới song song)',
+            'Nâng gót chân khỏi sàn'
+        ],
+        suggestedSets: '4 sets × 5-8 reps',
+        restSeconds: 150,
+        caloriesPer10Min: 95,
+        variations: ['Front Squat', 'Goblet Squat', 'Box Squat']
     },
-    {
-        id: 'leg-003',
-        name: 'Đá Đùi (Leg Extension)',
-        target: 'Gym/Chân',
-        equipment: 'Máy tập',
-        difficulty: 'beginner',
-        primaryMuscle: 'Đùi Trước',
-        instructions: [
-            'Ngồi vào máy, cổ chân đặt dưới đệm.',
-            'Duỗi thẳng chân, siết cơ đùi ở điểm cao nhất.',
-            'Hạ xuống từ từ về vị trí bắt đầu.'
-        ]
-    },
+
+
 
     // Shoulders
-    {
-        id: 'sh-001',
-        name: 'Đẩy Vai (Overhead Press)',
-        target: 'Gym/Vai',
-        equipment: 'Thanh đòn',
-        difficulty: 'intermediate',
-        primaryMuscle: 'Cơ Vai',
-        secondaryMuscles: ['Tay Sau', 'Ngực Trên'],
-        instructions: [
-            'Thanh đòn ngang xương đòn, nắm rộng bằng vai.',
-            'Đẩy tạ qua đầu cho đến khi tay duỗi thẳng.',
-            'Hạ tạ xuống ngực có kiểm soát.'
-        ]
-    },
-    {
-        id: 'sh-003',
-        name: 'Kéo Cáp Mặt (Face Pull)',
-        target: 'Gym/Vai',
-        equipment: 'Máy cáp',
-        difficulty: 'beginner',
-        primaryMuscle: 'Vai Sau',
-        secondaryMuscles: ['Cầu Vai', 'Rotator Cuff'],
-        instructions: [
-            'Sử dụng dây thừng ở vị trí ngang mắt.',
-            'Kéo dây về phía mặt, tách hai đầu dây ra.',
-            'Siết chặt hai bả vai lại với nhau.'
-        ]
-    },
+
 
     // Arms
-    {
-        id: 'arm-001',
-        name: 'Cuốn Tạ Đòn (Barbell Curl)',
-        target: 'Gym/Tay',
-        equipment: 'Thanh đòn',
-        difficulty: 'beginner',
-        primaryMuscle: 'Tay Trước (Biceps)',
-        instructions: [
-            'Đứng thẳng, nắm thanh đòn lòng bàn tay hướng lên.',
-            'Cuốn tạ lên phía vai, giữ khuỷu tay cố định sát hông.',
-            'Hạ tạ xuống chậm rãi.'
-        ]
-    },
-    {
-        id: 'arm-002',
-        name: 'Thừng Kéo Tay Sau',
-        target: 'Gym/Tay',
-        equipment: 'Máy cáp',
-        difficulty: 'beginner',
-        primaryMuscle: 'Tay Sau (Triceps)',
-        instructions: [
-            'Đứng đối diện máy cable, nắm dây thừng.',
-            'Đẩy dây xuống dưới cho đến khi tay duỗi thẳng.',
-            'Gồng cơ tam đầu ở đáy và từ từ đưa lên.'
-        ]
-    },
-    {
-        id: 'arm-003',
-        name: 'Cuốn Búa (Hammer Curl)',
-        target: 'Gym/Tay',
-        equipment: 'Tạ đơn',
-        difficulty: 'beginner',
-        primaryMuscle: 'Cơ Cánh Tay',
-        instructions: [
-            'Nắm tạ đơn lòng bàn tay hướng vào thân người.',
-            'Cuốn tạ lên như đang đóng đinh.',
-            'Hạ xuống có kiểm soát.'
-        ]
-    },
+
 
     {
         id: 'chest-005',
         name: 'Đẩy Ngực Trên',
+        nameEn: 'Incline Barbell Bench Press',
         target: 'Gym/Ngực',
         equipment: 'Thanh đòn',
         difficulty: 'intermediate',
+        category: 'strength',
+        gifUrl: 'https://static.exercisedb.dev/media/PG1kcIb.gif',
         primaryMuscle: 'Ngực Trên',
         secondaryMuscles: ['Tay Sau', 'Vai Trước'],
         instructions: [
             'Ghế dốc 30-45 độ.',
             'Hạ thanh đòn xuống ngực trên.',
             'Đẩy lên, tập trung vào việc co cơ ngực trên.'
-        ]
+        ],
+        tips: [
+            'Chỉnh ghế dốc 30 độ để tối ưu cho ngực trên',
+            'Hạ thanh đòn về phía xương đòn',
+            'Đẩy chân xuống sàn để tạo lực ổn định'
+        ],
+        commonMistakes: [
+            'Chỉnh ghế quá dốc biến thành đẩy vai',
+            'Bật tạ khỏi ngực thay vì đẩy có kiểm soát',
+            'Nắm tay quá rộng gây đau vai'
+        ],
+        suggestedSets: '4 sets × 8-10 reps',
+        restSeconds: 120,
+        caloriesPer10Min: 80,
+        variations: ['Incline Dumbbell Press', 'Low Incline Bench Press', 'Incline Smith Machine Press']
     },
     {
         id: 'back-005',
         name: 'Chèo Tạ Đơn (Dumbbell Row)',
+        nameEn: 'Dumbbell Row',
         target: 'Gym/Lưng',
         equipment: 'Tạ đơn',
         difficulty: 'intermediate',
+        category: 'strength',
+        gifUrl: 'https://static.exercisedb.dev/media/C0MA9bC.gif',
         primaryMuscle: 'Xô (Lats)',
         secondaryMuscles: ['Lưng Giữa', 'Tay Trước'],
         instructions: [
             'Một tay và đầu gối đặt trên ghế.',
             'Kéo tạ về phía hông, giữ khuỷu tay sát người.',
             'Siết bả vai ở điểm cao nhất.'
-        ]
+        ],
+        tips: [
+            'Kéo tạ về phía hông, không phải ngực',
+            'Giữ lưng thẳng song song với sàn',
+            'Siết bả vai ở điểm cao nhất 1 giây'
+        ],
+        commonMistakes: [
+            'Xoay thân người để lấy đà',
+            'Kéo tạ bằng tay thay vì cơ lưng',
+            'Không kéo hết biên độ'
+        ],
+        suggestedSets: '3-4 sets × 8-12 reps',
+        restSeconds: 90,
+        caloriesPer10Min: 70,
+        variations: ['Barbell Row', 'Seated Cable Row', 'Meadows Row']
     },
     {
         id: 'leg-004',
         name: 'Đạp Đùi (Leg Press)',
+        nameEn: 'Leg Press',
         target: 'Gym/Chân',
         equipment: 'Máy tập',
         difficulty: 'beginner',
+        category: 'strength',
+        gifUrl: 'https://static.exercisedb.dev/media/7zdxRTl.gif',
         primaryMuscle: 'Đùi Trước',
         secondaryMuscles: ['Mông', 'Đùi Sau'],
         instructions: [
             'Chân đặt rộng bằng vai trên bàn đạp.',
             'Hạ xuống cho đến khi gối gập 90 độ.',
             'Đẩy lên nhưng không khóa khớp gối.'
-        ]
+        ],
+        tips: [
+            'Đặt chân cao trên bàn đạp để nhắm vào mông nhiều hơn',
+            'Không khóa khớp gối ở đỉnh',
+            'Hạ từ từ cho đến khi gối gập 90 độ'
+        ],
+        commonMistakes: [
+            'Khóa khớp gối thẳng hoàn toàn',
+            'Đặt chân quá thấp gây áp lực lên gối',
+            'Nâng mông khỏi ghế khi hạ quá sâu'
+        ],
+        suggestedSets: '3-4 sets × 10-15 reps',
+        restSeconds: 90,
+        caloriesPer10Min: 75,
+        variations: ['Single Leg Press', 'Wide Stance Leg Press', 'Hack Squat']
     },
     {
         id: 'leg-005',
         name: 'Romanian Deadlift (RDL)',
+        nameEn: 'Romanian Deadlift',
         target: 'Gym/Chân',
         equipment: 'Thanh đòn',
         difficulty: 'intermediate',
+        category: 'strength',
+        gifUrl: 'https://static.exercisedb.dev/media/wQ2c4XD.gif',
         primaryMuscle: 'Đùi Sau',
         secondaryMuscles: ['Mông', 'Lưng Dưới'],
         instructions: [
             'Đứng thẳng với thanh đòn.',
             'Gập hông, hạ thanh đòn dọc theo chân.',
             'Cảm nhận độ căng ở đùi sau và trở lại vị trí đứng.'
-        ]
+        ],
+        tips: [
+            'Giữ thanh đòn luôn sát chân trong suốt động tác',
+            'Đẩy hông ra sau thay vì cúi lưng xuống',
+            'Cảm nhận cơ đùi sau căng mạnh khi hạ'
+        ],
+        commonMistakes: [
+            'Cong lưng khi hạ tạ xuống',
+            'Gập gối quá nhiều biến thành Squat',
+            'Hạ tạ quá thấp vượt quá khả năng linh hoạt'
+        ],
+        suggestedSets: '3-4 sets × 8-12 reps',
+        restSeconds: 120,
+        caloriesPer10Min: 80,
+        variations: ['Single Leg RDL', 'Dumbbell RDL', 'Stiff Leg Deadlift']
     },
 
     // Core
-    {
-        id: 'core-001',
-        name: 'Plank (Giữ Bụng)',
-        target: 'Gym/Bụng',
-        equipment: 'Bodyweight',
-        difficulty: 'beginner',
-        primaryMuscle: 'Cơ Bụng',
-        instructions: [
-            'Cẳng tay và mũi chân chạm sàn, người thẳng.',
-            'Siết chặt cơ bụng, giữ nguyên tư thế.',
-            'Giữ càng lâu càng tốt.'
-        ]
-    },
+
     {
         id: 'core-002',
         name: 'Treo Người Đá Bụng',
+        nameEn: 'Hanging Leg Raise',
         target: 'Gym/Bụng',
         equipment: 'Xà đơn',
         difficulty: 'intermediate',
+        category: 'calisthenics',
+        gifUrl: 'https://static.exercisedb.dev/media/0V2YQjW.gif',
         primaryMuscle: 'Bụng Dưới',
         instructions: [
             'Treo người trên xà, chân duỗi thẳng.',
             'Nâng chân lên cho đến khi song song với sàn.',
             'Hạ xuống chậm rãi, tránh đung đưa.'
-        ]
+        ],
+        tips: [
+            'Cuộn xương chậu lên để kích hoạt bụng dưới',
+            'Nếu khó quá, bắt đầu với gập gối thay vì duỗi thẳng',
+            'Hạ chân xuống từ từ, đừng để rơi tự do'
+        ],
+        commonMistakes: [
+            'Đung đưa thân người để lấy đà',
+            'Chỉ nâng chân mà không cuộn hông',
+            'Dùng lực cơ hông gập thay vì cơ bụng'
+        ],
+        suggestedSets: '3 sets × 10-15 reps',
+        restSeconds: 60,
+        caloriesPer10Min: 60,
+        variations: ['Knee Raise', 'Toes to Bar', 'Captain Chair Leg Raise']
     },
     // --- CHEST EXPANSION ---
     {
         id: 'chest-006',
         name: 'Đẩy Ngực Dốc Lên (Incline Dumbbell Press)',
+        nameEn: 'Incline Dumbbell Press',
         target: 'Gym/Ngực',
         equipment: 'Tạ đơn',
         difficulty: 'intermediate',
+        category: 'strength',
+        gifUrl: 'https://static.exercisedb.dev/media/PG1kcIb.gif',
         primaryMuscle: 'Ngực Trên',
         secondaryMuscles: ['Vai Trước', 'Tay Sau'],
         instructions: [
             'Nằm trên ghế dốc 30-45 độ, cầm tạ đơn.',
             'Đẩy tạ thẳng lên trên ngực, hai lòng bàn tay hướng vào nhau hoặc về phía trước.',
             'Hạ tạ xuống chậm rãi cho đến khi ngang ngực.'
-        ]
+        ],
+        tips: [
+            'Chỉnh ghế 30 độ để nhắm ngực trên, không quá dốc',
+            'Hạ tạ xuống ngang ngực trên, khuỷu tay hơi thấp hơn vai',
+            'Siết ngực ở đỉnh 1 giây trước khi hạ'
+        ],
+        commonMistakes: [
+            'Ghế quá dốc biến thành đẩy vai',
+            'Hạ tạ quá thấp gây đau vai',
+            'Đẩy hai tạ không đều'
+        ],
+        suggestedSets: '4 sets × 8-12 reps',
+        restSeconds: 90,
+        caloriesPer10Min: 70,
+        variations: ['Incline Barbell Press', 'Low Incline DB Press', 'Neutral Grip Incline']
     },
-    {
-        id: 'chest-007',
-        name: 'Ép Ngực Máy (Pec Deck Fly)',
-        target: 'Gym/Ngực',
-        equipment: 'Máy tập',
-        difficulty: 'beginner',
-        primaryMuscle: 'Ngực Trong',
-        secondaryMuscles: ['Vai Trước'],
-        instructions: [
-            'Ngồi vào máy, lưng thẳng.',
-            'Đặt tay lên tay cầm hoặc đệm tay, ép hai tay lại gần nhau.',
-            'Giữ 1 giây ở điểm ép sát nhất, sau đó mở rộng tay về vị trí đầu.'
-        ]
-    },
+
     {
         id: 'chest-008',
         name: 'Xà Kép (Dips)',
+        nameEn: 'Chest Dips',
         target: 'Gym/Ngực',
         equipment: 'Xà kép',
         difficulty: 'advanced',
+        category: 'calisthenics',
+        gifUrl: 'https://static.exercisedb.dev/media/LkoAWAE.gif',
         primaryMuscle: 'Ngực Dưới',
         secondaryMuscles: ['Tay Sau', 'Vai Trước'],
         instructions: [
@@ -316,14 +404,31 @@ export const EXERCISE_DB: Exercise[] = [
             'Hơi đổ người về phía trước để tập trung vào ngực.',
             'Hạ người xuống cho đến khi khuỷu tay gập 90 độ.',
             'Đẩy ngược lên vị trí ban đầu.'
-        ]
+        ],
+        tips: [
+            'Đổ người về trước 15-20 độ để nhắm ngực',
+            'Hạ chậm, kiểm soát; không rơi xuống',
+            'Nếu đau vai, thu hẹp tay hoặc dùng dây kháng lực hỗ trợ'
+        ],
+        commonMistakes: [
+            'Hạ quá sâu gây đau vai',
+            'Đứng thẳng quá, tập trung vào tay sau thay vì ngực',
+            'Đung đưa chân để lấy đà'
+        ],
+        suggestedSets: '3-4 sets × 6-12 reps',
+        restSeconds: 120,
+        caloriesPer10Min: 75,
+        variations: ['Bench Dip', 'Assisted Dips', 'Weighted Dips']
     },
     {
         id: 'chest-009',
         name: 'Hít Đất (Push Up)',
+        nameEn: 'Push Up',
         target: 'Gym/Ngực',
         equipment: 'Bodyweight',
         difficulty: 'beginner',
+        gifUrl: 'https://static.exercisedb.dev/media/07041kr.gif',
+        category: 'calisthenics',
         primaryMuscle: 'Cơ Ngực Lớn',
         secondaryMuscles: ['Tay Sau', 'Vai Trước', 'Core'],
         instructions: [
@@ -331,30 +436,65 @@ export const EXERCISE_DB: Exercise[] = [
             'Giữ thân người thẳng từ đầu đến gót chân.',
             'Hạ người xuống cho đến khi ngực gần chạm sàn.',
             'Đẩy người lên trở lại.'
-        ]
+        ],
+        tips: [
+            'Siết bụng và mông để giữ thân thẳng',
+            'Khuỷu tay hơi chếch 45 độ, không xòe ngang',
+            'Hạ chậm 2-3 giây, đẩy lên 1 giây'
+        ],
+        commonMistakes: [
+            'Hông xệ hoặc mông nhô cao',
+            'Đầu cúi xuống hoặc ngửa lên',
+            'Không hạ đủ sâu (ngực gần sàn)'
+        ],
+        suggestedSets: '3-4 sets × 10-20 reps',
+        restSeconds: 60,
+        caloriesPer10Min: 65,
+        videoUrl: '/videos/exercises/push-up.mp4',
+        variations: ['Diamond Push Up', 'Wide Push Up', 'Decline Push Up', 'Knee Push Up']
     },
 
     // --- BACK EXPANSION ---
     {
         id: 'back-006',
         name: 'Chèo Cáp Ngồi (Seated Cable Row)',
+        nameEn: 'Seated Cable Row',
         target: 'Gym/Lưng',
         equipment: 'Máy cáp',
         difficulty: 'intermediate',
+        category: 'strength',
+        gifUrl: 'https://static.exercisedb.dev/media/hvV79Si.gif',
         primaryMuscle: 'Lưng Giữa',
         secondaryMuscles: ['Xô', 'Tay Trước', 'Vai Sau'],
         instructions: [
             'Ngồi thẳng lưng, chân đặt lên đệm đỡ.',
             'Kéo tay cầm về phía bụng dưới, ép bả vai lại.',
             'Không đung đưa người quá nhiều, thả tạ có kiểm soát.'
-        ]
+        ],
+        tips: [
+            'Kéo về phía rốn/bụng dưới, không phải ngực',
+            'Ép hai bả vai lại với nhau ở điểm cuối',
+            'Giữ ngực ưỡn, không cúi gập'
+        ],
+        commonMistakes: [
+            'Đung đưa thân người để kéo tạ nặng',
+            'Kéo tay cầm về ngực quá cao',
+            'Thả tạ quá nhanh không kiểm soát'
+        ],
+        suggestedSets: '3-4 sets × 8-12 reps',
+        restSeconds: 90,
+        caloriesPer10Min: 60,
+        variations: ['V-Bar Row', 'Wide Grip Row', 'Single Arm Cable Row']
     },
     {
         id: 'back-007',
         name: 'Chèo Tạ Đòn Chữ T (T-Bar Row)',
+        nameEn: 'T-Bar Row',
         target: 'Gym/Lưng',
         equipment: 'Máy tập/Thanh đòn',
         difficulty: 'intermediate',
+        category: 'strength',
+        gifUrl: 'https://static.exercisedb.dev/media/BgljGjd.gif',
         primaryMuscle: 'Lưng Giữa',
         secondaryMuscles: ['Xô', 'Tay Trước'],
         instructions: [
@@ -362,31 +502,34 @@ export const EXERCISE_DB: Exercise[] = [
             'Giữ lưng thẳng, gập hông 45 độ.',
             'Kéo tạ về phía ngực, ép chặt cơ lưng.',
             'Hạ tạ xuống cho đến khi tay duỗi thẳng.'
-        ]
+        ],
+        tips: [
+            'Giữ lưng thẳng hoặc hơi ưỡn, không cong',
+            'Kéo thanh chạm ngực giữa, ép bả vai',
+            'Dùng đệm kê ngực nếu có để cô lập lưng'
+        ],
+        commonMistakes: [
+            'Cong lưng khi kéo nặng',
+            'Dùng lực tay nhiều hơn lưng',
+            'Gập hông quá thấp gây áp lực lưng dưới'
+        ],
+        suggestedSets: '3-4 sets × 8-10 reps',
+        restSeconds: 120,
+        caloriesPer10Min: 75,
+        variations: ['Landmine Row', 'Chest-Supported T-Bar', 'Wide Grip T-Bar']
     },
-    {
-        id: 'back-008',
-        name: 'Lưng Dưới (Hyperextension)',
-        target: 'Gym/Lưng',
-        equipment: 'Ghế tập',
-        difficulty: 'beginner',
-        primaryMuscle: 'Lưng Dưới',
-        secondaryMuscles: ['Mông', 'Đùi Sau'],
-        instructions: [
-            'Nằm sấp trên ghế tập lưng dưới.',
-            'Gập người xuống tại khớp hông.',
-            'Nâng người lên cho đến khi thân người thẳng hàng.',
-            'Tránh ưỡn lưng quá mức.'
-        ]
-    },
+
 
     // --- LEGS EXPANSION ---
     {
         id: 'leg-006',
         name: 'Chùn Chân (Lunges)',
+        nameEn: 'Lunges',
         target: 'Gym/Chân',
         equipment: 'Tạ đơn/Bodyweight',
         difficulty: 'intermediate',
+        category: 'strength',
+        gifUrl: 'https://static.exercisedb.dev/media/t8iSghb.gif',
         primaryMuscle: 'Đùi Trước',
         secondaryMuscles: ['Mông', 'Đùi Sau'],
         instructions: [
@@ -394,154 +537,71 @@ export const EXERCISE_DB: Exercise[] = [
             'Hạ trọng tâm cho đến khi hai gối gập 90 độ.',
             'Đạp mạnh chân trước để trở về tư thế đứng.',
             'Đổi chân và lặp lại.'
-        ]
+        ],
+        tips: ['Giữ thân thẳng, không nghiêng về trước', 'Gối trước không vượt quá mũi chân', 'Bước đủ rộng để gối sau gần chạm sàn'],
+        commonMistakes: ['Gối trước đẩy quá xa gây áp lực đầu gối', 'Thân người nghiêng về trước', 'Bước quá hẹp'],
+        suggestedSets: '3 sets × 10-12 reps mỗi chân',
+        restSeconds: 90,
+        caloriesPer10Min: 70,
+        variations: ['Walking Lunge', 'Reverse Lunge', 'Bulgarian Split Squat']
     },
     {
         id: 'leg-007',
         name: 'Nhón Bắp Chân Đứng (Standing Calf Raise)',
+        nameEn: 'Standing Calf Raise',
         target: 'Gym/Chân',
         equipment: 'Máy tập',
         difficulty: 'beginner',
+        category: 'strength',
+        gifUrl: 'https://static.exercisedb.dev/media/2ORFMoR.gif',
         primaryMuscle: 'Bắp Chân',
         instructions: [
             'Đứng trên máy hoặc bục, mũi chân đặt lên mép.',
             'Hạ gót chân xuống thấp nhất có thể.',
             'Nhón gót lên cao hết mức, siết cơ bắp chân.'
-        ]
+        ],
+        tips: ['Hạ gót xuống hết biên độ để kéo giãn bắp chân', 'Giữ 1-2 giây ở đỉnh', 'Không dùng đà vung gót'],
+        commonMistakes: ['Biên độ ngắn, không hạ gót đủ sâu', 'Dùng đà nhún', 'Gối cong khi nâng'],
+        suggestedSets: '3-4 sets × 15-20 reps',
+        restSeconds: 45,
+        caloriesPer10Min: 40,
+        variations: ['Seated Calf Raise', 'Single Leg Calf Raise', 'Donkey Calf Raise']
     },
     {
         id: 'leg-008',
         name: 'Cuốn Đùi Sau Nằm (Lying Leg Curl)',
+        nameEn: 'Lying Leg Curl',
         target: 'Gym/Chân',
         equipment: 'Máy tập',
         difficulty: 'beginner',
+        category: 'strength',
+        gifUrl: 'https://static.exercisedb.dev/media/17lJ1kr.gif',
         primaryMuscle: 'Đùi Sau',
         instructions: [
             'Nằm sấp trên máy, cổ chân đặt dưới đệm.',
             'Gập chân cuốn đệm lên phía mông.',
             'Giữ 1 giây rồi hạ xuống chậm rãi.'
-        ]
-    },
-    {
-        id: 'leg-009',
-        name: 'Đẩy Hông (Hip Thrust)',
-        target: 'Gym/Chân',
-        equipment: 'Thanh đòn',
-        difficulty: 'intermediate',
-        primaryMuscle: 'Mông (Glutes)',
-        secondaryMuscles: ['Đùi Sau'],
-        instructions: [
-            'Tựa lưng trên ghế, thanh đòn đặt ngang hông.',
-            'Dùng lực mông đẩy hông lên cao cho đến khi người thẳng.',
-            'Siết chặt mông ở điểm cao nhất, hạ xuống có kiểm soát.'
-        ]
-    },
-    {
-        id: 'leg-010',
-        name: 'Hack Squat',
-        target: 'Gym/Chân',
-        equipment: 'Máy tập',
-        difficulty: 'intermediate',
-        primaryMuscle: 'Đùi Trước',
-        secondaryMuscles: ['Mông'],
-        instructions: [
-            'Tựa lưng vào đệm máy Hack Squat, vai đặt dưới đệm đỡ.',
-            'Mở khóa an toàn, hạ người xuống sâu.',
-            'Đạp mạnh để đứng dậy, không khóa khớp gối.'
-        ]
+        ],
+        tips: ['Siết đùi sau ở điểm cao nhất', 'Hạ xuống chậm 2-3 giây', 'Điều chỉnh đệm khớp với cổ chân'],
+        commonMistakes: ['Nâng mông khỏi ghế khi cuốn', 'Dùng đà vung chân', 'Hạ tạ quá nhanh'],
+        suggestedSets: '3 sets × 12-15 reps',
+        restSeconds: 60,
+        caloriesPer10Min: 50,
+        variations: ['Seated Leg Curl', 'Standing Leg Curl', 'Nordic Curl']
     },
 
-    // --- SHOULDERS EXPANSION ---
-    {
-        id: 'sh-004',
-        name: 'Bay Vai (Lateral Raise)',
-        target: 'Gym/Vai',
-        equipment: 'Tạ đơn',
-        difficulty: 'beginner',
-        primaryMuscle: 'Vai Giữa',
-        instructions: [
-            'Đứng thẳng, cầm tạ đơn hai bên hông.',
-            'Nâng tạ sang hai bên cho đến khi ngang vai.',
-            'Khuỷu tay hơi cong, không dùng đà để vung tạ.',
-            'Hạ xuống chậm rãi.'
-        ]
-    },
-    {
-        id: 'sh-005',
-        name: 'Nâng Vai Trước (Front Raise)',
-        target: 'Gym/Vai',
-        equipment: 'Tạ đơn',
-        difficulty: 'beginner',
-        primaryMuscle: 'Vai Trước',
-        instructions: [
-            'Cầm tạ đơn trước đùi.',
-            'Nâng tạ về phía trước mặt cho đến khi ngang tầm mắt.',
-            'Hạ xuống có kiểm soát.'
-        ]
-    },
-    {
-        id: 'sh-006',
-        name: 'Kéo Thẳng Đứng (Upright Row)',
-        target: 'Gym/Vai',
-        equipment: 'Thanh đòn/EZ Bar',
-        difficulty: 'intermediate',
-        primaryMuscle: 'Vai Cầu (Traps)',
-        secondaryMuscles: ['Vai Giữa'],
-        instructions: [
-            'Nắm thanh đòn hẹp tay, sát đùi.',
-            'Kéo thanh đòn dọc theo thân người lên ngang ngực.',
-            'Khuỷu tay luôn cao hơn cổ tay.',
-            'Hạ xuống vị trí ban đầu.'
-        ]
-    },
-    {
-        id: 'sh-007',
-        name: 'Bay Vai Ngược (Reverse Fly)',
-        target: 'Gym/Vai',
-        equipment: 'Máy tập/Tạ đơn',
-        difficulty: 'beginner',
-        primaryMuscle: 'Vai Sau',
-        instructions: [
-            'Ngồi ngược trên ghế tập ngực hoặc cúi thấp người.',
-            'Mở rộng tay ra sau, ép hai bả vai lại.',
-            'Tập trung vào cơ vai sau, không nhún vai.'
-        ]
-    },
+
+
 
     // --- ARMS EXPANSION ---
-    {
-        id: 'arm-004',
-        name: 'Duỗi Tay Sau Qua Đầu (Overhead Extension)',
-        target: 'Gym/Tay',
-        equipment: 'Tạ đơn',
-        difficulty: 'beginner',
-        primaryMuscle: 'Tay Sau (Long Head)',
-        instructions: [
-            'Ngồi hoặc đứng, cầm tạ đơn bằng hai tay đưa qua đầu.',
-            'Hạ tạ xuống sau đầu sâu hết mức có thể.',
-            'Duỗi thẳng tay đưa tạ lên cao.'
-        ]
-    },
-    {
-        id: 'arm-005',
-        name: 'Cuốn Tay Trước Ghế Dốc (Incline Curl)',
-        target: 'Gym/Tay',
-        equipment: 'Tạ đơn',
-        difficulty: 'intermediate',
-        primaryMuscle: 'Tay Trước (Long Head)',
-        instructions: [
-            'Ngồi trên ghế dốc 45 độ.',
-            'Thả tay thẳng xuống sàn, giữ tạ đơn.',
-            'Cuốn tạ lên mà không di chuyển khuỷu tay.',
-            'Cảm nhận độ căng của bắp tay khi hạ xuống.'
-        ]
-    },
+
     {
         id: 'arm-006',
         name: 'Duỗi Tay Sau Ghế (Bench Dip)',
         target: 'Gym/Tay',
         equipment: 'Ghế tập',
         difficulty: 'beginner',
+        gifUrl: 'https://static.exercisedb.dev/media/LkoAWAE.gif',
         primaryMuscle: 'Tay Sau',
         instructions: [
             'Đặt tay lên mép ghế, chân duỗi thẳng hoặc gập gối.',
@@ -549,116 +609,11 @@ export const EXERCISE_DB: Exercise[] = [
             'Đẩy mạnh tay để nâng người lên.'
         ]
     },
-    {
-        id: 'arm-007',
-        name: 'Skull Crusher',
-        target: 'Gym/Tay',
-        equipment: 'Thanh EZ',
-        difficulty: 'intermediate',
-        primaryMuscle: 'Tay Sau',
-        instructions: [
-            'Nằm trên ghế, cầm thanh EZ đưa thẳng lên trần.',
-            'Gập khuỷu tay, hạ thanh đòn xuống trán.',
-            'Giữ khuỷu tay cố định, đẩy thanh đòn trở lại vị trí cũ.'
-        ]
-    },
-    {
-        id: 'arm-008',
-        name: 'Cuốn Tạ Tập trung (Concentration Curl)',
-        target: 'Gym/Tay',
-        equipment: 'Tạ đơn',
-        difficulty: 'beginner',
-        primaryMuscle: 'Tay Trước (Peak)',
-        instructions: [
-            'Ngồi trên ghế, khuỷu tay tựa vào đùi trong.',
-            'Cuốn tạ lên tập trung vào đỉnh bắp tay.',
-            'Hạ xuống chậm rãi hết biên độ.'
-        ]
-    },
 
-    // --- CORE EXPANSION ---
-    {
-        id: 'core-003',
-        name: 'Gập Bụng (Crunches)',
-        target: 'Gym/Bụng',
-        equipment: 'Bodyweight',
-        difficulty: 'beginner',
-        primaryMuscle: 'Bụng Trên',
-        instructions: [
-            'Nằm ngửa, gập gối, tay đặt sau đầu.',
-            'Nâng vai lên khỏi sàn, cuộn cơ bụng lại.',
-            'Hạ xuống nhưng không thả lỏng hoàn toàn.'
-        ]
-    },
-    {
-        id: 'core-004',
-        name: 'Xoay Người Nga (Russian Twist)',
-        target: 'Gym/Bụng',
-        equipment: 'Bóng/Tạ đơn',
-        difficulty: 'intermediate',
-        primaryMuscle: 'Cơ Liên Sườn',
-        instructions: [
-            'Ngồi trên sàn, nâng chân lên, người hơi ngả ra sau.',
-            'Cầm tạ xoay người sang trái rồi sang phải.',
-            'Giữ thăng bằng và cảm nhận cơ liên sườn hoạt động.'
-        ]
-    },
-    {
-        id: 'core-005',
-        name: 'Con Lăn Bụng (Ab Wheel Rollout)',
-        target: 'Gym/Bụng',
-        equipment: 'Con lăn',
-        difficulty: 'advanced',
-        primaryMuscle: 'Toàn bộ Core',
-        instructions: [
-            'Quỳ gối, nắm con lăn trước mặt.',
-            'Lăn con lăn về phía trước xa nhất có thể.',
-            'Dùng cơ bụng kéo người trở lại vị trí ban đầu.'
-        ]
-    },
 
-    // --- CARDIO & PLYO ---
-    {
-        id: 'cardio-001',
-        name: 'Burpees',
-        target: 'Cardio',
-        equipment: 'Bodyweight',
-        difficulty: 'advanced',
-        primaryMuscle: 'Toàn thân',
-        instructions: [
-            'Đứng thẳng, sau đó ngồi xổm chống tay xuống đất.',
-            'Bật chân ra sau thành tư thế hít đất.',
-            'Thực hiện một cái hít đất rồi bật chân thu về.',
-            'Bật nhảy lên cao, vỗ tay trên đầu.'
-        ]
-    },
-    {
-        id: 'cardio-002',
-        name: 'Nhảy Dây (Jump Rope)',
-        target: 'Cardio',
-        equipment: 'Dây nhảy',
-        difficulty: 'beginner',
-        primaryMuscle: 'Bắp Chân/Tim Mạch',
-        instructions: [
-            'Giữ hai tay cầm dây, khuỷu tay sát người.',
-            'Bật nhảy nhẹ nhàng bằng mũi chân.',
-            'Xoay cổ tay để quay dây đều đặn.'
-        ]
-    },
-    {
-        id: 'cardio-003',
-        name: 'Leo Núi (Mountain Climbers)',
-        target: 'Cardio',
-        equipment: 'Bodyweight',
-        difficulty: 'intermediate',
-        primaryMuscle: 'Bụng/Tim Mạch',
-        instructions: [
-            'Bắt đầu ở tư thế chống đẩy cao.',
-            'Kéo một đầu gối lên phía ngực.',
-            'Đổi chân liên tục với tốc độ nhanh.',
-            'Giữ lưng thẳng và hông thấp.'
-        ]
-    },
+
+
+
     // --- KETTLEBELL ---
     {
         id: 'kb-001',
@@ -666,6 +621,7 @@ export const EXERCISE_DB: Exercise[] = [
         target: 'Gym/FullBody',
         equipment: 'Kettlebell',
         difficulty: 'intermediate',
+        gifUrl: 'https://static.exercisedb.dev/media/UHJlbu3.gif',
         primaryMuscle: 'Đùi Sau/Mông',
         secondaryMuscles: ['Lưng Dưới', 'Vai'],
         instructions: [
@@ -681,6 +637,7 @@ export const EXERCISE_DB: Exercise[] = [
         target: 'Gym/Chân',
         equipment: 'Kettlebell/Tạ đơn',
         difficulty: 'beginner',
+        gifUrl: 'https://static.exercisedb.dev/media/ZA8b5hc.gif',
         primaryMuscle: 'Đùi Trước',
         secondaryMuscles: ['Mông', 'Core'],
         instructions: [
@@ -695,6 +652,7 @@ export const EXERCISE_DB: Exercise[] = [
         target: 'Gym/FullBody',
         equipment: 'Kettlebell',
         difficulty: 'advanced',
+        gifUrl: 'https://static.exercisedb.dev/media/Ha7SZ3y.gif',
         primaryMuscle: 'Toàn thân',
         instructions: [
             'Nằm ngửa, một tay giữ tạ thẳng lên trời.',
@@ -711,6 +669,7 @@ export const EXERCISE_DB: Exercise[] = [
         target: 'Gym/Tay',
         equipment: 'Tạ đơn/Thanh đòn',
         difficulty: 'beginner',
+        gifUrl: 'https://static.exercisedb.dev/media/82LxxkW.gif',
         primaryMuscle: 'Cẳng Tay',
         instructions: [
             'Đặt cẳng tay lên ghế, cổ tay thò ra ngoài.',
@@ -723,6 +682,7 @@ export const EXERCISE_DB: Exercise[] = [
         target: 'Gym/Vai',
         equipment: 'Tạ đơn/Thanh đòn',
         difficulty: 'beginner',
+        gifUrl: 'https://static.exercisedb.dev/media/dG7tG5y.gif',
         primaryMuscle: 'Cầu Vai (Traps)',
         instructions: [
             'Đứng thẳng, cầm tạ hai bên hông.',
@@ -736,6 +696,7 @@ export const EXERCISE_DB: Exercise[] = [
         target: 'Gym/Chân',
         equipment: 'Máy tập',
         difficulty: 'beginner',
+        gifUrl: 'https://static.exercisedb.dev/media/7WaDzyL.gif',
         primaryMuscle: 'Mông (Glute Medius)',
         instructions: [
             'Ngồi vào máy, đặt chân lên đệm ngoài.',
@@ -749,6 +710,7 @@ export const EXERCISE_DB: Exercise[] = [
         target: 'Gym/Chân',
         equipment: 'Máy tập',
         difficulty: 'beginner',
+        gifUrl: 'https://static.exercisedb.dev/media/hBGWILP.gif',
         primaryMuscle: 'Đùi Trong',
         instructions: [
             'Ngồi vào máy, đặt chân lên đệm trong.',
@@ -757,25 +719,14 @@ export const EXERCISE_DB: Exercise[] = [
     },
 
     // --- CALISTHENICS ---
-    {
-        id: 'cali-001',
-        name: 'Muscle Up',
-        target: 'Gym/FullBody',
-        equipment: 'Xà đơn',
-        difficulty: 'advanced',
-        primaryMuscle: 'Xô/Ngực/Tay Sau',
-        instructions: [
-            'Kéo xà bùng nổ, đưa ngực qua xà.',
-            'Chuyển cổ tay, đẩy người lên tư thế dip.',
-            'Đẩy thẳng tay ở điểm cao nhất.'
-        ]
-    },
+
     {
         id: 'cali-002',
         name: 'Pistol Squat',
         target: 'Gym/Chân',
         equipment: 'Bodyweight',
         difficulty: 'advanced',
+        gifUrl: 'https://static.exercisedb.dev/media/5bpPTHv.gif',
         primaryMuscle: 'Đùi Trước/Mông',
         instructions: [
             'Đứng một chân, chân kia duỗi thẳng ra trước.',
@@ -783,19 +734,7 @@ export const EXERCISE_DB: Exercise[] = [
             'Giữ thăng bằng và đứng dậy.'
         ]
     },
-    {
-        id: 'cali-003',
-        name: 'Dragon Flag',
-        target: 'Gym/Bụng',
-        equipment: 'Ghế tập',
-        difficulty: 'advanced',
-        primaryMuscle: 'Bụng/Core',
-        instructions: [
-            'Nằm trên ghế, tay nắm mép ghế sau đầu.',
-            'Nâng toàn bộ cơ thể lên thẳng đứng bằng vai.',
-            'Hạ xuống từ từ, giữ người thẳng như cây thước.'
-        ]
-    },
+
 
     // --- COMPOUND VARIATIONS ---
     {
@@ -804,6 +743,7 @@ export const EXERCISE_DB: Exercise[] = [
         target: 'Gym/Chân',
         equipment: 'Thanh đòn',
         difficulty: 'intermediate',
+        gifUrl: 'https://static.exercisedb.dev/media/KgI0tqW.gif',
         primaryMuscle: 'Mông/Đùi Trong',
         secondaryMuscles: ['Lưng Dưới'],
         instructions: [
@@ -812,296 +752,11 @@ export const EXERCISE_DB: Exercise[] = [
             'Giữ lưng thẳng, đạp sàn để nâng tạ.'
         ]
     },
-    {
-        id: 'var-002',
-        name: 'Front Squat (Squat Trước)',
-        target: 'Gym/Chân',
-        equipment: 'Thanh đòn',
-        difficulty: 'advanced',
-        primaryMuscle: 'Đùi Trước',
-        secondaryMuscles: ['Upper Back', 'Core'],
-        instructions: [
-            'Thanh đòn đặt trên vai trước, khuỷu tay nâng cao.',
-            'Squat xuống sâu, giữ lưng cực kỳ thẳng.',
-            'Tránh để khuỷu tay hạ thấp.'
-        ]
-    },
-    {
-        id: 'var-003',
-        name: 'Zercher Squat',
-        target: 'Gym/Chân',
-        equipment: 'Thanh đòn',
-        difficulty: 'advanced',
-        primaryMuscle: 'Đùi Trước/Core',
-        instructions: [
-            'Đặt thanh đòn vào khuỷu tay gập lại.',
-            'Khóa chặt tay trước ngực.',
-            'Squat xuống, giữ thanh đòn sát người.'
-        ]
-    },
-    {
-        id: 'var-004',
-        name: 'Deficit Deadlift',
-        target: 'Gym/Lưng',
-        equipment: 'Thanh đòn + Bục',
-        difficulty: 'advanced',
-        primaryMuscle: 'Lưng/Đùi Sau',
-        instructions: [
-            'Đứng trên một tấm tạ hoặc bục thấp (2-5cm).',
-            'Thực hiện Deadlift như bình thường.',
-            'Tăng phạm vi chuyển động để kích thích nhiều hơn.'
-        ]
-    },
 
-    // --- STRETCHING & YOGA ---
-    {
-        id: 'str-001',
-        name: 'Giãn Cơ Cổ (Neck Stretch)',
-        target: 'Gym/Stretching',
-        equipment: 'Bodyweight',
-        difficulty: 'beginner',
-        primaryMuscle: 'Cổ',
-        instructions: [
-            'Nghiêng đầu sang phải, dùng tay phải kéo nhẹ.',
-            'Giữ 15-30 giây.',
-            'Đổi bên.'
-        ]
-    },
-    {
-        id: 'str-002',
-        name: 'Giãn Cơ Vai (Shoulder Stretch)',
-        target: 'Gym/Stretching',
-        equipment: 'Bodyweight',
-        difficulty: 'beginner',
-        primaryMuscle: 'Vai',
-        instructions: [
-            'Đưa một tay qua ngực.',
-            'Dùng tay kia ép sát tay này vào người.',
-            'Giữ 15-30 giây.'
-        ]
-    },
-    {
-        id: 'str-003',
-        name: 'Tư Thế Em Bé (Child\'s Pose)',
-        target: 'Yoga',
-        equipment: 'Thảm tập',
-        difficulty: 'beginner',
-        primaryMuscle: 'Lưng Dưới',
-        secondaryMuscles: ['Hông', 'Vai'],
-        instructions: [
-            'Quỳ gối trên sàn, mông chạm gót chân.',
-            'Vươn dài hai tay ra phía trước, trán chạm thảm.',
-            'Thả lỏng toàn bộ cơ thể hít thở sâu.'
-        ]
-    },
-    {
-        id: 'str-004',
-        name: 'Tư Thế Chó Úp Mặt (Downward Dog)',
-        target: 'Yoga',
-        equipment: 'Thảm tập',
-        difficulty: 'beginner',
-        primaryMuscle: 'Gân Kheo (Hamstrings)',
-        secondaryMuscles: ['Vai', 'Bắp Chân'],
-        instructions: [
-            'Chống hai tay và hai chân xuống sàn.',
-            'Đẩy hông lên cao tạo thành chữ V ngược.',
-            'Cố gắng giữ thẳng lưng và chân.'
-        ]
-    },
-    {
-        id: 'str-005',
-        name: 'Tư Thế Rắn Hổ Mang (Cobra)',
-        target: 'Yoga',
-        equipment: 'Thảm tập',
-        difficulty: 'beginner',
-        primaryMuscle: 'Lưng Dưới/Bụng',
-        instructions: [
-            'Nằm sấp, hai tay chống cạnh ngực.',
-            'Đẩy thẳng tay, nâng ngực lên cao.',
-            'Mở rộng vai và nhìn thẳng.'
-        ]
-    },
-    {
-        id: 'str-006',
-        name: 'Tư Thế Chiến Binh 1 (Warrior I)',
-        target: 'Yoga',
-        equipment: 'Thảm tập',
-        difficulty: 'intermediate',
-        primaryMuscle: 'Chân/Hông',
-        instructions: [
-            'Bước một chân dài về phía trước, gập gối vuông góc.',
-            'Chân sau duỗi thẳng, bàn chân xoay 45 độ.',
-            'Vươn hai tay lên cao, mắt nhìn theo tay.'
-        ]
-    },
-    {
-        id: 'str-007',
-        name: 'Giãn Cơ Tứ Đầu (Quad Stretch)',
-        target: 'Gym/Stretching',
-        equipment: 'Bodyweight',
-        difficulty: 'beginner',
-        primaryMuscle: 'Đùi Trước',
-        instructions: [
-            'Đứng thẳng, co một chân ra sau.',
-            'Dùng tay cùng bên nắm lấy cổ chân, kéo gót về mông.',
-            'Giữ đầu gối hướng xuống sàn.'
-        ]
-    },
-    {
-        id: 'str-008',
-        name: 'Xoay Cột Sống (Spinal Twist)',
-        target: 'Yoga',
-        equipment: 'Thảm tập',
-        difficulty: 'beginner',
-        primaryMuscle: 'Lưng/Cột Sống',
-        instructions: [
-            'Nằm ngửa, co một chân lên ngực.',
-            'Đưa chân đó qua bên đối diện, tay dang ngang.',
-            'Mắt nhìn về phía tay ngược lại.'
-        ]
-    },
-    // --- CABLE EXERCISES ---
-    {
-        id: 'cab-001',
-        name: 'Kéo Cáp Tập Tay Sau (Tricep Pushdown)',
-        target: 'Gym/Tay',
-        equipment: 'Máy cáp',
-        difficulty: 'beginner',
-        primaryMuscle: 'Tay Sau',
-        secondaryMuscles: ['Vai'],
-        instructions: [
-            'Đứng thẳng, nắm thanh đòn ngang hoặc dây thừng.',
-            'Giữ khuỷu tay cố định bên sườn.',
-            'Ép mạnh tay xuống cho đến khi thẳng hết cỡ, thở ra.',
-            'Từ từ đưa tay lên vị trí ban đầu, hít vào.'
-        ]
-    },
-    {
-        id: 'cab-002',
-        name: 'Cuốn Tay Trước Với Cáp (Cable Curl)',
-        target: 'Gym/Tay',
-        equipment: 'Máy cáp',
-        difficulty: 'beginner',
-        primaryMuscle: 'Tay Trước',
-        instructions: [
-            'Đứng thẳng, cầm thanh đòn nối với cáp thấp.',
-            'Cuốn tay lên phía vai, giữ khuỷu tay cố định.',
-            'Siết chặt cơ bắp tay ở điểm cao nhất.'
-        ]
-    },
-    {
-        id: 'cab-003',
-        name: 'Kéo Cáp Tập Ngực (Cable Fly)',
-        target: 'Gym/Ngực',
-        equipment: 'Máy cáp',
-        difficulty: 'intermediate',
-        primaryMuscle: 'Ngực',
-        secondaryMuscles: ['Vai Trước'],
-        instructions: [
-            'Đứng giữa hai ròng rọc cáp cao.',
-            'Kéo hai tay về phía trước ngực, hơi gập khuỷu tay.',
-            'Ép chặt cơ ngực ở điểm giữa, cảm nhận sự co thắt.',
-            'Mở rộng tay về sau từ từ để giãn cơ.'
-        ]
-    },
-    {
-        id: 'cab-004',
-        name: 'Kéo Cáp Mặt (Face Pull)',
-        target: 'Gym/Vai',
-        equipment: 'Máy cáp',
-        difficulty: 'intermediate',
-        primaryMuscle: 'Vai Sau',
-        secondaryMuscles: ['Cầu Vai', 'Chóp Xoay (Rotator Cuff)'],
-        instructions: [
-            'Lắp dây thừng vào ròng rọc cao ngang mặt.',
-            'Kéo dây về phía mặt, tách hai đầu dây sang hai bên tai.',
-            'Ép bả vai lại phía sau, khuỷu tay cao hơn vai.',
-            'Bài tập tuyệt vời để sửa tư thế gù lưng và bảo vệ khớp vai.'
-        ]
-    },
-    {
-        id: 'cab-005',
-        name: 'Gập Bụng Với Cáp (Cable Crunch)',
-        target: 'Gym/Bụng',
-        equipment: 'Máy cáp',
-        difficulty: 'intermediate',
-        primaryMuscle: 'Cơ Bụng 6 Múi',
-        instructions: [
-            'Quỳ gối trước máy cáp, nắm dây thừng đặt sau gáy.',
-            'Gập người xuống bằng cơ bụng, cố gắng chạm khuỷu tay vào đùi.',
-            'Hít vào khi nâng người lên, thở ra mạnh khi gập xuống.'
-        ]
-    },
 
-    // --- MACHINE EXERCISES ---
-    {
-        id: 'mac-001',
-        name: 'Đạp Đùi (Leg Press)',
-        target: 'Gym/Chân',
-        equipment: 'Máy tập',
-        difficulty: 'beginner',
-        primaryMuscle: 'Đùi Trước',
-        secondaryMuscles: ['Mông', 'Đùi Sau'],
-        instructions: [
-            'Ngồi vào ghế, đặt chân lên bàn đạp rộng bằng vai.',
-            'Tháo chốt an toàn, hạ bàn đạp xuống cho đến khi đùi gần chạm ngực.',
-            'Đạp mạnh lên nhưng KHÔNG khóa khớp gối hoàn toàn.',
-            'Thở ra khi đạp lên, hít vào khi hạ xuống.'
-        ]
-    },
-    {
-        id: 'mac-002',
-        name: 'Đá Đùi Trước (Leg Extension)',
-        target: 'Gym/Chân',
-        equipment: 'Máy tập',
-        difficulty: 'beginner',
-        primaryMuscle: 'Đùi Trước',
-        instructions: [
-            'Ngồi vào máy, đặt cổ chân dưới đệm mút.',
-            'Đá chân lên thẳng tắp, siết chặt cơ đùi.',
-            'Hạ xuống từ từ có kiểm soát.'
-        ]
-    },
-    {
-        id: 'mac-003',
-        name: 'Móc Đùi Sau (Leg Curl)',
-        target: 'Gym/Chân',
-        equipment: 'Máy tập',
-        difficulty: 'beginner',
-        primaryMuscle: 'Đùi Sau',
-        instructions: [
-            'Nằm sấp hoặc ngồi (tùy máy), đặt gót chân dưới đệm.',
-            'Cuốn gót chân về phía mông nhanh và dứt khoát.',
-            'Duỗi ra chậm rãi để cảm nhận cơ giãn.'
-        ]
-    },
-    {
-        id: 'mac-004',
-        name: 'Ép Ngực Máy (Pec Deck / Machine Fly)',
-        target: 'Gym/Ngực',
-        equipment: 'Máy tập',
-        difficulty: 'beginner',
-        primaryMuscle: 'Ngực Trong',
-        instructions: [
-            'Ngồi thẳng, đặt tay lên hai pad đệm.',
-            'Ép hai tay lại gần nhau trước ngực.',
-            'Giữ 1 giây rồi mở ra từ từ.'
-        ]
-    },
-    {
-        id: 'mac-005',
-        name: 'Đẩy Vai Máy (Machine Shoulder Press)',
-        target: 'Gym/Vai',
-        equipment: 'Máy tập',
-        difficulty: 'beginner',
-        primaryMuscle: 'Vai Trước',
-        secondaryMuscles: ['Tay Sau'],
-        instructions: [
-            'Điều chỉnh ghế sao cho tay cầm ngang vai.',
-            'Đẩy thẳng lên cao qua đầu.',
-            'Hạ xuống ngang tai rồi đẩy tiếp.'
-        ]
-    },
+
+
+
 
     // --- DUMBBELL EXERCISES ---
     {
@@ -1110,6 +765,7 @@ export const EXERCISE_DB: Exercise[] = [
         target: 'Gym/Ngực',
         equipment: 'Tạ đơn',
         difficulty: 'intermediate',
+        gifUrl: 'https://static.exercisedb.dev/media/PG1kcIb.gif',
         primaryMuscle: 'Ngực Trên',
         secondaryMuscles: ['Vai Trước', 'Tay Sau'],
         instructions: [
@@ -1119,121 +775,7 @@ export const EXERCISE_DB: Exercise[] = [
             'Thở ra khi đẩy, hít khi hạ.'
         ]
     },
-    {
-        id: 'db-002',
-        name: 'Bay Vai (Lateral Raise)',
-        target: 'Gym/Vai',
-        equipment: 'Tạ đơn',
-        difficulty: 'beginner',
-        primaryMuscle: 'Vai Giữa',
-        instructions: [
-            'Đứng thẳng, cầm tạ hai bên hông.',
-            'Nâng tạ sang hai bên cho đến khi ngang vai.',
-            'Hơi đổ nước (ngón út cao hơn ngón cái) để vào vai tốt hơn.',
-            'Hạ xuống chậm, không thả rơi tạ.'
-        ]
-    },
-    {
-        id: 'db-003',
-        name: 'Chèo Tạ Đơn 1 Tay (One Arm DB Row)',
-        target: 'Gym/Lưng',
-        equipment: 'Tạ đơn',
-        difficulty: 'intermediate',
-        primaryMuscle: 'Xô (Lats)',
-        secondaryMuscles: ['Tay Trước', 'Lưng Giữa'],
-        instructions: [
-            'Chống một tay và đầu gối lên ghế phẳng.',
-            'Tay còn lại cầm tạ, kéo tạ về phía hông.',
-            'Giữ lưng thẳng, không xoay người quá nhiều.',
-            'Cảm nhận bả vai di chuyển.'
-        ]
-    },
-    {
-        id: 'db-004',
-        name: 'Tấn Trước (Walking Lunges)',
-        target: 'Gym/Chân',
-        equipment: 'Tạ đơn',
-        difficulty: 'intermediate',
-        primaryMuscle: 'Đùi',
-        secondaryMuscles: ['Mông', 'Bắp Chân'],
-        instructions: [
-            'Cầm 2 quả tạ đơn, bước chân dài về phía trước.',
-            'Hạ trọng tâm sao cho 2 đầu gối vuông góc 90 độ.',
-            'Đứng dậy và bước tiếp chân kia.'
-        ]
-    },
-    {
-        id: 'db-005',
-        name: 'Cuốn Búa (Hammer Curl)',
-        target: 'Gym/Tay',
-        equipment: 'Tạ đơn',
-        difficulty: 'beginner',
-        primaryMuscle: 'Tay Trước (Brachialis)',
-        secondaryMuscles: ['Cẳng Tay'],
-        instructions: [
-            'Cầm tạ đơn, lòng bàn tay hướng vào thân người (kiểu cầm búa).',
-            'Cuốn tạ lên vai, giữ nguyên cổ tay.',
-            'Tốt cho việc làm dày bắp tay và phát triển cẳng tay.'
-        ]
-    },
-    {
-        id: 'db-006',
-        name: 'Nhún Vai (Dumbbell Shrug)',
-        target: 'Gym/Vai',
-        equipment: 'Tạ đơn',
-        difficulty: 'beginner',
-        primaryMuscle: 'Cầu Vai (Traps)',
-        instructions: [
-            'Cầm tạ nặng hai bên.',
-            'Nhún vai lên cao về phía tai.',
-            'Giữ 1 giây ở trên đỉnh rồi hạ xuống.',
-            'Không xoay vai, chỉ nhún lên xuống.'
-        ]
-    },
 
-    // --- ABS & CORE ---
-    {
-        id: 'abs-001',
-        name: 'Plank (Tấm Ván)',
-        target: 'Gym/Bụng',
-        equipment: 'Bodyweight',
-        difficulty: 'beginner',
-        primaryMuscle: 'Cơ Bụng Dọc',
-        secondaryMuscles: ['Ổn định toàn thân'],
-        instructions: [
-            'Chống khuỷu tay vuông góc dưới vai.',
-            'Giữ thân người thẳng như tấm ván từ đầu đến gót chân.',
-            'Siết chặt bụng, mông và đùi. Không võng lưng.',
-            'Hít thở đều, giữ càng lâu càng tốt.'
-        ]
-    },
-    {
-        id: 'abs-002',
-        name: 'Đạp Xe (Bicycle Crunches)',
-        target: 'Gym/Bụng',
-        equipment: 'Bodyweight',
-        difficulty: 'intermediate',
-        primaryMuscle: 'Cơ Bụng Chéo (Obliques)',
-        instructions: [
-            'Nằm ngửa, tay để sau đầu.',
-            'Co gối trái lên đồng thời xoay người để khuỷu tay phải chạm gối trái.',
-            'Đổi bên liên tục như đang đạp xe.',
-            'Động tác chậm rãi để cảm nhận cơ.'
-        ]
-    },
-    {
-        id: 'abs-003',
-        name: 'Treo Người Nâng Chân (Hanging Leg Raise)',
-        target: 'Gym/Bụng',
-        equipment: 'Xà đơn',
-        difficulty: 'advanced',
-        primaryMuscle: 'Bụng Dưới',
-        instructions: [
-            'Treo người trên xà đơn.',
-            'Dùng cơ bụng dưới cuốn xương chậu lên, nâng chân cao ngang hông.',
-            'Hạ xuống chậm, tránh đung đưa người.'
-        ]
-    }
 
 ];
 

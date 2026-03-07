@@ -7,6 +7,14 @@ export type Subtask = {
     completed: boolean;
 };
 
+export type Comment = {
+    id: string;
+    userId: string;
+    userName: string;
+    text: string;
+    createdAt: string;
+};
+
 export type Task = {
     id: string;
     content: string;
@@ -17,6 +25,9 @@ export type Task = {
     date: string;
     subtasks: Subtask[];
     description?: string;
+    assigneeId?: string;
+    creatorId?: string;
+    comments?: Comment[];
 };
 
 export type Column = {
@@ -31,7 +42,7 @@ export type BoardState = {
     columns: Record<string, Column>;
     columnOrder: string[];
 
-    addTask: (columnId: string, content: string, category?: Task['category'], priority?: Task['priority']) => void;
+    addTask: (columnId: string, content: string, category?: Task['category'], priority?: Task['priority'], assigneeId?: string) => void;
     deleteTask: (taskId: string) => void;
     moveTask: (sourceColId: string, destColId: string, sourceIndex: number, destIndex: number, taskId: string) => void;
     addColumn: (title: string) => void;
@@ -92,7 +103,7 @@ export const useBoardStore = create<BoardState>()(
             },
             columnOrder: ['col-1', 'col-2', 'col-3', 'col-4'],
 
-            addTask: (columnId, content, category = 'work', priority = 'medium') =>
+            addTask: (columnId, content, category = 'work', priority = 'medium', assigneeId?: string) =>
                 set((state) => {
                     const newTaskId = `task-${crypto.randomUUID()}`;
                     const newTask: Task = {
@@ -103,7 +114,8 @@ export const useBoardStore = create<BoardState>()(
                         completed: false,
                         date: new Date().toISOString(),
                         tags: [],
-                        subtasks: []
+                        subtasks: [],
+                        assigneeId
                     };
                     return {
                         tasks: { ...state.tasks, [newTaskId]: newTask },

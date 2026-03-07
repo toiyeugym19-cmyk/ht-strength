@@ -7,21 +7,22 @@ import {
 import { vi } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    ChevronLeft, ChevronRight, Calendar as CalendarIcon,
-    CheckCircle2, Circle, Clock, Dumbbell, Book,
-    Zap, GripHorizontal
-} from 'lucide-react';
+    CaretLeft, CaretRight, CalendarBlank as CalendarIcon,
+    CheckCircle, Circle, Clock, Barbell as Dumbbell, BookOpen as Book,
+    Lightning as Zap, DotsSix as GripHorizontal
+} from '@phosphor-icons/react';
 import { useStore } from '../hooks/useStore';
 import { useBoardStore } from '../store/useBoardStore';
 import { useJournalStore } from '../store/useJournalStore';
 import { useNutritionStore } from '../store/useNutritionStore';
+import { useCalendarStore } from '../store/useCalendarStore';
 import { DndContext, useDraggable, useDroppable, DragOverlay } from '@dnd-kit/core';
 import type { DragEndEvent } from '@dnd-kit/core';
 
 // --- DATA TYPES ---
 type AgendaItem = {
     id: string;
-    type: 'task' | 'gym' | 'nutrition' | 'journal';
+    type: 'task' | 'gym' | 'nutrition' | 'journal' | 'appointment' | 'focus' | 'social' | 'health';
     title: string;
     subtitle?: string;
     time?: string;
@@ -45,11 +46,14 @@ function DraggableAgendaItem({ item }: { item: AgendaItem }) {
 
     const getIcon = () => {
         switch (item.type) {
-            case 'task': return isCompleted ? <CheckCircle2 size={16} /> : <Circle size={16} />;
-            case 'gym': return <Dumbbell size={16} />;
-            case 'nutrition': return <Zap size={16} />;
-            case 'journal': return <Book size={16} />;
-            default: return <Clock size={16} />;
+            case 'task': return isCompleted ? <CheckCircle size={18} weight="fill" className="text-[#30D158]" /> : <Circle size={18} weight="duotone" className="text-white/40" />;
+            case 'gym': return <Dumbbell size={18} weight="duotone" className="text-[#BF5AF2]" />;
+            case 'nutrition': return <Zap size={18} weight="duotone" className="text-[#FF9F0A]" />;
+            case 'journal': return <Book size={18} weight="duotone" className="text-[#0A84FF]" />;
+            case 'appointment': return <Clock size={18} weight="duotone" className="text-[#FF375F]" />;
+            case 'focus': return <Zap size={18} weight="duotone" className="text-[#FFD60A]" />;
+            case 'social': return <Circle size={18} weight="duotone" className="text-[#64D2FF]" />;
+            default: return <Clock size={18} weight="duotone" className="text-white/40" />;
         }
     };
 
@@ -78,26 +82,26 @@ function DraggableAgendaItem({ item }: { item: AgendaItem }) {
                 </div>
 
                 {/* Content Card */}
-                <div className={`flex-1 p-4 rounded-2xl border backdrop-blur-md transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl 
-                    ${item.type === 'task' ? 'border-l-4 border-l-blue-500 bg-blue-500/5 border-white/5' : ''}
-                    ${item.type === 'gym' ? 'border-l-4 border-l-purple-500 bg-purple-500/5 border-white/5' : ''}
-                    ${item.type === 'nutrition' ? 'border-l-4 border-l-orange-500 bg-orange-500/5 border-white/5' : ''}
-                    ${item.type === 'journal' ? 'border-l-4 border-l-yellow-500 bg-yellow-500/5 border-white/5' : ''}
-                `}>
+                <div className={`flex-1 p-4 rounded-[16px] backdrop-blur-md transition-all duration-300
+                    ${item.type === 'task' ? 'border-l-4 border-l-[#0A84FF] bg-[#0A84FF]/10' : ''}
+                    ${item.type === 'gym' ? 'border-l-4 border-l-[#BF5AF2] bg-[#BF5AF2]/10' : ''}
+                    ${item.type === 'nutrition' ? 'border-l-4 border-l-[#FF9F0A] bg-[#FF9F0A]/10' : ''}
+                    ${item.type === 'journal' ? 'border-l-4 border-l-[#30D158] bg-[#30D158]/10' : ''}
+                `} style={{ boxShadow: 'var(--sa-shadow-card)', border: '1px solid rgba(255,255,255,0.05)' }}>
                     <div className="flex items-start justify-between">
                         <div>
-                            <div className="flex items-center gap-2 mb-1 opacity-80 text-[10px] font-black uppercase tracking-widest text-text-muted">
+                            <div className="flex items-center gap-2 mb-1 opacity-80 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--ios-tertiary)' }}>
                                 {getIcon()}
-                                <span>{item.type.toUpperCase()}</span>
+                                <span>{item.type}</span>
                             </div>
-                            <h4 className={`text-lg font-bold leading-tight text-white ${isCompleted && item.type === 'task' ? 'line-through opacity-60' : ''}`}>
+                            <h4 className={`text-[16px] font-semibold leading-tight text-white ${isCompleted && item.type === 'task' ? 'line-through opacity-50' : ''}`}>
                                 {item.title}
                             </h4>
-                            {item.subtitle && <p className="text-sm opacity-70 mt-1 font-medium text-text-muted">{item.subtitle}</p>}
+                            {item.subtitle && <p className="text-[13px] opacity-70 mt-1" style={{ color: 'var(--ios-secondary)' }}>{item.subtitle}</p>}
                         </div>
                         {isDraggable && (
                             <div className="text-white/20 group-hover:text-white/60 transition-colors cursor-grab active:cursor-grabbing">
-                                <GripHorizontal size={20} />
+                                <GripHorizontal size={20} weight="bold" />
                             </div>
                         )}
                     </div>
@@ -117,12 +121,17 @@ function DroppableDay({ date, isSelected, isCurrentMonth, isTodayDate, hasEvents
         <div
             ref={setNodeRef}
             className={`
-                relative h-14 w-full flex flex-col items-center justify-center cursor-pointer transition-all duration-300 rounded-xl
-                ${!isCurrentMonth ? "text-white/10 opacity-50" : "text-white/60 hover:bg-white/5"}
-                ${isSelected ? "bg-primary text-white shadow-[0_0_20px_rgba(139,92,246,0.5)] scale-105 z-10 font-black border border-white/20" : ""}
-                ${isTodayDate && !isSelected ? "border border-primary/50 text-primary" : ""}
-                ${isOver ? "bg-primary/40 scale-110 ring-2 ring-primary z-20" : ""}
+                relative h-[44px] w-full flex flex-col items-center justify-center cursor-pointer transition-all duration-300 rounded-[12px]
+                ${!isCurrentMonth ? "text-white/20 opacity-50" : "text-white hover:bg-white/5"}
+                ${isSelected ? "text-white shadow-lg scale-105 z-10 font-bold" : ""}
+                ${isTodayDate && !isSelected ? "text-[var(--sa-primary)] font-bold" : ""}
+                ${isOver ? "scale-110 ring-2 z-20" : ""}
             `}
+            style={{
+                background: isSelected ? 'var(--sa-primary)' : 'transparent',
+                boxShadow: isSelected ? 'var(--sa-shadow-glow)' : 'none',
+                borderColor: isOver ? 'var(--sa-primary)' : 'transparent',
+            }}
             onClick={onClick}
         >
             <span className="text-sm">{children}</span>
@@ -145,6 +154,7 @@ export default function CalendarPage() {
     const { tasks, updateTaskDate } = useBoardStore();
     const { entries } = useJournalStore();
     const { commits } = useNutritionStore();
+    const { events: standaloneEvents } = useCalendarStore();
 
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
     const isTablet = typeof window !== 'undefined' && window.innerWidth >= 768 && window.innerWidth < 1024;
@@ -218,6 +228,22 @@ export default function CalendarPage() {
             }
         });
 
+        // Standalone Events
+        standaloneEvents.forEach(evt => {
+            const evtDate = parseISO(evt.startTime);
+            if (isSameDay(evtDate, date)) {
+                items.push({
+                    id: evt.id,
+                    type: evt.type as any,
+                    title: evt.title,
+                    subtitle: evt.description,
+                    time: format(evtDate, 'HH:mm'),
+                    date: evtDate,
+                    status: 'none'
+                });
+            }
+        });
+
         return items.sort((a, b) => (a.time || '').localeCompare(b.time || ''));
     };
 
@@ -269,17 +295,21 @@ export default function CalendarPage() {
                         key={day.toString()}
                         onClick={() => setSelectedDate(cloneDay)}
                         className={`
-                            relative aspect-square flex flex-col items-center justify-center rounded-[1rem] transition-all duration-300
-                            ${!isCurrentMonth ? "text-zinc-800" : "text-zinc-500"}
-                            ${isSelected ? "bg-primary text-white shadow-2xl shadow-primary/40 scale-110 z-10" : "hover:bg-white/5"}
-                            ${isTodayDate && !isSelected ? "border border-primary/40 text-primary" : ""}
+                            relative aspect-square flex flex-col items-center justify-center rounded-[12px] transition-all duration-200
+                            ${!isCurrentMonth ? "text-white/20" : "text-white"}
+                            ${isSelected ? "text-white shadow-lg scale-105 z-10 font-bold" : "hover:bg-white/5"}
+                            ${isTodayDate && !isSelected ? "text-[var(--sa-primary)] font-bold" : ""}
                         `}
+                        style={{
+                            background: isSelected ? 'var(--sa-primary)' : 'transparent',
+                            boxShadow: isSelected ? 'var(--sa-shadow-glow)' : 'none',
+                        }}
                     >
-                        <span className="text-[13px] font-black">{format(cloneDay, 'd')}</span>
+                        <span className="text-[14px] font-medium">{format(cloneDay, 'd')}</span>
                         {itemsCount > 0 && !isSelected && (
-                            <div className="flex gap-[2px] mt-0.5">
+                            <div className="flex gap-[3px] mt-1">
                                 {Array.from({ length: Math.min(itemsCount, 3) }).map((_, i) => (
-                                    <div key={i} className="w-[3px] h-[3px] rounded-full bg-primary/60" />
+                                    <div key={i} className="w-[4px] h-[4px] rounded-full" style={{ background: 'var(--sa-primary)' }} />
                                 ))}
                             </div>
                         )}
@@ -300,33 +330,27 @@ export default function CalendarPage() {
     // ========== MOBILE VIEW ==========
     if (isMobile) {
         return (
-            <div className="flex flex-col min-h-full bg-bg-dark pb-32" data-device="mobile">
-                <div className="px-6 pt-10">
-                    <h1 className="text-4xl font-[900] text-white italic uppercase tracking-tighter leading-none mb-4">
-                        TIMELINE <span className="text-primary italic">HUB</span>
-                    </h1>
-                </div>
-
+            <div className="ios-animate-in min-h-full superapp-page pb-24">
                 {/* Calendar Card Mobile */}
-                <div className="px-6 mb-8">
-                    <div className="bg-zinc-900/40 p-5 rounded-[2.5rem] border border-white/5 backdrop-blur-xl">
+                <div className="px-4 mb-5 gym-section pt-4">
+                    <div className="gym-card p-5">
                         {/* Month Navigator */}
-                        <div className="flex items-center justify-between mb-6">
-                            <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} className="p-3 bg-white/5 rounded-2xl text-zinc-500 active:scale-90">
-                                <ChevronLeft size={20} />
+                        <div className="flex items-center justify-between mb-5">
+                            <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} className="p-2 bg-[var(--ios-fill-tertiary)] rounded-[10px] text-[var(--ios-text-secondary)] active:scale-95 transition-transform">
+                                <CaretLeft size={20} weight="bold" />
                             </button>
-                            <h2 className="text-sm font-black text-white uppercase italic tracking-widest pl-2">
+                            <h2 className="text-[16px] font-semibold text-white tracking-wide">
                                 {format(currentMonth, 'MMMM yyyy', { locale: vi })}
                             </h2>
-                            <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} className="p-3 bg-white/5 rounded-2xl text-zinc-500 active:scale-90">
-                                <ChevronRight size={20} />
+                            <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} className="p-2 bg-[var(--ios-fill-tertiary)] rounded-[10px] text-[var(--ios-text-secondary)] active:scale-95 transition-transform">
+                                <CaretRight size={20} weight="bold" />
                             </button>
                         </div>
 
                         {/* Week Days */}
-                        <div className="grid grid-cols-7 gap-1 mb-4">
+                        <div className="grid grid-cols-7 gap-1 mb-3">
                             {['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map(d => (
-                                <div key={d} className="text-center text-[10px] font-black text-zinc-700 uppercase">{d}</div>
+                                <div key={d} className="text-center text-[12px] font-medium text-[var(--ios-tertiary)]">{d}</div>
                             ))}
                         </div>
 
@@ -336,49 +360,49 @@ export default function CalendarPage() {
                 </div>
 
                 {/* Agenda Info */}
-                <div className="px-6 mb-6 flex justify-between items-end">
+                <div className="px-4 mb-4 flex justify-between items-end">
                     <div>
-                        <p className="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-1 pl-1">SCHEDULE DETAIL</p>
-                        <h2 className="text-2xl font-[900] text-white italic uppercase tracking-tighter capitalize leading-none">
-                            {format(selectedDate, 'EEEE, d MMMM', { locale: vi })}
+                        <p className="text-[12px] font-medium uppercase mb-1" style={{ color: 'var(--sa-primary)' }}>Lịch Trình</p>
+                        <h2 className="text-[20px] font-bold text-white capitalize leading-none">
+                            {format(selectedDate, 'EEEE, d/M', { locale: vi })}
                         </h2>
                     </div>
                     <div className="text-right">
-                        <span className="text-2xl font-[900] text-white leading-none block">{agendaItems.length}</span>
-                        <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">SỰ KIỆN</span>
+                        <span className="text-[20px] font-bold text-white leading-none block">{agendaItems.length}</span>
+                        <span className="text-[11px] font-medium uppercase tracking-wider" style={{ color: 'var(--ios-tertiary)' }}>SỰ KIỆN</span>
                     </div>
                 </div>
 
                 {/* Agenda List */}
-                <div className="px-6 space-y-4 pb-20">
+                <div className="px-4 space-y-3 pb-6">
                     <AnimatePresence mode="wait">
                         {agendaItems.length > 0 ? (
                             <motion.div
                                 key={selectedDate.toISOString()}
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="space-y-4"
+                                className="space-y-3"
                             >
                                 {agendaItems.map((item) => {
                                     const isCompleted = item.status === 'completed';
                                     return (
                                         <div
                                             key={item.id}
-                                            className="bg-zinc-900/30 border border-white/5 rounded-[2rem] p-5 flex items-center gap-5 relative overflow-hidden group"
+                                            className="gym-card p-4 flex items-center gap-4 relative group"
                                         >
-                                            <div className="w-14 shrink-0 text-center flex flex-col items-center">
-                                                <span className="text-[13px] font-[900] text-white italic">{item.time || '--:--'}</span>
-                                                <div className={`w-1 h-1 rounded-full mt-2 ${item.type === 'task' ? 'bg-blue-500' : item.type === 'gym' ? 'bg-purple-500' : item.type === 'nutrition' ? 'bg-orange-500' : 'bg-yellow-500'}`} />
+                                            <div className="w-12 shrink-0 text-center flex flex-col items-center">
+                                                <span className="text-[14px] font-bold text-white tracking-wide">{item.time || '--:--'}</span>
+                                                <div className={`w-1.5 h-1.5 rounded-full mt-2`} style={{ background: item.type === 'task' ? '#0A84FF' : item.type === 'gym' ? '#BF5AF2' : item.type === 'nutrition' ? '#FF9F0A' : '#30D158' }} />
                                             </div>
                                             <div className="flex-1">
-                                                <div className="flex items-center gap-2 mb-1.5">
-                                                    <span className="text-[9px] font-black text-zinc-600 uppercase tracking-wider">{item.type}</span>
-                                                    {item.type === 'task' && (isCompleted ? <CheckCircle2 size={12} className="text-green-500" /> : <Circle size={12} className="text-blue-500" />)}
+                                                <div className="flex items-center gap-1.5 mb-1.5">
+                                                    <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--ios-tertiary)' }}>{item.type}</span>
+                                                    {item.type === 'task' && (isCompleted ? <CheckCircle size={14} weight="fill" color="#30D158" /> : <Circle size={14} weight="duotone" color="#0A84FF" />)}
                                                 </div>
-                                                <h4 className={`font-bold text-white text-[15px] italic leading-tight ${isCompleted && item.type === 'task' ? 'line-through opacity-40' : ''}`}>
+                                                <h4 className={`font-semibold text-white text-[16px] leading-tight ${isCompleted && item.type === 'task' ? 'line-through opacity-50' : ''}`}>
                                                     {item.title}
                                                 </h4>
-                                                {item.subtitle && <p className="text-[11px] font-bold text-zinc-500 uppercase tracking-wide mt-1">{item.subtitle}</p>}
+                                                {item.subtitle && <p className="text-[12px] font-medium mt-1" style={{ color: 'var(--ios-secondary)' }}>{item.subtitle}</p>}
                                             </div>
                                         </div>
                                     );
@@ -388,10 +412,12 @@ export default function CalendarPage() {
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="py-20 text-center opacity-20"
+                                className="py-20 text-center opacity-40 flex flex-col items-center"
                             >
-                                <CalendarIcon size={64} className="mx-auto mb-4" />
-                                <p className="text-[10px] font-black uppercase tracking-[0.5em]">System Idle</p>
+                                <div className="w-16 h-16 rounded-[20px] bg-[var(--ios-fill-tertiary)] flex items-center justify-center mb-4">
+                                    <CalendarIcon size={32} weight="duotone" color="var(--ios-tertiary)" />
+                                </div>
+                                <p className="text-[15px] font-medium" style={{ color: 'var(--ios-text-secondary)' }}>Không có lịch trình</p>
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -467,8 +493,8 @@ export default function CalendarPage() {
                                 {format(currentMonth, 'MMMM yyyy', { locale: vi })}
                             </h2>
                             <div className="flex gap-1">
-                                <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} className="p-2 hover:bg-white/10 rounded-lg text-white/70 transition-colors"><ChevronLeft size={18} /></button>
-                                <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} className="p-2 hover:bg-white/10 rounded-lg text-white/70 transition-colors"><ChevronRight size={18} /></button>
+                                <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} className="p-2 hover:bg-white/10 rounded-lg text-white/70 transition-colors"><CaretLeft size={18} /></button>
+                                <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} className="p-2 hover:bg-white/10 rounded-lg text-white/70 transition-colors"><CaretRight size={18} /></button>
                             </div>
                         </div>
                         <div className="grid grid-cols-7 gap-1 mb-2">

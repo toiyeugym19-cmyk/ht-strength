@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Dumbbell, ArrowRight, Lock, Mail, Github, Chrome, AlertCircle } from 'lucide-react';
+import { CaretRight, Lock, Envelope, Warning, Shield, UserCircle } from '@phosphor-icons/react';
 import { toast } from 'sonner';
-import { useAuth } from '../hooks/useAuth'; // Import hook mock auth
+import { useAuth } from '../hooks/useAuth';
 
 export default function LoginPage() {
     const navigate = useNavigate();
-    const { login } = useAuth(); // Lấy hàm login từ hook
+    const { login } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
-    const [mode, setMode] = useState<'login' | 'register'>('login');
+    const [showForm, setShowForm] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
@@ -18,152 +18,168 @@ export default function LoginPage() {
         e.preventDefault();
         setIsLoading(true);
         setError(null);
-
-        // Validation cơ bản
         if (!email || !password) {
             setError('Vui lòng nhập đầy đủ thông tin');
             setIsLoading(false);
             return;
         }
-
         try {
-            await login(email); // Mock Login luôn thành công
-            toast.success(mode === 'login' ? 'Đăng nhập thành công!' : 'Tạo tài khoản thành công!');
+            await login(email);
+            toast.success('Đăng nhập thành công!');
             navigate('/');
-        } catch (err) {
+        } catch {
             setError('Có lỗi xảy ra');
         } finally {
             setIsLoading(false);
         }
     };
 
-    const handleGoogleLogin = async () => {
+    const quickLogin = async (role: 'admin' | 'member') => {
         setIsLoading(true);
         try {
-            await login('google-user@gmail.com');
-            toast.success('Đăng nhập Google thành công!');
+            const email = role === 'admin' ? 'admin@htstrength.com' : 'member@htstrength.com';
+            await login(email);
+            toast.success(role === 'admin' ? 'Xin chào Admin!' : 'Xin chào Hội Viên!');
             navigate('/');
-        } catch (err) {
-            toast.error('Lỗi đăng nhập Google');
         } finally {
             setIsLoading(false);
         }
-    }
+    };
+
+    const fadeUp = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
 
     return (
-        <div className="min-h-screen bg-[#030014] flex items-center justify-center p-4 relative overflow-hidden font-sans">
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
-            <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-blue-600/20 rounded-full blur-[120px] animate-pulse-slow" />
-            <div className="absolute top-[40%] -right-[10%] w-[40%] h-[40%] bg-purple-600/20 rounded-full blur-[120px] animate-pulse-slow" />
+        <div className="min-h-screen flex items-center justify-center p-5" style={{ background: '#0C0C0E' }}>
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full opacity-15 blur-[120px]" style={{ background: '#E8613A' }} />
+            </div>
 
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="w-full max-w-md relative z-10"
+                initial="hidden" animate="show"
+                variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
+                className="w-full max-w-[380px] relative z-10"
             >
-                <div className="flex flex-col items-center mb-8">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20 mb-4 rotate-3 hover:rotate-6 transition-transform">
-                        <Dumbbell className="text-white w-8 h-8" strokeWidth={2.5} />
-                    </div>
-                    <h1 className="text-3xl font-black text-white tracking-tighter italic uppercase">HT Strength</h1>
-                    <p className="text-zinc-400 font-medium">Hệ thống quản lý Gym tối thượng</p>
-                </div>
+                {/* Logo */}
+                <motion.div variants={fadeUp} className="flex flex-col items-center mb-10">
+                    <motion.div
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ delay: 0.1, type: 'spring', stiffness: 200 }}
+                        className="w-32 h-32 rounded-[28px] overflow-hidden flex items-center justify-center mb-5"
+                        style={{ background: '#161618', border: '2px solid rgba(255,255,255,0.08)', boxShadow: '0 8px 48px rgba(0,0,0,0.5)' }}
+                    >
+                        <img src="/logo-hts.png" alt="HT Strength" className="w-full h-full object-contain p-2" />
+                    </motion.div>
+                    <h1 className="text-[30px] font-black tracking-tighter" style={{ color: '#F0F0F5' }}>HT STRENGTH</h1>
+                    <p className="text-[14px] mt-1 font-medium" style={{ color: '#9494A0' }}>Elite Gym Management System</p>
+                </motion.div>
 
-                <div className="bg-zinc-900/50 backdrop-blur-xl border border-white/10 p-8 rounded-[2rem] shadow-2xl">
-                    <div className="flex gap-4 mb-8 p-1 bg-black/40 rounded-xl">
-                        <button
-                            onClick={() => setMode('login')}
-                            className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${mode === 'login' ? 'bg-white text-black shadow-lg' : 'text-zinc-500 hover:text-white'}`}
-                        >
-                            ĐĂNG NHẬP
-                        </button>
-                        <button
-                            onClick={() => setMode('register')}
-                            className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${mode === 'register' ? 'bg-white text-black shadow-lg' : 'text-zinc-500 hover:text-white'}`}
-                        >
-                            ĐĂNG KÝ
-                        </button>
-                    </div>
-
-                    <form onSubmit={handleAuth} className="space-y-4">
-                        {error && (
-                            <div className="bg-red-500/10 border border-red-500/20 p-3 rounded-xl flex items-center gap-2">
-                                <AlertCircle className="text-red-500" size={16} />
-                                <span className="text-xs font-bold text-red-500">{error}</span>
-                            </div>
-                        )}
-
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1">Email</label>
-                            <div className="relative group">
-                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-white transition-colors" size={18} />
-                                <input
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder:text-zinc-700 outline-none focus:border-blue-500 transition-all font-medium"
-                                    placeholder="admin@htstrength.com"
-                                />
-                            </div>
+                {/* ── DEMO BUTTONS — to, rõ ràng ── */}
+                <motion.div variants={fadeUp} className="space-y-3 mb-6">
+                    <button
+                        onClick={() => quickLogin('admin')}
+                        disabled={isLoading}
+                        className="w-full flex items-center gap-4 p-4 rounded-2xl active:scale-[0.97] transition-all disabled:opacity-50"
+                        style={{ background: '#161618', border: '1px solid rgba(255,255,255,0.07)' }}
+                    >
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(10,132,255,0.15)' }}>
+                            <Shield size={24} color="#0A84FF" weight="duotone" />
                         </div>
-
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1">Mật khẩu</label>
-                            <div className="relative group">
-                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-white transition-colors" size={18} />
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder:text-zinc-700 outline-none focus:border-blue-500 transition-all font-medium"
-                                    placeholder="••••••••"
-                                />
-                            </div>
+                        <div className="flex-1 text-left">
+                            <p className="text-[16px] font-semibold" style={{ color: '#F0F0F5' }}>Admin / Chủ Gym</p>
+                            <p className="text-[12px] mt-0.5" style={{ color: '#9494A0' }}>Quản lý hội viên, PT, doanh thu</p>
                         </div>
+                        <CaretRight size={18} weight="bold" style={{ color: '#4E4E58' }} />
+                    </button>
 
-                        {mode === 'login' && (
-                            <div className="flex justify-end">
-                                <a href="#" className="text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors">Quên mật khẩu?</a>
-                            </div>
-                        )}
+                    <button
+                        onClick={() => quickLogin('member')}
+                        disabled={isLoading}
+                        className="w-full flex items-center gap-4 p-4 rounded-2xl active:scale-[0.97] transition-all disabled:opacity-50"
+                        style={{ background: '#161618', border: '1px solid rgba(255,255,255,0.07)' }}
+                    >
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(232,97,58,0.15)' }}>
+                            <UserCircle size={24} color="#E8613A" weight="duotone" />
+                        </div>
+                        <div className="flex-1 text-left">
+                            <p className="text-[16px] font-semibold" style={{ color: '#F0F0F5' }}>Hội Viên</p>
+                            <p className="text-[12px] mt-0.5" style={{ color: '#9494A0' }}>Tập luyện, xem tiến trình, thống kê</p>
+                        </div>
+                        <CaretRight size={18} weight="bold" style={{ color: '#4E4E58' }} />
+                    </button>
+                </motion.div>
 
+                {/* Loading spinner overlay */}
+                {isLoading && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                        className="flex justify-center py-3">
+                        <div className="w-5 h-5 border-2 rounded-full animate-spin" style={{ borderColor: 'rgba(232,97,58,0.2)', borderTopColor: '#E8613A' }} />
+                    </motion.div>
+                )}
+
+                {/* ── HOẶC ĐĂNG NHẬP BẰNG EMAIL ── */}
+                <motion.div variants={fadeUp}>
+                    <div className="relative my-5">
+                        <div className="absolute inset-0 flex items-center"><div className="w-full" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }} /></div>
+                        <div className="relative flex justify-center">
+                            <span className="text-[11px] font-medium px-3" style={{ background: '#0C0C0E', color: '#4E4E58' }}>hoặc</span>
+                        </div>
+                    </div>
+
+                    {!showForm ? (
                         <button
-                            type="submit"
-                            disabled={isLoading}
-                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:scale-[1.02] active:scale-[0.98] text-white font-black py-4 rounded-xl shadow-lg shadow-blue-500/20 transition-all flex items-center justify-center gap-2 group mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                            onClick={() => setShowForm(true)}
+                            className="w-full py-3 rounded-xl text-[14px] font-medium active:opacity-60 transition-opacity"
+                            style={{ background: 'rgba(255,255,255,0.04)', color: '#9494A0', border: '1px solid rgba(255,255,255,0.06)' }}
                         >
-                            {isLoading ? (
-                                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            ) : (
-                                <>
-                                    {mode === 'login' ? 'ĐĂNG NHẬP NGAY' : 'TẠO TÀI KHOẢN'}
-                                    <ArrowRight className="group-hover:translate-x-1 transition-transform" size={18} />
-                                </>
-                            )}
+                            Đăng nhập bằng email
                         </button>
-                    </form>
+                    ) : (
+                        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                            className="rounded-2xl p-5" style={{ background: '#161618', border: '1px solid rgba(255,255,255,0.07)' }}>
+                            <form onSubmit={handleAuth} className="space-y-4">
+                                {error && (
+                                    <div className="flex items-center gap-2 p-3 rounded-xl" style={{ background: 'rgba(255,59,48,0.1)', border: '0.5px solid rgba(255,59,48,0.2)' }}>
+                                        <Warning size={16} color="#FF3B30" weight="duotone" />
+                                        <span className="text-[13px] font-medium" style={{ color: '#FF3B30' }}>{error}</span>
+                                    </div>
+                                )}
+                                <div>
+                                    <label className="text-[11px] font-bold uppercase tracking-widest block mb-2" style={{ color: '#4E4E58' }}>Email</label>
+                                    <div className="relative">
+                                        <Envelope className="absolute left-3.5 top-1/2 -translate-y-1/2" size={16} weight="duotone" style={{ color: '#4E4E58' }} />
+                                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                                            className="w-full py-3 pl-11 pr-4 rounded-xl text-[15px] outline-none"
+                                            style={{ background: '#1E1E22', border: '1px solid rgba(255,255,255,0.07)', color: '#F0F0F5' }}
+                                            placeholder="email@htstrength.com" />
+                                    </div>
+                                    <p className="text-[10px] mt-1.5" style={{ color: '#4E4E58' }}>
+                                        Gõ "admin" trong email = Admin · còn lại = Member
+                                    </p>
+                                </div>
+                                <div>
+                                    <label className="text-[11px] font-bold uppercase tracking-widest block mb-2" style={{ color: '#4E4E58' }}>Mật khẩu</label>
+                                    <div className="relative">
+                                        <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2" size={16} weight="duotone" style={{ color: '#4E4E58' }} />
+                                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+                                            className="w-full py-3 pl-11 pr-4 rounded-xl text-[15px] outline-none"
+                                            style={{ background: '#1E1E22', border: '1px solid rgba(255,255,255,0.07)', color: '#F0F0F5' }}
+                                            placeholder="••••••••" />
+                                    </div>
+                                </div>
+                                <button type="submit" disabled={isLoading}
+                                    className="w-full py-3.5 rounded-xl text-[15px] font-semibold flex items-center justify-center gap-2 active:opacity-80 transition-opacity disabled:opacity-50"
+                                    style={{ background: '#E8613A', color: 'white' }}>
+                                    Đăng nhập <CaretRight size={16} weight="bold" />
+                                </button>
+                            </form>
+                        </motion.div>
+                    )}
+                </motion.div>
 
-                    <div className="relative my-8">
-                        <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/10"></div></div>
-                        <div className="relative flex justify-center text-xs uppercase"><span className="bg-[#0c0c12] px-2 text-zinc-500 font-bold">Hoặc tiếp tục với</span></div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <button type="button" onClick={handleGoogleLogin} className="flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all">
-                            <Chrome size={18} className="text-white" />
-                            <span className="text-sm font-bold text-white">Google</span>
-                        </button>
-                        <button type="button" className="flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all">
-                            <Github size={18} className="text-white" />
-                            <span className="text-sm font-bold text-white">GitHub</span>
-                        </button>
-                    </div>
-                </div>
-
-                <p className="text-center text-zinc-600 text-xs mt-8 font-medium">
-                    &copy; 2026 HT Strength Management System
-                </p>
+                <motion.p variants={fadeUp} className="text-center text-[11px] mt-8" style={{ color: '#4E4E58' }}>
+                    © 2026 HT Strength Gym
+                </motion.p>
             </motion.div>
         </div>
     );

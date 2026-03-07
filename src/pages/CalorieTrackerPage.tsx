@@ -57,12 +57,20 @@ export default function CalorieTrackerPage() {
 
     return (
         <div className="min-h-screen pb-24" style={{ background: '#0a0a1a' }}>
-            {/* Header */}
-            <div className="px-4 pt-4 pb-2">
+            {/* ─── HEADER ─── */}
+            <div className="px-4 pt-3 pb-2">
+                {/* Phân biệt rõ mục đích */}
+                <div className="rounded-xl px-3 py-2.5 mb-3 flex items-center gap-2" style={{ background: 'rgba(255,159,10,0.1)', border: '0.5px solid rgba(255,159,10,0.25)' }}>
+                    <Flame size={13} className="text-orange-400 flex-shrink-0" />
+                    <p className="text-[11px] font-medium" style={{ color: 'rgba(255,159,10,0.9)' }}>
+                        <strong>Nhật Ký Ăn Uống Hàng Ngày</strong> — Ghi thực tế bữa ăn, tính tổng macro ngày hôm nay
+                    </p>
+                </div>
+
                 <div className="flex items-center justify-between">
-                    <h1 className="text-xl font-bold text-white flex items-center gap-2">
-                        <Flame className="text-orange-500" size={22} />
-                        Calorie Goal
+                    <h1 className="text-[20px] font-bold text-white flex items-center gap-2">
+                        <Flame className="text-orange-500" size={20} />
+                        Calo Hôm Nay
                     </h1>
                     <button onClick={() => setShowGoalEditor(true)} className="p-2 rounded-xl" style={{ background: 'rgba(255,255,255,0.06)' }}>
                         <Settings size={18} className="text-gray-400" />

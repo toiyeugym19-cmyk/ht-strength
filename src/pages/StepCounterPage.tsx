@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { format, subDays } from 'date-fns';
 import { vi } from 'date-fns/locale';
-import { Footprints, Flame, Clock, MapPin, TrendingUp, Trophy, Plus, Target } from 'lucide-react';
+import { Footprints, Flame, Clock, MapPin, TrendUp, Trophy, Target } from '@phosphor-icons/react';
 import { useStepStore } from '../store/useStepStore';
 import { useHealthStore } from '../store/useHealthStore';
 import { toast } from 'sonner';
@@ -22,20 +22,7 @@ export default function StepCounterPage() {
     const distance = todayEntry.distance || (steps * 0.0008);
     const calories = todayEntry.calories || Math.round(steps * 0.04);
 
-    // Manual input
-    const [showInput, setShowInput] = useState(false);
-    const [inputSteps, setInputSteps] = useState('');
 
-    const handleAddSteps = () => {
-        const val = parseInt(inputSteps);
-        if (!val || val <= 0) return;
-        const newTotal = steps + val;
-        stepStore.updateSteps(today, newTotal);
-        healthStore.updateStat(today, { steps: newTotal });
-        toast.success(`+${val.toLocaleString()} bước chân! 🚶`);
-        setInputSteps('');
-        setShowInput(false);
-    };
 
     // Weekly data
     const weekData = Array.from({ length: 7 }, (_, i) => {
@@ -66,28 +53,9 @@ export default function StepCounterPage() {
             <motion.div variants={stagger} initial="hidden" animate="show" className="px-5 pt-6 space-y-5">
 
                 {/* Header */}
-                <motion.div variants={fadeUp} className="flex items-center justify-between">
+                <motion.div variants={fadeUp}>
                     <h1 className="text-2xl font-bold">Bước chân</h1>
-                    <motion.button whileTap={{ scale: 0.9 }} onClick={() => setShowInput(!showInput)}
-                        className="w-10 h-10 rounded-full flex items-center justify-center"
-                        style={{ background: 'rgba(48,209,88,0.15)', border: '1px solid rgba(48,209,88,0.2)' }}>
-                        <Plus size={18} className="text-[#30D158]" />
-                    </motion.button>
                 </motion.div>
-
-                {/* Manual Input */}
-                {showInput && (
-                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
-                        className="rounded-2xl p-4 space-y-3" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
-                        <p className="text-sm font-semibold">Nhập bước chân thủ công</p>
-                        <div className="flex gap-2">
-                            <input type="number" value={inputSteps} onChange={e => setInputSteps(e.target.value)}
-                                placeholder="VD: 5000" className="input-clean flex-1 !py-2.5" />
-                            <button onClick={handleAddSteps} className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
-                                style={{ background: '#30D158' }}>Thêm</button>
-                        </div>
-                    </motion.div>
-                )}
 
                 {/* Activity Ring */}
                 <motion.div variants={fadeUp} className="rounded-3xl p-6 flex flex-col items-center"
@@ -102,15 +70,15 @@ export default function StepCounterPage() {
                                 style={{ transition: 'stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1)' }} />
                         </svg>
                         <div className="absolute inset-0 flex flex-col items-center justify-center">
-                            <Footprints size={20} className="text-[#30D158] mb-1" />
+                            <Footprints size={20} weight="duotone" className="text-[#30D158] mb-1" />
                             <span className="text-3xl font-bold">{steps.toLocaleString()}</span>
                             <span className="text-xs" style={{ color: 'var(--text-muted)' }}>/ {goal.toLocaleString()}</span>
                         </div>
                     </div>
                     <div className="flex justify-center gap-6 mt-5">
-                        <StatPill icon={<MapPin size={14} />} value={`${distance.toFixed(1)} km`} color="#0A84FF" />
-                        <StatPill icon={<Flame size={14} />} value={`${calories} kcal`} color="#FF9F0A" />
-                        <StatPill icon={<Clock size={14} />} value={`${todayEntry.activeMinutes} phút`} color="#BF5AF2" />
+                        <StatPill icon={<MapPin size={14} weight="duotone" />} value={`${distance.toFixed(1)} km`} color="#0A84FF" />
+                        <StatPill icon={<Flame size={14} weight="duotone" />} value={`${calories} kcal`} color="#FF9F0A" />
+                        <StatPill icon={<Clock size={14} weight="duotone" />} value={`${todayEntry.activeMinutes} phút`} color="#BF5AF2" />
                     </div>
                 </motion.div>
 
@@ -119,7 +87,7 @@ export default function StepCounterPage() {
                     style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(255,159,10,0.15)' }}>
-                            <Target size={18} className="text-[#FF9F0A]" />
+                            <Target size={18} weight="duotone" className="text-[#FF9F0A]" />
                         </div>
                         <div>
                             <p className="text-sm font-semibold">Mục tiêu hàng ngày</p>
@@ -206,12 +174,12 @@ export default function StepCounterPage() {
                 {/* Quick Stats */}
                 <motion.div variants={fadeUp} className="grid grid-cols-2 gap-3">
                     <div className="rounded-2xl p-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
-                        <TrendingUp size={16} className="text-[#30D158] mb-2" />
+                        <TrendUp size={16} weight="duotone" className="text-[#30D158] mb-2" />
                         <p className="text-xl font-bold">{stepStore.getTotalSteps().toLocaleString()}</p>
                         <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>Tổng bước chân</p>
                     </div>
                     <div className="rounded-2xl p-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
-                        <Trophy size={16} className="text-[#FF9F0A] mb-2" />
+                        <Trophy size={16} weight="duotone" className="text-[#FF9F0A] mb-2" />
                         <p className="text-xl font-bold">{stepStore.bestStreak}</p>
                         <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>Chuỗi kỷ lục</p>
                     </div>

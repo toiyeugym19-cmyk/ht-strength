@@ -5,7 +5,6 @@ import {
     Activity, RefreshCw, TrendingUp, Gauge, Wind, Timer, HeartPulse
 } from 'lucide-react';
 import { useHealthStore } from '../store/useHealthStore';
-import { useDeviceDetect } from '../hooks/useDeviceDetect';
 import { format } from 'date-fns';
 
 // ============================================================
@@ -110,7 +109,6 @@ function getRating(value: number, optimal: [number, number]): { label: string; c
 // ============================================================
 export default function HealthBenchmarkWidget() {
     const { dailyStats, isSyncing, lastSyncTime, syncWithDevice, syncLog } = useHealthStore();
-    const device = useDeviceDetect();
     const today = format(new Date(), 'yyyy-MM-dd');
     const todayStats = dailyStats[today];
     const [showLog, setShowLog] = useState(false);
@@ -164,14 +162,14 @@ export default function HealthBenchmarkWidget() {
                 }
             </div>
 
-            {/* Benchmark cards — 2-column on iPad, 1-column on iPhone */}
+            {/* Benchmark cards — Compact 2-column grid */}
             <div style={{
                 margin: '0 16px',
                 display: 'grid',
-                gridTemplateColumns: device.isTablet ? '1fr 1fr' : '1fr',
-                gap: device.isTablet ? 10 : 0,
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: 8,
             }}>
-                {BENCHMARKS.map((bm, idx) => {
+                {BENCHMARKS.map((bm) => {
                     const value = todayStats ? (todayStats as any)[bm.key] || 0 : 0;
                     const rating = getRating(value, bm.optimal);
                     const position = Math.max(0, Math.min(100, ((value - bm.min) / (bm.max - bm.min)) * 100));
@@ -181,35 +179,27 @@ export default function HealthBenchmarkWidget() {
 
                     return (
                         <div key={bm.key} style={{
-                            padding: device.isTablet ? '16px 18px' : '14px 16px',
+                            padding: '12px 12px',
                             background: '#1C1C1F',
-                            borderRadius: device.isTablet ? 14 : 0,
-                            ...(!device.isTablet && idx > 0 ? {
-                                borderTop: '0.5px solid rgba(84,84,88,0.35)'
-                            } : {}),
-                            ...(!device.isTablet && idx === 0 ? {
-                                borderRadius: '14px 14px 0 0'
-                            } : {}),
-                            ...(!device.isTablet && idx === BENCHMARKS.length - 1 ? {
-                                borderRadius: idx === 0 ? 14 : '0 0 14px 14px'
-                            } : {}),
+                            borderRadius: 14,
                         }}>
                             {/* Row 1: Label + Rating badge */}
                             <div style={{
-                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                                marginBottom: 8
+                                display: 'flex', flexDirection: 'column',
+                                marginBottom: 14, gap: 6, position: 'relative'
                             }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                                     <div style={{ color: bm.color }}>{bm.icon}</div>
-                                    <span style={{ fontSize: 15, fontWeight: 500, color: '#F5F5F7' }}>
+                                    <span style={{ fontSize: 13, fontWeight: 500, color: '#F5F5F7', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                         {bm.label}
                                     </span>
                                 </div>
                                 <span style={{
-                                    fontSize: 12, fontWeight: 600,
-                                    padding: '3px 10px', borderRadius: 6,
+                                    fontSize: 9, fontWeight: 600,
+                                    padding: '2px 6px', borderRadius: 4,
                                     background: todayStats ? rating.bg : 'rgba(142,142,147,0.12)',
-                                    color: todayStats ? rating.color : '#636366'
+                                    color: todayStats ? rating.color : '#636366',
+                                    alignSelf: 'flex-start'
                                 }}>
                                     {todayStats ? rating.label : '—'}
                                 </span>
@@ -225,20 +215,20 @@ export default function HealthBenchmarkWidget() {
                                         style={{
                                             position: 'absolute',
                                             left: `${position}%`,
-                                            top: -18, transform: 'translateX(-50%)',
-                                            fontSize: 11, fontWeight: 600, color: bm.color,
+                                            top: -16, transform: 'translateX(-50%)',
+                                            fontSize: 9, fontWeight: 600, color: bm.color,
                                             whiteSpace: 'nowrap'
                                         }}
                                     >
-                                        Bạn: {displayValue} {bm.unit}
+                                        Bạn: {displayValue}
                                     </motion.div>
                                 )}
 
                                 {/* Background bar */}
                                 <div style={{
-                                    width: '100%', height: 8, borderRadius: 4,
+                                    width: '100%', height: 6, borderRadius: 3,
                                     background: '#2C2C2E', position: 'relative',
-                                    overflow: 'hidden', marginTop: 20
+                                    overflow: 'hidden', marginTop: 16
                                 }}>
                                     {/* Optimal range highlight */}
                                     <div style={{
@@ -247,7 +237,7 @@ export default function HealthBenchmarkWidget() {
                                         width: `${optHigh - optLow}%`,
                                         height: '100%',
                                         background: `${bm.color}25`,
-                                        borderRadius: 4
+                                        borderRadius: 3
                                     }} />
 
                                     {/* Value fill bar */}
@@ -257,7 +247,7 @@ export default function HealthBenchmarkWidget() {
                                             animate={{ width: `${position}%` }}
                                             transition={{ duration: 1, ease: 'easeOut' }}
                                             style={{
-                                                height: '100%', borderRadius: 4,
+                                                height: '100%', borderRadius: 3,
                                                 background: bm.color,
                                                 position: 'absolute', left: 0, top: 0
                                             }}
@@ -273,8 +263,8 @@ export default function HealthBenchmarkWidget() {
                                             style={{
                                                 position: 'absolute', top: -3,
                                                 width: 0, height: 0, transform: 'translateX(-50%)',
-                                                borderLeft: '5px solid transparent',
-                                                borderRight: '5px solid transparent',
+                                                borderLeft: '4px solid transparent',
+                                                borderRight: '4px solid transparent',
                                                 borderTop: `5px solid ${bm.color}`
                                             }}
                                         />
@@ -285,13 +275,10 @@ export default function HealthBenchmarkWidget() {
                             {/* Row 3: Scale labels */}
                             <div style={{
                                 display: 'flex', justifyContent: 'space-between',
-                                fontSize: 10, color: '#636366', marginTop: 4
+                                fontSize: 9, color: '#636366', marginTop: 6, opacity: 0.8
                             }}>
                                 <span>{bm.min}</span>
-                                <span style={{ color: '#8E8E93', fontWeight: 500 }}>
-                                    Mức tốt: {bm.optimal[0]}–{bm.optimal[1]}
-                                </span>
-                                <span>{bm.max.toLocaleString()}</span>
+                                <span>{bm.max}</span>
                             </div>
                         </div>
                     );

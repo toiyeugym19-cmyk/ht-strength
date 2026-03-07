@@ -4,6 +4,7 @@ import { format, startOfDay, endOfDay } from 'date-fns';
 import { Capacitor } from '@capacitor/core';
 import { CapacitorHealthkit } from '@perfood/capacitor-healthkit';
 import { GoogleFit } from '@perfood/capacitor-google-fit';
+import { toast } from 'sonner';
 
 // ============================================================
 //  Types
@@ -83,7 +84,7 @@ async function syncFromHealthKit(log: (msg: string) => void): Promise<Partial<Da
     } catch (authErr: any) {
         log('❌ Authorization FAILED: ' + (authErr?.message || JSON.stringify(authErr)));
         throw new Error(
-            'Không thể cấp quyền HealthKit. Vui lòng mở Xcode -> Tab Signing & Capabilities -> Bấm dấu + Góc trái trên -> Thêm HealthKit. Sau đó Build lại app trên điện thoại iOS! Lỗi gốc: ' + (authErr?.message || 'Unknown')
+            'HEALTHKIT_PERMISSION_DENIED:' + (authErr?.message || 'Unknown')
         );
     }
 
@@ -378,9 +379,6 @@ export const useHealthStore = create<HealthState>()(
                     // ---- Fallback: No connection ----
                     else {
                         log('❌ Không có nguồn kết nối health data nào.');
-                        if (!isNative) {
-                            alert('Tính năng đồng bộ sức khỏe chỉ hoạt động trên thiết bị iPhone/iPad thực tế. Trên trình duyệt hãy kết nối Google Fit.');
-                        }
                         set({ isSyncing: false, syncLog: logs });
                         return;
                     }
@@ -389,11 +387,9 @@ export const useHealthStore = create<HealthState>()(
                     log('💥 LỖI SYNC: ' + errMsg);
                     console.error('Health sync error:', err);
 
-                    const isNative = Capacitor.isNativePlatform();
-                    if (isNative) {
-                        alert('HealthKit Lỗi: ' + errMsg);
-                    } else {
-                        alert('Health Sync Error: ' + errMsg);
+                    const isHealthKitPermission = errMsg.includes('HEALTHKIT_PERMISSION') || errMsg.includes('Could not get permission');
+                    if (!isHealthKitPermission) {
+                        toast.error('Lỗi đồng bộ: ' + (errMsg.length > 80 ? errMsg.slice(0, 80) + '...' : errMsg));
                     }
                     set({ isSyncing: false, syncLog: logs });
                     return;

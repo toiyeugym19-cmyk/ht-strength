@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal, Command, CornerDownLeft, Sparkles } from 'lucide-react';
+import { Terminal, Command, KeyReturn, Sparkle } from '@phosphor-icons/react';
 import { useBoardStore } from '../store/useBoardStore';
 import { useNutritionStore, type DietPhase } from '../store/useNutritionStore';
 import { useNavigate } from 'react-router-dom';
@@ -127,13 +127,13 @@ export default function CommandPalette() {
                                 onKeyDown={e => e.key === 'Enter' && handleCommand(e)}
                             />
                             <div className="flex items-center gap-1 px-2 py-1 bg-white/5 rounded border border-white/10 text-[10px] text-text-muted font-bold">
-                                <CornerDownLeft size={10} /> ENTER
+                                <KeyReturn size={10} weight="bold" /> ENTER
                             </div>
                         </div>
 
                         <div className="p-4 bg-black/40">
                             <div className="flex items-center gap-2 mb-3 text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">
-                                <Sparkles size={12} /> Suggested Commands
+                                <Sparkle size={12} weight="duotone" /> Suggested Commands
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs font-mono">
                                 <SuggestionItem cmd="commit task [text]" desc="Add a new task to main branch" />
@@ -162,7 +162,7 @@ export default function CommandPalette() {
                                 <span><span className="text-white">esc</span> close</span>
                             </div>
                             <div className="flex items-center gap-1">
-                                <Command size={10} /> K
+                                <Command size={10} weight="bold" /> K
                             </div>
                         </div>
                     </motion.div>

@@ -1,11 +1,12 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Star, Gift, Flame, Target, ChevronRight, Check, Lock } from 'lucide-react';
+import { Check, Lock } from '@phosphor-icons/react';
 import { useStepStore } from '../store/useStepStore';
 import { toast } from 'sonner';
 
 // ============================================================
 //  SOCIAL / LOYALTY PAGE — Mibro Fit Dark Theme (Functional)
+//  Includes: Challenges, Rewards, AND Leaderboard (all restored)
 // ============================================================
 
 const STORAGE_KEY = 'ht-loyalty-v1';
@@ -24,16 +25,26 @@ const CHALLENGES = [
 ];
 
 const REWARDS = [
-    { id: 'towel', title: 'Khăn tập HT', desc: 'Khăn microfiber thể thao', cost: 200, icon: '🏋️', tier: 'bronze' },
-    { id: 'bottle', title: 'Bình nước HT', desc: 'Bình giữ nhiệt 750ml', cost: 350, icon: '🥤', tier: 'silver' },
-    { id: 'shirt', title: 'Áo tập HT', desc: 'Áo thun thể thao dry-fit', cost: 500, icon: '👕', tier: 'gold' },
-    { id: 'session', title: 'Buổi PT miễn phí', desc: '1 buổi Personal Training', cost: 800, icon: '💪', tier: 'platinum' },
-    { id: 'month', title: 'Miễn phí 1 tháng', desc: 'Thẻ tập 1 tháng miễn phí', cost: 1500, icon: '🏆', tier: 'diamond' },
+    { id: 'towel', title: 'Khăn tập HT', desc: 'Khăn microfiber thể thao', cost: 200, icon: '🏋️' },
+    { id: 'bottle', title: 'Bình nước HT', desc: 'Bình giữ nhiệt 750ml', cost: 350, icon: '🥤' },
+    { id: 'shirt', title: 'Áo tập HT', desc: 'Áo thun thể thao dry-fit', cost: 500, icon: '👕' },
+    { id: 'session', title: 'Buổi PT miễn phí', desc: '1 buổi Personal Training', cost: 800, icon: '💪' },
+    { id: 'month', title: 'Miễn phí 1 tháng', desc: 'Thẻ tập 1 tháng miễn phí', cost: 1500, icon: '🏆' },
+];
+
+// Leaderboard (restored from old version)
+const LEADERBOARD = [
+    { rank: 1, name: 'Minh Tran', points: 8200, workouts: 24, avatar: '🥇', isYou: false },
+    { rank: 2, name: 'Lan Nguyen', points: 7100, workouts: 20, avatar: '🥈', isYou: false },
+    { rank: 3, name: 'Bạn', points: 5500, workouts: 18, avatar: '🥉', isYou: true },
+    { rank: 4, name: 'Tuan Pham', points: 4800, workouts: 15, avatar: '👤', isYou: false },
+    { rank: 5, name: 'Duc Le', points: 4300, workouts: 13, avatar: '👨', isYou: false },
+    { rank: 6, name: 'Hoa Vu', points: 3800, workouts: 11, avatar: '👩', isYou: false },
 ];
 
 export default function SocialPage() {
     const stepStore = useStepStore();
-    const [tab, setTab] = useState<'challenges' | 'rewards'>('challenges');
+    const [tab, setTab] = useState<'challenges' | 'rewards' | 'leaderboard'>('challenges');
     const loyalty = getLoyalty();
     const [points, setPoints] = useState(loyalty.points || 0);
     const [claimed, setClaimed] = useState<string[]>(loyalty.claimed || []);
@@ -95,22 +106,23 @@ export default function SocialPage() {
                     <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>điểm tích luỹ</p>
                 </motion.div>
 
-                {/* Tabs */}
+                {/* Tabs — 3 tabs: Challenges, Rewards, Leaderboard */}
                 <motion.div variants={fadeUp} className="flex rounded-xl overflow-hidden"
                     style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
-                    {(['challenges', 'rewards'] as const).map(t => (
+                    {(['challenges', 'rewards', 'leaderboard'] as const).map(t => (
                         <button key={t} onClick={() => setTab(t)}
                             className="flex-1 py-3 text-sm font-semibold transition-all"
                             style={{
                                 background: tab === t ? 'var(--primary)' : 'transparent',
                                 color: tab === t ? 'white' : 'var(--text-secondary)'
                             }}>
-                            {t === 'challenges' ? '🎯 Thử thách' : '🎁 Đổi thưởng'}
+                            {t === 'challenges' ? '🎯 Thử thách' : t === 'rewards' ? '🎁 Đổi thưởng' : '🏆 BXH'}
                         </button>
                     ))}
                 </motion.div>
 
-                {tab === 'challenges' ? (
+                {/* TAB: Challenges */}
+                {tab === 'challenges' && (
                     <div className="space-y-3">
                         {CHALLENGES.map(c => {
                             const eligible = isEligible(c);
@@ -125,7 +137,7 @@ export default function SocialPage() {
                                     </div>
                                     {isClaimed ? (
                                         <div className="flex items-center gap-1 text-xs" style={{ color: '#30D158' }}>
-                                            <Check size={14} /> Đã nhận
+                                            <Check size={14} weight="bold" /> Đã nhận
                                         </div>
                                     ) : eligible ? (
                                         <button onClick={() => handleClaim(c)}
@@ -142,7 +154,10 @@ export default function SocialPage() {
                             );
                         })}
                     </div>
-                ) : (
+                )}
+
+                {/* TAB: Rewards */}
+                {tab === 'rewards' && (
                     <div className="space-y-3">
                         {REWARDS.map(r => {
                             const canAfford = points >= r.cost;
@@ -157,7 +172,7 @@ export default function SocialPage() {
                                     </div>
                                     {isRedeemed ? (
                                         <div className="flex items-center gap-1 text-xs" style={{ color: '#BF5AF2' }}>
-                                            <Check size={14} /> Đã đổi
+                                            <Check size={14} weight="bold" /> Đã đổi
                                         </div>
                                     ) : canAfford ? (
                                         <button onClick={() => handleRedeem(r)}
@@ -167,12 +182,39 @@ export default function SocialPage() {
                                         </button>
                                     ) : (
                                         <div className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-hint)' }}>
-                                            <Lock size={12} /> {r.cost} ⭐
+                                            <Lock size={12} weight="duotone" /> {r.cost} ⭐
                                         </div>
                                     )}
                                 </motion.div>
                             );
                         })}
+                    </div>
+                )}
+
+                {/* TAB: Leaderboard (restored from old version) */}
+                {tab === 'leaderboard' && (
+                    <div className="space-y-3">
+                        {LEADERBOARD.map((u, i) => (
+                            <motion.div key={u.rank} variants={fadeUp} className="rounded-2xl p-4 flex items-center gap-3"
+                                style={{
+                                    background: u.isYou ? 'rgba(48,209,88,0.08)' : 'var(--bg-card)',
+                                    border: `1px solid ${u.isYou ? 'rgba(48,209,88,0.3)' : 'var(--border-color)'}`
+                                }}>
+                                <span className="text-2xl w-8 text-center">{u.avatar}</span>
+                                <div className="flex-1">
+                                    <p className="text-sm font-semibold">
+                                        {u.name} {u.isYou && <span className="text-[10px] px-1.5 py-0.5 rounded-full ml-1" style={{ background: 'rgba(48,209,88,0.2)', color: '#30D158' }}>Bạn</span>}
+                                    </p>
+                                    <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted)' }}>{u.workouts} buổi tập</p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-sm font-bold" style={{ color: i === 0 ? '#FFD60A' : i === 1 ? '#A0A0AB' : i === 2 ? '#AC8E68' : 'var(--text-secondary)' }}>
+                                        {u.points.toLocaleString()}
+                                    </p>
+                                    <p className="text-[10px]" style={{ color: 'var(--text-hint)' }}>điểm</p>
+                                </div>
+                            </motion.div>
+                        ))}
                     </div>
                 )}
             </motion.div>

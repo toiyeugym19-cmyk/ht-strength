@@ -157,7 +157,36 @@ const DEFAULT_PLANS: MemberAutomationPlan[] = [
         priority: 'critical',
         n8nWorkflowId: 'renewal-expiry'
     },
-    // More plans would go here...
+    {
+        id: 'retention_013',
+        name: 'Low Sessions Warning',
+        nameVi: 'Cảnh Báo Sắp Hết Buổi',
+        description: 'Nhắc hội viên khi còn dưới 3 buổi tập',
+        triggerType: 'system_event',
+        triggerCondition: 'sessionsRemaining <= 3',
+        actionType: 'create_task',
+        actionPayload: { title: 'Tư vấn tái ký gói', message: '{memberName} chỉ còn {sessionsRemaining} buổi tập. Hãy liên hệ gia hạn ngay!' },
+        enabled: true,
+        triggerCount: 0,
+        category: 'retention',
+        priority: 'high',
+        n8nWorkflowId: 'retention-low-sessions'
+    },
+    {
+        id: 'engagement_011',
+        name: 'Training Milestone',
+        nameVi: 'Cột Mốc Tập Luyện',
+        description: 'Chúc mừng khi đạt mốc 10, 20, 50, 100 buổi',
+        triggerType: 'streak',
+        triggerCondition: 'totalCheckIns % 10 === 0',
+        actionType: 'zalo_message',
+        actionPayload: { template: 'milestone_congrats' },
+        enabled: true,
+        triggerCount: 0,
+        category: 'engagement',
+        priority: 'medium',
+        n8nWorkflowId: 'engagement-milestone'
+    },
 ];
 
 // --- STORE CHÍNH ---

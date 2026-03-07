@@ -164,25 +164,59 @@ export function useAutomationEngine(): AutomationEngineResult {
 
             // --- SYSTEM ALERTS (Non-Plan) ---
 
-            // Check Membership Expiry
-            if (activeMember && activeMember.expiryDate) {
-                const expiry = parseISO(activeMember.expiryDate);
-                const daysLeft = differenceInDays(expiry, now);
+            // Check each member for alerts
+            members.forEach(m => {
+                // 1. Membership Expiry Date (Existing)
+                if (m.expiryDate) {
+                    const expiry = parseISO(m.expiryDate);
+                    const daysLeft = differenceInDays(expiry, now);
 
-                if (daysLeft <= 3 && daysLeft >= 0) {
-                    const expiryId = 'sys_expiry_warning';
-                    if (!pendingSuggestions.some(s => s.id === expiryId)) { // Simple check by ID pattern
+                    if (daysLeft <= 3 && daysLeft >= 0) {
+                        const expiryId = `sys_expiry_${m.id}`;
+                        if (!pendingSuggestions.some(s => s.planId === expiryId)) {
+                            addSuggestion({
+                                planId: expiryId,
+                                title: `⚠️ Sắp hết hạn gói: ${m.name}`,
+                                message: `Gói tập của ${m.name} sẽ hết hạn trong ${daysLeft} ngày nữa. Gia hạn ngay!`,
+                                icon: 'alert-triangle',
+                                priority: 'high',
+                                dismissable: true
+                            });
+                        }
+                    }
+                }
+
+                // 2. Low Sessions (MINDMAP B6)
+                const remaining = (m.sessionsTotal || 0) - (m.sessionsUsed || 0);
+                if (remaining <= 3 && remaining > 0 && m.status === 'Active') {
+                    const lowSessionId = `sys_low_sessions_${m.id}`;
+                    if (!pendingSuggestions.some(s => s.planId === lowSessionId)) {
                         addSuggestion({
-                            planId: 'system',
-                            title: '⚠️ Sắp hết hạn gói tập',
-                            message: `Gói tập của ${activeMember.name} sẽ hết hạn trong ${daysLeft} ngày nữa. Gia hạn ngay!`,
-                            icon: 'alert-triangle',
-                            priority: 'high',
+                            planId: lowSessionId,
+                            title: `🔔 Sắp hết buổi: ${m.name}`,
+                            message: `${m.name} chỉ còn ${remaining} buổi tập. Hãy chủ động liên hệ tư vấn gia hạn!`,
+                            icon: 'clock',
+                            priority: 'medium',
                             dismissable: true
                         });
                     }
                 }
-            }
+
+                // 3. Milestone Achievement (MINDMAP E2)
+                if (m.sessionsUsed > 0 && m.sessionsUsed % 10 === 0) {
+                    const milestoneId = `sys_milestone_${m.id}_${m.sessionsUsed}`;
+                    if (!pendingSuggestions.some(s => s.planId === milestoneId)) {
+                        addSuggestion({
+                            planId: milestoneId,
+                            title: `🎉 Cột mốc mới: ${m.name}`,
+                            message: `Hội viên ${m.name} đã hoàn thành ${m.sessionsUsed} buổi tập! Đừng quên tặng một lời khen hoặc phần quà nhỏ.`,
+                            icon: 'award',
+                            priority: 'medium',
+                            dismissable: true
+                        });
+                    }
+                }
+            });
 
             // --- AUTO-OPTIMIZATION: MONOTONY CHECK ---
             // Detect if user is doing same exercise too often (last 3 logs are same)

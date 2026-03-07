@@ -1,356 +1,74 @@
 @import 'framework7/css/bundle';
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap&subset=vietnamese,latin');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap&subset=vietnamese,latin');
+@import './styles/tokens.css';
 @import './styles/mobile.css';
 @import './styles/tablet.css';
 @import './styles/ios.css';
+@import './styles/apple-ui.css';
+@import './styles/gym-app.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ============================================================
-   🌑 MIBRO FIT DARK THEME — Premium Health & Fitness UI
-   Inspired by Mibro Fit companion app
-   Optimized for Sony Xperia XA2 Plus (6" 18:9 1080x2160)
+   HT STRENGTH — Unified Design System
+   Single source of truth. No competing variables.
    ============================================================ */
 
-:root {
-  /* ── Core Backgrounds ── */
-  --bg-app: #0D0D0D;
-  --bg-card: #1A1A1E;
-  --bg-card-alt: #222228;
-  --bg-elevated: #2A2A30;
-  --bg-input: #141418;
-  --bg-sidebar: rgba(20, 20, 24, 0.85);
-
-  /* ── Borders & Dividers ── */
-  --border-color: rgba(255, 255, 255, 0.06);
-  --border-subtle: rgba(255, 255, 255, 0.04);
-
-  /* ── Text ── */
-  --text-main: #F5F5F7;
-  --text-secondary: #A0A0AB;
-  --text-muted: #6B6B78;
-  --text-hint: #4A4A55;
-
-  /* ── Primary: Mibro Green (Activity Ring) ── */
-  --primary: #30D158;
-  --primary-rgb: 48, 209, 88;
-  --primary-hover: #34E060;
-  --primary-dim: rgba(48, 209, 88, 0.15);
-
-  /* ── Accent: Electric Blue ── */
-  --accent: #0A84FF;
-  --accent-rgb: 10, 132, 255;
-  --accent-dim: rgba(10, 132, 255, 0.15);
-
-  /* ── Health Metric Colors ── */
-  --color-heart: #FF375F;
-  --color-heart-dim: rgba(255, 55, 95, 0.15);
-  --color-sleep: #BF5AF2;
-  --color-sleep-dim: rgba(191, 90, 242, 0.15);
-  --color-oxygen: #64D2FF;
-  --color-oxygen-dim: rgba(100, 210, 255, 0.15);
-  --color-calories: #FF9F0A;
-  --color-calories-dim: rgba(255, 159, 10, 0.15);
-  --color-steps: #30D158;
-  --color-steps-dim: rgba(48, 209, 88, 0.15);
-  --color-stress: #FFD60A;
-  --color-stress-dim: rgba(255, 214, 10, 0.15);
-  --color-weight: #AC8E68;
-  --color-weight-dim: rgba(172, 142, 104, 0.15);
-  --color-active: #FF6482;
-  --color-active-dim: rgba(255, 100, 130, 0.15);
-
-  /* ── Shadows ── */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
-  --shadow-glow-green: 0 0 20px rgba(48, 209, 88, 0.3);
-  --shadow-glow-blue: 0 0 20px rgba(10, 132, 255, 0.3);
-  --shadow-color: rgba(0, 0, 0, 0.5);
-
-  /* ── Layout ── */
-  --card-radius: 16px;
-  --card-radius-lg: 24px;
-  --card-radius-sm: 12px;
-  --card-gap: 12px;
-
-  /* ── iOS Variables ── */
-  --ios-bg-glass: rgba(13, 13, 13, 0.88);
-  --ios-tab-bar-bg: rgba(10, 10, 12, 0.92);
-  --ios-header-bg: rgba(13, 13, 13, 0.85);
-  --ios-card-bg: #1A1A1E;
-  --ios-border: rgba(255, 255, 255, 0.06);
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  height: 100%;
+  background: var(--g-bg, #09090B);
 }
 
-/* ── Light Theme Override (minimal, app prioritizes dark) ── */
-[data-theme='light'] {
-  --bg-app: #F2F2F7;
-  --bg-card: #FFFFFF;
-  --bg-card-alt: #F8F8FA;
-  --bg-elevated: #FFFFFF;
-  --bg-input: #F2F2F7;
-  --bg-sidebar: rgba(255, 255, 255, 0.9);
-  --border-color: rgba(0, 0, 0, 0.08);
-  --border-subtle: rgba(0, 0, 0, 0.04);
-  --text-main: #1C1C1E;
-  --text-secondary: #636366;
-  --text-muted: #AEAEB2;
-  --text-hint: #C7C7CC;
-  --primary: #30D158;
-  --primary-rgb: 48, 209, 88;
-  --accent: #0A84FF;
-  --accent-rgb: 10, 132, 255;
-  --shadow-color: rgba(0, 0, 0, 0.08);
-  --ios-bg-glass: rgba(255, 255, 255, 0.88);
-  --ios-tab-bar-bg: rgba(255, 255, 255, 0.95);
-  --ios-header-bg: rgba(242, 242, 247, 0.9);
-  --ios-card-bg: #FFFFFF;
-  --ios-border: rgba(0, 0, 0, 0.06);
+body {
+  cursor: default;
+  overflow-x: hidden;
+  height: 100%;
+  min-height: 100vh;
+  overscroll-behavior: none;
+  background: var(--g-bg, #09090B);
 }
 
-/* ============================================================
-   BASE STYLES
-   ============================================================ */
-@layer base {
-  body {
-    @apply bg-[var(--bg-app)] text-[var(--text-main)] antialiased transition-colors duration-300 font-sans overflow-hidden h-screen;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+#root {
+  min-height: 100vh;
+  height: 100%;
+  background: var(--g-bg, #09090B);
 }
 
-/* ============================================================
-   COMPONENT STYLES
-   ============================================================ */
-@layer components {
-
-  /* ── Dark Cards ── */
-  .glass-panel {
-    @apply transition-all duration-200 relative overflow-hidden;
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--card-radius);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .glass-panel:hover {
-    border-color: rgba(var(--primary-rgb), 0.2);
-    box-shadow: var(--shadow-md);
-  }
-
-  /* ── Mibro Health Metric Card ── */
-  .mibro-card {
-    @apply p-4 rounded-2xl transition-all active:scale-[0.97] duration-150;
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-  }
-
-  .mibro-card-accent {
-    @apply p-4 rounded-2xl transition-all active:scale-[0.97] duration-150 relative overflow-hidden;
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-  }
-
-  .mibro-card-accent::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--card-accent-color, var(--primary));
-    opacity: 0.8;
-  }
-
-  /* ── Mibro Stat Badge ── */
-  .mibro-stat {
-    @apply flex flex-col items-center justify-center p-3 rounded-xl;
-    background-color: var(--bg-card-alt);
-  }
-
-  .mibro-stat-value {
-    @apply text-2xl font-bold tracking-tight;
-  }
-
-  .mibro-stat-label {
-    @apply text-[11px] font-medium mt-1;
-    color: var(--text-muted);
-  }
-
-  /* ── Activity Ring (SVG-based) ── */
-  .activity-ring {
-    transform: rotate(-90deg);
-  }
-
-  .activity-ring-track {
-    fill: none;
-    stroke: var(--bg-card-alt);
-    stroke-width: 8;
-    stroke-linecap: round;
-  }
-
-  .activity-ring-fill {
-    fill: none;
-    stroke-width: 8;
-    stroke-linecap: round;
-    transition: stroke-dashoffset 1s ease-out;
-  }
-
-  /* ── Buttons ── */
-  .btn {
-    @apply px-5 py-3 font-semibold tracking-wide transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 text-sm rounded-xl;
-  }
-
-  .btn-primary {
-    @apply text-white;
-    background: var(--primary);
-    box-shadow: 0 4px 14px rgba(var(--primary-rgb), 0.35);
-  }
-
-  .btn-primary:hover {
-    box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.5);
-    transform: translateY(-1px);
-  }
-
-  .btn-secondary {
-    @apply border text-[var(--text-secondary)];
-    background: var(--bg-card);
-    border-color: var(--border-color);
-  }
-
-  .btn-secondary:hover {
-    border-color: var(--primary);
-    color: var(--text-main);
-  }
-
-  /* ── Inputs ── */
-  .input-clean {
-    @apply w-full rounded-xl px-4 py-3 text-sm outline-none transition-all;
-    background: var(--bg-input);
-    border: 1px solid var(--border-color);
-    color: var(--text-main);
-  }
-
-  .input-clean::placeholder {
-    color: var(--text-hint);
-  }
-
-  .input-clean:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
-  }
-
-  /* ── iOS Premium UI (Updated for Mibro Dark) ── */
-  .ios-glass {
-    @apply backdrop-blur-[24px];
-    background-color: var(--ios-bg-glass);
-  }
-
-  .ios-tab-bar {
-    @apply fixed bottom-0 left-0 right-0 h-20 border-t flex items-center justify-around px-2 z-[100] backdrop-blur-3xl;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    background-color: var(--ios-tab-bar-bg);
-    border-color: var(--ios-border);
-    box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.5);
-  }
-
-  .ios-card {
-    @apply p-5 rounded-[20px] border transition-all active:scale-[0.97] duration-150;
-    background-color: var(--ios-card-bg);
-    border-color: var(--ios-border);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .ios-header {
-    @apply h-[100px] flex flex-col justify-end px-6 pb-4 sticky top-0 z-[60] backdrop-blur-2xl border-b;
-    background-color: var(--ios-header-bg);
-    border-color: var(--ios-border);
-  }
-
-  .ios-title {
-    @apply text-[28px] font-extrabold tracking-tight leading-tight;
-  }
-
-  .ios-search-bar {
-    @apply mx-5 mt-3 mb-2 rounded-xl flex items-center px-3 py-2.5 gap-2;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-  }
-
-  .ios-list-item {
-    @apply flex items-center gap-4 px-5 py-4 active:bg-white/5 transition-colors border-b last:border-0;
-    border-color: var(--border-subtle);
-  }
-
-  .ios-btn-primary {
-    @apply text-white font-bold py-3.5 rounded-2xl text-center active:scale-95 transition-all;
-    background: var(--primary);
-    box-shadow: 0 4px 14px rgba(var(--primary-rgb), 0.3);
-  }
-
-  .ios-tag {
-    @apply px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide;
-  }
-
-  /* ── Pulse Glow (for live data) ── */
-  .pulse-glow {
-    animation: pulseGlow 2s ease-in-out infinite;
-  }
-
-  @keyframes pulseGlow {
-
-    0%,
-    100% {
-      opacity: 1;
-    }
-
-    50% {
-      opacity: 0.6;
-    }
-  }
-
-  /* ── Text Glow ── */
-  .text-glow {
-    text-shadow: 0 0 15px rgba(var(--primary-rgb), 0.4);
-  }
-
-  .text-glow-blue {
-    text-shadow: 0 0 15px rgba(var(--accent-rgb), 0.4);
-  }
+/* Scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
-/* ============================================================
-   ANIMATIONS
-   ============================================================ */
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-4px);
-  }
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-.animate-float {
-  animation: float 5s ease-in-out infinite;
+::-webkit-scrollbar {
+  width: 4px;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--g-accent);
+  color: white;
+}
+
+/* Animations */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -375,6 +93,18 @@
   }
 }
 
+@keyframes pulseGlow {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.55;
+  }
+}
+
 @keyframes ringFill {
   from {
     stroke-dashoffset: var(--ring-circumference);
@@ -386,7 +116,7 @@
 }
 
 .fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
+  animation: fadeInUp 0.3s ease-out forwards;
 }
 
 .animate-fade-in-up {
@@ -394,87 +124,80 @@
 }
 
 .animate-slide-up {
-  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .animate-ring-fill {
   animation: ringFill 1.2s ease-out forwards;
 }
 
-/* ============================================================
-   SCROLLBAR & SELECTION
-   ============================================================ */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
 }
 
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+/* Activity ring SVG helpers */
+.activity-ring {
+  transform: rotate(-90deg);
 }
 
-/* Thin dark scrollbar for content areas */
-::-webkit-scrollbar {
-  width: 4px;
+.activity-ring-track {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+.activity-ring-fill {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s ease-out;
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
+/* ===== SIÊU APP — Premium tokens ===== */
+.superapp-hero {
+  background: linear-gradient(180deg, rgba(10, 132, 255, 0.08) 0%, transparent 50%);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+.superapp-hero-warm {
+  background: linear-gradient(180deg, rgba(255, 159, 10, 0.06) 0%, transparent 45%);
 }
 
-::selection {
-  background: var(--primary);
-  color: white;
+.superapp-glow {
+  box-shadow: 0 0 40px -8px rgba(10, 132, 255, 0.35);
 }
 
-/* ============================================================
-   HTML / BODY GLOBALS
-   ============================================================ */
-html {
-  scroll-behavior: smooth;
-  -webkit-tap-highlight-color: transparent;
-  overscroll-behavior: none;
-  touch-action: manipulation;
-  height: 100%;
-  background-color: #0D0D0D;
+.superapp-glow-warm {
+  box-shadow: 0 0 36px -6px rgba(255, 159, 10, 0.3);
 }
 
-body {
-  cursor: default;
-  overflow-x: hidden;
-  height: 100%;
-  overscroll-behavior: none;
-  background-color: #0D0D0D;
+.superapp-card-glass {
+  background: rgba(28, 28, 30, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 0.5px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--ios-shadow-card, 0 1px 0 rgba(255, 255, 255, 0.04));
 }
 
-/* ============================================================
-   CALENDAR OVERRIDES (Light Mode)
-   ============================================================ */
-[data-theme='light'] .rbc-calendar {
-  @apply text-slate-600;
+.superapp-tap-scale:active {
+  transform: scale(0.98);
 }
 
-[data-theme='light'] .rbc-off-range-bg {
-  @apply bg-slate-100 !important;
+/* Page content — padding chuẩn để nội dung không dính mép */
+.superapp-page {
+  padding-left: var(--g-page-x, 16px);
+  padding-right: var(--g-page-x, 16px);
+  padding-bottom: 0px;
 }
 
-[data-theme='light'] .rbc-today {
-  @apply bg-blue-50 !important;
+.superapp-text-gradient {
+  background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.85) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-[data-theme='light'] .rbc-toolbar button {
-  @apply text-slate-600 border-slate-200 hover:bg-slate-50 !important;
-}
-
-[data-theme='light'] .rbc-toolbar button.rbc-active {
-  @apply bg-blue-500 text-white border-blue-500 !important;
+[data-theme="light"] .superapp-card-glass {
+  background: rgba(255, 255, 255, 0.92);
+  border: 0.5px solid rgba(0, 0, 0, 0.08);
+  box-shadow: var(--ios-shadow-card);
 }

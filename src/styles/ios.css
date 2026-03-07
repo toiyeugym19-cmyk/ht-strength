@@ -61,16 +61,52 @@
     height: 100dvh;
     width: 100%;
     max-width: 430px;
+    /* Base for mobile */
     margin: 0 auto;
-    background: var(--ios-bg);
-    color: var(--ios-text);
-    font-family: 'Inter', -apple-system, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+
+    /* Tablet & iPad Optimization */
+    @media (min-width: 768px) {
+        max-width: 1024px;
+        box-shadow: none;
+    }
+
+    /* Desktop/Large Tablet */
+    @media (min-width: 1200px) {
+        max-width: 1200px;
+    }
+
+    background: var(--g-bg);
+    color: var(--g-text);
+    font-family: 'Inter',
+    -apple-system,
+    'SF Pro Display',
+    'SF Pro Text',
+    system-ui,
+    sans-serif;
     overflow: hidden;
     position: relative;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Shadow border on desktop for phone-like framing */
-    box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.8);
+}
+
+/* ===== UNIFIED CARD ===== */
+.gym-card {
+    background: var(--g-surface);
+    border-radius: var(--g-radius-md);
+    border: 1px solid var(--g-border);
+    transition: all 0.15s ease;
+}
+
+.gym-card:active {
+    background: var(--g-surface-2);
+    transform: scale(0.978);
+}
+
+.gym-card-accent {
+    background: var(--g-surface);
+    border-radius: var(--g-radius-md);
+    border: 1px solid var(--g-border);
 }
 
 /* ===== GLOBAL SCROLLBAR HIDING ===== */
@@ -98,13 +134,23 @@
 /* ===== NAVIGATION BAR ===== */
 .ios-nav-bar {
     flex-shrink: 0;
-    background: var(--ios-nav-bg);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-bottom: 0.5px solid var(--ios-separator);
-    z-index: 60;
-    transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
-    padding-bottom: 4px;
+    background: rgba(9, 9, 11, 0.82);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border-bottom: 1px solid var(--g-separator);
+    z-index: 100;
+    padding-bottom: 6px;
+    position: relative;
+    transition: background 0.3s ease;
+}
+
+[data-theme="light"] .ios-nav-bar {
+    background: rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.ios-nav-bar--collapsed {
+    padding-bottom: 2px;
 }
 
 .ios-nav-bar__top {
@@ -161,10 +207,15 @@
 }
 
 .ios-nav-logo-img {
-    height: 28px;
+    height: 48px;
     width: auto;
-    border-radius: 6px;
+    border-radius: 8px;
     object-fit: contain;
+    transition: transform 0.2s ease;
+}
+
+.ios-nav-logo-img:active {
+    transform: scale(0.95);
 }
 
 .ios-nav-small-title {
@@ -197,16 +248,18 @@
 .ios-nav-bar__large-title {
     padding: 0 16px;
     overflow: hidden;
+    text-align: center;
 }
 
 .ios-large-title {
-    font-size: 34px;
+    font-size: 30px;
     font-weight: 700;
-    letter-spacing: 0.37px;
-    color: var(--ios-text);
-    line-height: 1.1;
+    letter-spacing: -0.5px;
+    color: var(--g-text);
+    line-height: 1.12;
     margin: 0;
-    padding-bottom: 8px;
+    padding-bottom: 10px;
+    text-align: center;
 }
 
 /* ===== CONTENT AREA ===== */
@@ -227,7 +280,7 @@
     min-height: 100%;
 }
 
-/* ===== TAB BAR — iOS 18 Native ===== */
+/* ===== TAB BAR (Redesign) ===== */
 .ios-tabbar {
     position: fixed;
     bottom: 0;
@@ -235,18 +288,24 @@
     transform: translateX(-50%);
     width: 100%;
     max-width: 430px;
-    /* 49px is the exact Apple HIG tab bar height */
-    height: calc(49px + env(safe-area-inset-bottom, 20px));
+    height: calc(60px + env(safe-area-inset-bottom, 20px));
     padding-bottom: env(safe-area-inset-bottom, 20px);
+    padding-top: 8px;
     display: flex;
     align-items: stretch;
+    background: rgba(9, 9, 11, 0.92);
+    border-top: 1px solid var(--g-separator);
+    backdrop-filter: blur(32px) saturate(140%);
+    -webkit-backdrop-filter: blur(32px) saturate(140%);
     justify-content: space-around;
     z-index: 100;
-    /* iOS frosted glass — matches new bg system */
-    background: rgba(20, 20, 22, 0.92);
-    backdrop-filter: saturate(180%) blur(25px);
-    -webkit-backdrop-filter: saturate(180%) blur(25px);
-    border-top: 0.5px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease;
+}
+
+[data-theme="light"] .ios-tabbar {
+    background: rgba(255, 255, 255, 0.88);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .ios-tabbar__item {
@@ -254,50 +313,55 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2px;
+    gap: 4px;
     flex: 1;
     min-width: 0;
-    padding: 0;
+    min-height: 44px;
+    padding: 4px 4px 0;
     text-decoration: none;
     -webkit-tap-highlight-color: transparent;
     position: relative;
     cursor: pointer;
-    /* Touch feedback */
-    transition: opacity 0.1s ease;
+    transition: all 0.2s ease;
+    border-radius: 12px;
+    margin: 0 2px;
 }
 
 .ios-tabbar__item:active {
-    opacity: 0.6;
+    opacity: 0.75;
+}
+
+.ios-tabbar__item.ios-tabbar__item--active {
+    background: var(--g-accent-dim);
 }
 
 .ios-tabbar__icon {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(142, 142, 147, 0.85);
-    transition: color 0.2s ease;
+    color: var(--ios-tabbar-inactive);
+    transition: all 0.2s ease;
 }
 
 .ios-tabbar__icon--active {
-    color: var(--ios-tint);
+    color: var(--g-accent);
 }
 
 .ios-tabbar__label {
     font-size: 10px;
     font-weight: 500;
-    letter-spacing: 0.07px;
+    letter-spacing: 0.02em;
     line-height: 1.1;
     text-align: center;
     white-space: nowrap;
-    color: rgba(142, 142, 147, 0.85);
+    color: var(--ios-tabbar-inactive);
     transition: color 0.2s ease;
-    margin-top: 0;
 }
 
 .ios-tabbar__label--active {
-    color: var(--ios-tint);
+    color: var(--g-accent);
     font-weight: 600;
 }
 
@@ -543,6 +607,22 @@
     background: var(--ios-fill-tertiary);
 }
 
+/* ===== MEMBER ROW ===== */
+.member-row-iphone {
+    background: var(--g-surface);
+    border-radius: var(--g-radius-md);
+    margin: 0 0 8px;
+    border: 1px solid var(--g-border);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: all 0.15s ease;
+}
+
+.member-row-iphone:active {
+    background: var(--g-surface-2);
+    transform: scale(0.982);
+}
+
 /* ===== iOS BUTTONS — Premium ===== */
 .ios-btn {
     display: flex;
@@ -703,31 +783,185 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 0.5px rgba(255, 255, 255, 0.04);
 }
 
-/* ===== DESIGN TOKENS ===== */
+/* ============================================================
+   HT STRENGTH — UNIFIED DESIGN TOKENS (Redesign 2026)
+   Premium dark theme, gym orange accent, softer surfaces.
+   ============================================================ */
+
 :root {
-    /* iOS Dark Mode Colors — iOS 18 HIG (Improved Contrast) */
-    --ios-bg: #0D0D0F;
-    --ios-text: #F5F5F7;
-    --ios-text-secondary: #98989D;
-    --ios-text-tertiary: #636366;
-    --ios-tint: #FF6B35;
-    --ios-separator: rgba(84, 84, 88, 0.65);
-    --ios-separator-opaque: #38383A;
-    --ios-fill-tertiary: rgba(118, 118, 128, 0.24);
-    --ios-nav-bg: rgba(13, 13, 15, 0.88);
-    --ios-tabbar-bg: rgba(22, 22, 24, 0.78);
-    --ios-tabbar-inactive: #8E8E93;
-    --ios-card-bg: #1C1C1F;
-    --ios-sheet-bg: #1C1C1F;
-    --ios-grouped-bg: #2C2C2E;
-    --ios-systemRed: #FF453A;
-    --ios-systemGreen: #30D158;
-    --ios-systemBlue: #0A84FF;
-    --ios-systemOrange: #FF9F0A;
+    /* ── Premium Design Tokens ── */
+    --g-bg: #000000;
+    --g-glass: rgba(28, 28, 30, 0.72);
+    --g-glass-border: rgba(255, 255, 255, 0.08);
+    --g-blur: blur(20px);
+    --g-accent-premium: #E8613A;
+    --g-accent-premium-dim: rgba(232, 97, 58, 0.15);
+    /* ────────────────────────── */
+    /* page bg — deeper black */
+    --g-surface: #141416;
+    /* card surface */
+    --g-surface-2: #1A1A1E;
+    /* elevated / input bg */
+    --g-surface-3: #25252A;
+    /* hover / selected */
+
+    /* ── Borders ── */
+    --g-border: rgba(255, 255, 255, 0.06);
+    --g-border-med: rgba(255, 255, 255, 0.1);
+    --g-separator: rgba(255, 255, 255, 0.05);
+
+    /* ── Text ── */
+    --g-text: #FAFAFA;
+    /* primary — crisp white */
+    --g-text-2: #A1A1AA;
+    /* secondary */
+    --g-text-3: #52525B;
+    /* tertiary / placeholder */
+
+    /* ── Accent — GYM ORANGE ── */
+    --g-accent: #F97316;
+    /* brighter orange */
+    --g-accent-dim: rgba(249, 115, 22, 0.14);
+    --g-accent-glow: rgba(249, 115, 22, 0.28);
+
+    /* ── Semantic colors ── */
+    --g-success: #22C55E;
+    --g-success-dim: rgba(34, 197, 94, 0.12);
+    --g-warning: #F59E0B;
+    --g-warning-dim: rgba(245, 158, 11, 0.12);
+    --g-danger: #EF4444;
+    --g-danger-dim: rgba(239, 68, 68, 0.12);
+    --g-info: #3B82F6;
+    --g-info-dim: rgba(59, 130, 246, 0.12);
+    --g-purple: #A855F7;
+
+    /* ── Radius (softer, modern) ── */
+    --g-radius-sm: 10px;
+    --g-radius: 14px;
+    --g-radius-md: 18px;
+    --g-radius-lg: 22px;
+
+    /* ── Spacing ── */
+    --g-page-x: 18px;
+    --g-page-y: 14px;
+    --g-section-gap: 24px;
+    --g-block-gap: 12px;
+
+    /* ── Shadows (softer, premium) ── */
+    --g-shadow: 0 1px 0 var(--g-border);
+    --g-shadow-card: 0 4px 24px rgba(0, 0, 0, 0.25), 0 0 0 1px var(--g-border);
+
+    /* ── Legacy aliases — keep existing class names working ── */
+    --ios-bg: var(--g-bg);
+    --ios-bg-elevated: var(--g-surface-2);
+    --ios-text: var(--g-text);
+    --ios-text-secondary: var(--g-text-2);
+    --ios-text-tertiary: var(--g-text-3);
+    --ios-label: var(--g-text-2);
+    --ios-secondary: var(--g-text-2);
+    --ios-tertiary: var(--g-text-3);
+    --ios-tint: var(--g-accent);
+    --ios-tint-dim: var(--g-accent-dim);
+    --ios-tint-glow: var(--g-accent-glow);
+    --ios-separator: var(--g-separator);
+    --ios-separator-opaque: var(--g-surface-3);
+    --ios-fill-tertiary: rgba(148, 148, 160, 0.12);
+    --ios-nav-bg: rgba(9, 9, 11, 0.88);
+    --ios-tabbar-bg: rgba(9, 9, 11, 0.94);
+    --ios-tabbar-inactive: var(--g-text-3);
+    --ios-card-bg: var(--g-surface);
+    --ios-card-bg-hover: var(--g-surface-2);
+    --ios-sheet-bg: var(--g-surface);
+    --ios-grouped-bg: var(--g-surface-2);
+    --ios-systemRed: var(--g-danger);
+    --ios-systemGreen: var(--g-success);
+    --ios-systemBlue: var(--g-info);
+    --ios-systemOrange: var(--g-warning);
     --ios-systemYellow: #FFD60A;
-    --ios-systemPurple: #BF5AF2;
+    --ios-systemPurple: var(--g-purple);
     --ios-systemPink: #FF375F;
     --ios-systemCyan: #64D2FF;
+    --ios-radius-sm: var(--g-radius-sm);
+    --ios-radius: var(--g-radius);
+    --ios-radius-lg: var(--g-radius-md);
+    --ios-radius-xl: var(--g-radius-lg);
+    --ios-shadow-card: var(--g-shadow-card);
+    --ios-shadow-elevated: 0 4px 20px rgba(0, 0, 0, 0.3);
+
+    /* ── Also alias Mibro Fit vars so health pages still work ── */
+    --bg-app: var(--g-bg);
+    --bg-card: var(--g-surface);
+    --bg-card-alt: var(--g-surface-2);
+    --bg-elevated: var(--g-surface-2);
+    --bg-input: var(--g-surface-2);
+    --text-main: var(--g-text);
+    --text-secondary: var(--g-text-2);
+    --text-muted: var(--g-text-3);
+    --text-hint: var(--g-text-3);
+    --primary: var(--g-success);
+    --primary-rgb: 52, 199, 89;
+    --primary-dim: var(--g-success-dim);
+    --accent: var(--g-info);
+    --accent-rgb: 10, 132, 255;
+    --accent-dim: var(--g-info-dim);
+    --border-color: var(--g-border);
+    --border-subtle: var(--g-separator);
+    --card-radius: var(--g-radius-md);
+    --card-radius-lg: var(--g-radius-lg);
+    --card-radius-sm: var(--g-radius);
+    --ios-card-bg-old: var(--g-surface);
+    --ios-border: var(--g-border);
+}
+
+/* ===== THEME SÁNG — dễ nhìn, tương phản rõ ===== */
+[data-theme="light"] {
+    --g-bg: #F2F2F7;
+    --g-surface: #FFFFFF;
+    --g-surface-2: #E5E5EA;
+    --g-surface-3: #D1D1D6;
+
+    --g-border: rgba(0, 0, 0, 0.08);
+    --g-border-med: rgba(0, 0, 0, 0.12);
+    --g-separator: rgba(0, 0, 0, 0.06);
+
+    --g-text: #1C1C1E;
+    --g-text-2: #48484A;
+    --g-text-3: #8E8E93;
+
+    --g-accent: #F97316;
+    --g-accent-dim: rgba(249, 115, 22, 0.14);
+    --g-accent-glow: rgba(249, 115, 22, 0.2);
+
+    --g-success: #22C55E;
+    --g-success-dim: rgba(52, 199, 89, 0.14);
+    --g-warning: #FF9F0A;
+    --g-warning-dim: rgba(255, 159, 10, 0.14);
+    --g-danger: #FF3B30;
+    --g-danger-dim: rgba(255, 59, 48, 0.12);
+    --g-info: #0A84FF;
+    --g-info-dim: rgba(10, 132, 255, 0.12);
+    --g-purple: #AF52DE;
+
+    --g-shadow: 0 1px 0 var(--g-border);
+    --g-shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06), 0 0 0 0.5px var(--g-border);
+
+    --ios-fill-tertiary: rgba(60, 60, 67, 0.12);
+    --ios-nav-bg: rgba(242, 242, 247, 0.94);
+    --ios-tabbar-bg: rgba(242, 242, 247, 0.98);
+    --ios-tabbar-inactive: #8E8E93;
+    --ios-shadow-card: var(--g-shadow-card);
+    --ios-shadow-elevated: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== SECTION TITLE — thống nhất giữa các trang ===== */
+.ios-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--g-text-3);
+    margin-bottom: 10px;
+    padding: 0;
 }
 
 /* ===== UTILITY CLASSES FOR iOS ===== */
@@ -815,6 +1049,28 @@
 .ios-sheet {
     -ms-overflow-style: none;
     scrollbar-width: none;
+}
+
+/* ===== PREMIUM UTILITIES ===== */
+.superapp-card-glass {
+    background: var(--g-glass);
+    backdrop-filter: var(--g-blur);
+    -webkit-backdrop-filter: var(--g-blur);
+    border: 1px solid var(--g-glass-border);
+}
+
+.superapp-tap-scale {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.superapp-tap-scale:active {
+    transform: scale(0.96);
+}
+
+.superapp-text-gradient {
+    background: linear-gradient(135deg, #FFF 0%, rgba(255, 255, 255, 0.6) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 /* ===== RESPONSIVE — iPad & Desktop ===== */

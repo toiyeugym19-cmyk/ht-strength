@@ -1,25 +1,24 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { Loader2 } from 'lucide-react';
+import { CircleNotch } from '@phosphor-icons/react';
 
 export default function PrivateRoute() {
-    // const { user, loading } = useAuth(); // useAuth giờ đã là Mock
+    const { user, loading } = useAuth();
 
-    // TEMPORARY BYPASS FOR DEVELOPMENT
+    if (loading) {
+        return (
+            <div className="h-screen w-full flex flex-col items-center justify-center gap-4" style={{ background: 'var(--g-bg, #0C0C0E)' }}>
+                <CircleNotch className="animate-spin" size={36} weight="bold" style={{ color: 'var(--g-accent, #E8613A)' }} />
+                <p className="text-sm font-semibold uppercase tracking-widest animate-pulse" style={{ color: 'var(--g-text-3, #4E4E58)' }}>
+                    Loading...
+                </p>
+            </div>
+        );
+    }
+
+    if (!user) {
+        return <Navigate to="/login" replace />;
+    }
+
     return <Outlet />;
-
-    // if (loading) {
-    //     return (
-    //         <div className="h-screen w-full bg-[#030014] flex flex-col items-center justify-center text-white gap-4">
-    //             <Loader2 className="animate-spin text-blue-500" size={40} />
-    //             <p className="text-zinc-500 text-sm font-bold uppercase tracking-widest animate-pulse">Checking Access...</p>
-    //         </div>
-    //     );
-    // }
-
-    // if (!user) {
-    //     return <Navigate to="/login" replace />;
-    // }
-
-    // return <Outlet />;
 }

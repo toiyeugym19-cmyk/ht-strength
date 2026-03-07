@@ -1,43 +1,65 @@
-import { useState, useEffect } from 'react';
+import { create } from 'zustand';
 
 // Mock User Interface
-interface User {
+export interface User {
     uid: string;
     email: string;
     displayName: string;
     photoURL: string;
+    role: 'admin' | 'pt' | 'member';
+    ptName?: string;   // Khi role=pt: tên PT để filter HV
+    memberId?: string; // Khi role=member: id member để lấy dữ liệu cá nhân
 }
 
-export function useAuth() {
-    const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
+interface AuthState {
+    user: User | null;
+    loading: boolean;
+    login: (email: string) => Promise<User>;
+    logout: () => Promise<void>;
+}
 
-    useEffect(() => {
-        // Giả lập check login từ localStorage
-        const storedUser = localStorage.getItem('mock_user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
+// Initial check
+const storedUser = localStorage.getItem('mock_user');
+const initialUser = storedUser ? JSON.parse(storedUser) : null;
+
+export const useAuth = create<AuthState>((set) => ({
+    user: initialUser,
+    loading: false,
+    login: async (email: string) => {
+        // Mock role based on email parsing
+        let role: 'admin' | 'pt' | 'member' = 'member';
+        let displayName = 'Member User';
+
+        let ptName: string | undefined;
+        let memberId: string | undefined;
+        if (email.includes('admin')) {
+            role = 'admin';
+            displayName = 'Admin Hùng Phan';
+        } else if (email.includes('pt')) {
+            role = 'pt';
+            displayName = 'PT User';
+            ptName = 'Coach Thor';
+        } else {
+            displayName = 'Nguyễn Văn A'; // Member mặc định
+            memberId = 'm1'; // Link với member đầu tiên
         }
-        setLoading(false);
-    }, []);
 
-    const login = async (email: string) => {
-        // Giả lập login thành công
-        const mockUser = {
-            uid: 'user-123',
+        const mockUser: User = {
+            uid: `user-${Date.now()}`,
             email: email,
-            displayName: 'Admin User',
-            photoURL: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix'
+            displayName: displayName,
+            photoURL: 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + email,
+            role: role,
+            ptName,
+            memberId
         };
         localStorage.setItem('mock_user', JSON.stringify(mockUser));
-        setUser(mockUser);
+        set({ user: mockUser });
         return mockUser;
-    };
-
-    const logout = async () => {
+    },
+    logout: async () => {
         localStorage.removeItem('mock_user');
-        setUser(null);
-    };
-
-    return { user, loading, login, logout };
-}
+        set({ user: null });
+        window.location.href = '/login';
+    }
+}));

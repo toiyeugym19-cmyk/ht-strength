@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Copy, ExternalLink, RefreshCw, Star, Trophy } from 'lucide-react';
+import { Copy, LinkSimple, ArrowCounterClockwise, Star, Trophy } from '@phosphor-icons/react';
 import REVIEWS from '../data/gymReviews.json';
 import { toast } from 'sonner';
 
@@ -38,7 +38,7 @@ export default function ReviewHubPage() {
         return (
             <div className="ios-animate-in flex flex-col items-center justify-center min-h-[80vh] p-6 text-center">
                 <div className="w-20 h-20 bg-[var(--ios-tint)]/20 rounded-3xl flex items-center justify-center mb-6">
-                    <Trophy className="text-[var(--ios-tint)]" size={40} />
+                    <Trophy className="text-[var(--ios-tint)]" size={40} weight="duotone" />
                 </div>
 
                 <h1 className="text-2xl font-bold text-white mb-2">Cảm ơn bạn!</h1>
@@ -49,7 +49,7 @@ export default function ReviewHubPage() {
                 {/* Stars */}
                 <div className="flex gap-1.5 mb-6">
                     {[1, 2, 3, 4, 5].map(i => (
-                        <Star key={i} size={28} className="text-[#FFD60A] fill-[#FFD60A]" />
+                        <Star key={i} size={28} weight="fill" className="text-[#FFD60A]" />
                     ))}
                 </div>
 
@@ -74,7 +74,7 @@ export default function ReviewHubPage() {
                 </div>
 
                 <button onClick={refreshReview} className="flex items-center gap-2 text-[var(--ios-tint)] text-[15px] font-medium">
-                    <RefreshCw size={16} /> Đổi nội dung khác
+                    <ArrowCounterClockwise size={16} weight="duotone" /> Đổi nội dung khác
                 </button>
             </div>
         );
@@ -88,7 +88,7 @@ export default function ReviewHubPage() {
             <div className="mx-4 mt-2">
                 <button onClick={() => { setView('customer'); refreshReview(); }}
                     className="w-full bg-[var(--ios-tint)] text-white rounded-2xl p-4 font-semibold text-[17px] active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
-                    <ExternalLink size={18} /> Xem giao diện khách hàng
+                    <LinkSimple size={18} weight="duotone" /> Xem giao diện khách hàng
                 </button>
             </div>
 
@@ -148,7 +148,7 @@ export default function ReviewHubPage() {
                         <div key={idx} className={`p-4 ${idx < 9 ? 'border-b border-[var(--ios-separator)]' : ''}`}>
                             <div className="flex items-center gap-2 mb-1.5">
                                 <div className="flex gap-0.5">
-                                    {[1, 2, 3, 4, 5].map(s => <Star key={s} size={10} className="text-[#FFD60A] fill-[#FFD60A]" />)}
+                                    {[1, 2, 3, 4, 5].map(s => <Star key={s} size={10} weight="fill" className="text-[#FFD60A]" />)}
                                 </div>
                                 <span className="text-[11px] text-[var(--ios-text-tertiary)]">Mẫu #{idx + 1}</span>
                             </div>

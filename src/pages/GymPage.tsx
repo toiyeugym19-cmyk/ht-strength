@@ -1,24 +1,49 @@
+import { Link } from 'react-router-dom';
 import { useGymStore } from '../store/useGymStore';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Dumbbell, Calendar, ChevronRight,
-    Zap, Clock, Plus,
-    Flame, Target
-} from 'lucide-react';
+    Barbell, Calendar, CaretRight,
+    Lightning, Clock, Plus,
+    Flame, Target, BookOpenText,
+    TrendUp
+} from '@phosphor-icons/react';
 import { format, startOfWeek, addDays, isSameDay } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { toast } from 'sonner';
 
 const PLAN_TYPES = [
-    { id: 'Rest', label: 'Nghỉ', color: '#636366' },
+    { id: 'Rest', label: 'Nghỉ', color: '#8E8E93' },
     { id: 'Push', label: 'Đẩy', color: '#0A84FF' },
-    { id: 'Pull', label: 'Kéo', color: '#FF6B35' },
+    { id: 'Pull', label: 'Kéo', color: '#FF9F0A' },
     { id: 'Legs', label: 'Chân', color: '#30D158' },
     { id: 'Upper', label: 'Trên', color: '#BF5AF2' },
     { id: 'Lower', label: 'Dưới', color: '#FF375F' },
     { id: 'Cardio', label: 'Cardio', color: '#FF453A' },
     { id: 'FullBody', label: 'Full', color: '#FFD60A' },
 ];
+
+const fadeUp = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } } } as any;
+const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } } as any;
+
+function IOSStatCard({ label, value, sub, icon: Icon, color }: { label: string; value: string; sub: string; icon: any; color: string }) {
+    return (
+        <motion.div
+            whileTap={{ scale: 0.96 }}
+            className="superapp-card-glass p-4 rounded-[24px] flex flex-col justify-between min-h-[120px]"
+        >
+            <div className="w-10 h-10 rounded-[14px] flex items-center justify-center" style={{ background: `${color}15`, border: `1px solid ${color}30` }}>
+                <Icon size={20} weight="fill" style={{ color }} />
+            </div>
+            <div>
+                <p className="text-[28px] font-black text-white leading-none tracking-tighter tabular-nums">{value}</p>
+                <div className="flex flex-col mt-2">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-white opacity-40">{label}</span>
+                    <span className="text-[9px] font-bold text-white/20 mt-0.5">{sub}</span>
+                </div>
+            </div>
+        </motion.div>
+    );
+}
 
 export default function GymPage() {
     const { weeklyPlan, updateWeeklyPlan, logs, userProfile } = useGymStore();
@@ -41,7 +66,7 @@ export default function GymPage() {
     const autoFillPlan = () => {
         const pattern = ['Push', 'Pull', 'Rest', 'Legs', 'Upper', 'Lower', 'Rest'];
         pattern.forEach((p, i) => updateWeeklyPlan(i, p));
-        toast.success("Đã áp dụng lịch mẫu: PPL Split!");
+        toast.success("Build thành công: Lịch PPL Split!");
     };
 
     const totalVolume = logs.reduce((acc, l) => acc + (l.weight * l.reps), 0);
@@ -49,82 +74,63 @@ export default function GymPage() {
     const bestE1RM = logs.length > 0 ? Math.max(...logs.map(l => l.e1RM)) : 0;
 
     return (
-        <div style={{ padding: '0 0 40px' }}>
-
-            {/* ===== STATS ROW ===== */}
-            <div style={{
-                display: 'flex', gap: 10,
-                margin: '12px 16px 14px', overflow: 'hidden'
-            }}>
-                {[
-                    { icon: <Flame size={16} />, val: totalSessions.toString(), sub: 'Buổi tập', bg: '#FF453A' },
-                    { icon: <Dumbbell size={16} />, val: totalVolume > 1000 ? `${(totalVolume / 1000).toFixed(1)}k` : `${totalVolume}`, sub: 'Tổng tải (kg)', bg: '#0A84FF' },
-                    { icon: <Target size={16} />, val: bestE1RM > 0 ? `${Math.round(bestE1RM)}` : '—', sub: 'Best 1RM', bg: '#30D158' },
-                ].map((s, i) => (
-                    <div key={i} style={{
-                        flex: 1, background: '#1C1C1F', borderRadius: 12,
-                        padding: '14px 10px', textAlign: 'center'
-                    }}>
-                        <div style={{
-                            width: 30, height: 30, borderRadius: 8, margin: '0 auto 8px',
-                            background: `${s.bg}22`, display: 'flex',
-                            alignItems: 'center', justifyContent: 'center', color: s.bg
-                        }}>{s.icon}</div>
-                        <div style={{ fontSize: 24, fontWeight: 700, color: '#fff', lineHeight: 1 }}>{s.val}</div>
-                        <div style={{ fontSize: 11, fontWeight: 500, color: '#AEAEB2', marginTop: 4 }}>{s.sub}</div>
+        <motion.div
+            variants={stagger} initial="hidden" animate="show"
+            className="ios-animate-in superapp-page pt-4 pb-20"
+        >
+            {/* ── HEADER ── */}
+            <motion.div variants={fadeUp} className="mb-6">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-[32px] font-black tracking-tighter text-white">HT TRAINING</h1>
+                        <p className="text-[13px] font-medium opacity-40">Cơ sở vật chất & Hiệu suất tập luyện</p>
                     </div>
-                ))}
-            </div>
-
-            {/* ===== TRAINING LEVEL ===== */}
-            <div style={{
-                margin: '0 16px 14px', padding: '13px 16px',
-                background: '#1C1C1F', borderRadius: 12,
-                display: 'flex', alignItems: 'center', gap: 12
-            }}>
-                <div style={{
-                    width: 34, height: 34, borderRadius: 8,
-                    background: 'rgba(10,132,255,0.15)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: '#0A84FF'
-                }}>
-                    <Dumbbell size={17} />
-                </div>
-                <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 15, fontWeight: 600, color: '#fff' }}>Trình độ tập luyện</div>
-                    <div style={{ fontSize: 13, fontWeight: 500, color: '#AEAEB2', marginTop: 1 }}>
-                        {userProfile.trainingClass}
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[#E8613A]/10 border border-[#E8613A]/20">
+                        <Barbell size={28} weight="fill" className="text-[#E8613A]" />
                     </div>
                 </div>
-                <ChevronRight size={18} style={{ color: '#636366' }} />
-            </div>
+            </motion.div>
 
-            {/* ===== WEEKLY PLANNER ===== */}
-            <div style={{ margin: '0 16px 14px' }}>
-                <div style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    marginBottom: 10, gap: 8
-                }}>
-                    <span style={{ fontSize: 15, fontWeight: 600, color: '#fff', whiteSpace: 'nowrap' }}>
-                        Lịch tuần
-                    </span>
-                    <button onClick={autoFillPlan} style={{
-                        display: 'flex', alignItems: 'center', gap: 4,
-                        padding: '5px 12px', borderRadius: 20,
-                        background: 'rgba(255,107,53,0.15)',
-                        color: '#FF6B35', fontSize: 13, fontWeight: 600,
-                        border: 'none', cursor: 'pointer'
-                    }}>
-                        <Zap size={13} /> Tự động
+            {/* ── PERFORMANCE HUB ── */}
+            <motion.div variants={fadeUp} className="grid grid-cols-2 gap-3 mb-6">
+                <IOSStatCard
+                    label="Volume"
+                    value={totalVolume > 1000 ? `${(totalVolume / 1000).toFixed(1)}k` : `${totalVolume}`}
+                    sub="KG tải trọng" icon={TrendUp} color="#30D158"
+                />
+                <IOSStatCard
+                    label="Sức mạnh"
+                    value={bestE1RM > 0 ? `${Math.round(bestE1RM)}` : '—'}
+                    sub="Kỷ lục 1RM" icon={Target} color="#0A84FF"
+                />
+            </motion.div>
+
+            {/* ── USER LEVEL ── */}
+            <motion.div variants={fadeUp} className="mb-6">
+                <div className="superapp-card-glass p-5 rounded-[28px] flex items-center gap-4 relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#BF5AF2] opacity-5 blur-[40px]" />
+                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-[#BF5AF2]/10 border border-[#BF5AF2]/20">
+                        <Barbell size={28} weight="fill" className="text-[#BF5AF2]" />
+                    </div>
+                    <div className="flex-1">
+                        <p className="text-[11px] font-black uppercase tracking-[0.1em] text-[#BF5AF2]">Elite Athlete Level</p>
+                        <h3 className="text-[18px] font-black text-white tracking-tight mt-0.5">{userProfile.trainingClass}</h3>
+                    </div>
+                    <CaretRight size={20} className="text-white/20" />
+                </div>
+            </motion.div>
+
+            {/* ── WEEKLY PLANNER ── */}
+            <motion.div variants={fadeUp} className="mb-8">
+                <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-[15px] font-black uppercase tracking-widest opacity-40">Lịch tập tuần này</h2>
+                    <button onClick={autoFillPlan} className="px-3 py-1.5 rounded-full bg-white/5 border border-white/5 flex items-center gap-2 active:scale-95 transition-transform">
+                        <Lightning size={14} weight="fill" className="text-[#FFD60A]" />
+                        <span className="text-[11px] font-black text-white/60">TỰ ĐỘNG</span>
                     </button>
                 </div>
 
-                {/* 7 day cards — horizontal scroll */}
-                <div style={{
-                    display: 'flex', gap: 6,
-                    overflowX: 'auto', paddingBottom: 2,
-                    msOverflowStyle: 'none', scrollbarWidth: 'none'
-                }}>
+                <div className="flex gap-2.5 overflow-x-auto no-scrollbar pb-2 -mx-4 px-4">
                     {weekDays.map((date, i) => {
                         const isToday = isSameDay(date, new Date());
                         const plan = getPlanForDay(i);
@@ -133,164 +139,76 @@ export default function GymPage() {
                         return (
                             <motion.div
                                 key={i}
-                                whileTap={{ scale: 0.93 }}
+                                whileTap={{ scale: 0.94 }}
                                 onClick={() => handlePlanChange(i)}
-                                style={{
-                                    minWidth: 56, flex: '0 0 auto',
-                                    display: 'flex', flexDirection: 'column',
-                                    alignItems: 'center', gap: 4,
-                                    padding: '10px 4px 10px',
-                                    borderRadius: 14,
-                                    background: isToday ? '#FF6B35' : '#1C1C1F',
-                                    cursor: 'pointer',
-                                    transition: 'all 0.15s ease'
-                                }}
+                                className={`flex-shrink-0 w-[72px] p-3 rounded-[24px] flex flex-col items-center gap-3 transition-all ${isToday ? 'bg-[#E8613A]' : 'superapp-card-glass border-transparent'
+                                    }`}
                             >
-                                <span style={{
-                                    fontSize: 11, fontWeight: 500,
-                                    color: isToday ? 'rgba(255,255,255,0.8)' : '#AEAEB2',
-                                    textTransform: 'capitalize'
-                                }}>
+                                <span className={`text-[10px] font-black uppercase tracking-widest ${isToday ? 'text-white/70' : 'text-white/30'}`}>
                                     {dayName}
                                 </span>
-                                <span style={{
-                                    fontSize: 18, fontWeight: 700,
-                                    color: isToday ? '#fff' : '#fff'
-                                }}>
+                                <span className={`text-[20px] font-black ${isToday ? 'text-white' : 'text-white/80'}`}>
                                     {format(date, 'd')}
                                 </span>
-                                <span style={{
-                                    fontSize: 10, fontWeight: 600,
-                                    color: isToday ? 'rgba(255,255,255,0.9)' : plan.color,
-                                    padding: '2px 6px', borderRadius: 6,
-                                    background: isToday ? 'rgba(255,255,255,0.15)' : `${plan.color}20`
-                                }}>
+                                <div className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase border ${isToday ? 'bg-white/20 border-white/30 text-white' : 'bg-white/5 border-white/10 text-white/40'
+                                    }`} style={{ color: isToday ? 'white' : plan.color }}>
                                     {plan.label}
-                                </span>
+                                </div>
                             </motion.div>
                         );
                     })}
                 </div>
-            </div>
+            </motion.div>
 
-            {/* ===== VOLUME CARD ===== */}
-            <div style={{
-                margin: '0 16px 14px', padding: '16px',
-                background: 'linear-gradient(135deg, #1C3F5E, #1C1C3E)',
-                borderRadius: 14, display: 'flex',
-                alignItems: 'center', justifyContent: 'space-between'
-            }}>
-                <div>
-                    <div style={{
-                        fontSize: 12, fontWeight: 600, color: '#64D2FF',
-                        marginBottom: 4, display: 'flex', alignItems: 'center', gap: 5
-                    }}>
-                        <Dumbbell size={14} /> Tổng khối lượng
+            {/* ── ACTION ── */}
+            <motion.div variants={fadeUp} className="mb-8">
+                <button className="w-full py-4 rounded-[22px] bg-[#0A84FF] text-white shadow-[0_12px_24px_rgba(10,132,255,0.3)] flex items-center justify-center gap-3 active:scale-95 transition-transform group">
+                    <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Plus size={20} weight="bold" />
                     </div>
-                    <div style={{ fontSize: 32, fontWeight: 800, color: '#fff', lineHeight: 1 }}>
-                        {totalVolume > 1000
-                            ? <>{(totalVolume / 1000).toFixed(1)}<span style={{ fontSize: 18, fontWeight: 600 }}>k</span> <span style={{ fontSize: 16, fontWeight: 500, color: '#AEAEB2' }}>kg</span></>
-                            : <>{totalVolume} <span style={{ fontSize: 16, fontWeight: 500, color: '#AEAEB2' }}>kg</span></>
-                        }
-                    </div>
-                </div>
-                <div style={{
-                    width: 48, height: 48, borderRadius: 14,
-                    background: 'rgba(100, 210, 255, 0.15)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center'
-                }}>
-                    <Dumbbell size={24} style={{ color: '#64D2FF' }} />
-                </div>
-            </div>
-
-            {/* ===== LOG BUTTON ===== */}
-            <div style={{ margin: '0 16px 14px' }}>
-                <button style={{
-                    width: '100%', padding: '12px',
-                    background: 'var(--ios-tint)', color: '#fff',
-                    borderRadius: 14, border: 'none',
-                    fontSize: 15, fontWeight: 600,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                    cursor: 'pointer', WebkitTapHighlightColor: 'transparent'
-                }}>
-                    <Plus size={18} strokeWidth={2.5} /> Ghi bài tập mới
+                    <span className="text-[17px] font-black tracking-tight">Ghi nhật ký bài tập mới</span>
                 </button>
-            </div>
+            </motion.div>
 
-            {/* ===== WORKOUT LOGS ===== */}
-            <div style={{ margin: '0 16px' }}>
-                <div style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    marginBottom: 8
-                }}>
-                    <span style={{ fontSize: 15, fontWeight: 600, color: '#fff' }}>
-                        Nhật ký gần đây
-                    </span>
-                    <span style={{ fontSize: 15, color: '#FF6B35', cursor: 'pointer' }}>
-                        Xem tất cả
-                    </span>
+            {/* ── RECENT LOGS ── */}
+            <motion.div variants={fadeUp}>
+                <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-[15px] font-black uppercase tracking-widest opacity-40">Nhật ký cường độ</h2>
+                    <Link to="/exercises" className="text-[11px] font-black text-[#E8613A]">XEM THƯ VIỆN</Link>
                 </div>
 
-                <div style={{ background: '#1C1C1F', borderRadius: 12, overflow: 'hidden' }}>
+                <div className="space-y-3">
                     {logs.length === 0 ? (
-                        <div style={{
-                            padding: '36px 16px', textAlign: 'center'
-                        }}>
-                            <Dumbbell size={36} style={{ color: '#3A3A3C', marginBottom: 10 }} />
-                            <p style={{ fontSize: 15, color: '#AEAEB2', margin: 0 }}>Chưa có dữ liệu bài tập</p>
-                            <p style={{ fontSize: 13, color: '#636366', margin: '4px 0 0' }}>
-                                Bấm nút ở trên để bắt đầu ghi
-                            </p>
+                        <div className="superapp-card-glass p-8 rounded-[32px] text-center">
+                            <Barbell size={48} className="mx-auto text-white/10 mb-4" />
+                            <p className="text-[15px] font-bold text-white/40">Chưa có dữ liệu bài tập</p>
+                            <p className="text-[12px] text-white/20 mt-1">Bắt đầu tập luyện để ghi lại tiến độ!</p>
                         </div>
                     ) : (
-                        logs.slice().reverse().slice(0, 5).map((log, idx) => (
-                            <div key={log.id} style={{
-                                display: 'flex', alignItems: 'center', gap: 12,
-                                padding: '11px 16px',
-                                borderBottom: idx < Math.min(logs.length, 5) - 1
-                                    ? '0.5px solid #2C2C2E' : 'none'
-                            }}>
-                                <div style={{
-                                    width: 38, height: 38, borderRadius: 10,
-                                    background: '#2C2C2E',
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    color: '#AEAEB2', flexShrink: 0,
-                                    fontSize: 15, fontWeight: 700
-                                }}>
+                        logs.slice().reverse().slice(0, 5).map((log) => (
+                            <motion.div
+                                key={log.id}
+                                className="superapp-card-glass p-4 rounded-[24px] flex items-center gap-4"
+                            >
+                                <div className="w-12 h-12 rounded-[18px] bg-white/5 border border-white/5 flex items-center justify-center text-[20px] font-black text-white/20">
                                     {log.exerciseName.charAt(0)}
                                 </div>
-                                <div style={{ flex: 1, minWidth: 0 }}>
-                                    <div style={{
-                                        fontSize: 15, fontWeight: 600, color: '#fff',
-                                        overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
-                                    }}>
-                                        {log.exerciseName}
-                                    </div>
-                                    <div style={{
-                                        display: 'flex', alignItems: 'center', gap: 8,
-                                        marginTop: 2, fontSize: 12, color: '#8E8E93'
-                                    }}>
-                                        <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                                            <Calendar size={10} /> {log.date}
-                                        </span>
-                                        <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                                            <Clock size={10} /> {log.reps} reps
-                                        </span>
+                                <div className="flex-1 min-w-0">
+                                    <h4 className="text-[16px] font-black text-white tracking-tight truncate">{log.exerciseName}</h4>
+                                    <div className="flex items-center gap-3 mt-1 text-[11px] font-bold text-white/30">
+                                        <span className="flex items-center gap-1.5"><Calendar size={12} /> {log.date}</span>
+                                        <span className="flex items-center gap-1.5"><Clock size={12} /> {log.reps} reps</span>
                                     </div>
                                 </div>
-                                <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                                    <div style={{ fontSize: 17, fontWeight: 700, color: '#fff' }}>
-                                        {log.weight}<span style={{ fontSize: 12, color: '#8E8E93', marginLeft: 1 }}>kg</span>
-                                    </div>
-                                    <div style={{ fontSize: 11, fontWeight: 600, color: '#30D158', marginTop: 1 }}>
-                                        1RM: {Math.round(log.e1RM)}kg
-                                    </div>
+                                <div className="text-right">
+                                    <p className="text-[18px] font-black text-white">{log.weight}<span className="text-[11px] opacity-30 ml-0.5">KG</span></p>
+                                    <p className="text-[10px] font-black text-[#30D158] mt-0.5">1RM: {Math.round(log.e1RM)}</p>
                                 </div>
-                            </div>
+                            </motion.div>
                         ))
                     )}
                 </div>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 }
