@@ -1,0 +1,31 @@
+﻿
+> life-planner@0.0.0 lint
+> eslint .
+
+
+D:\gym 2\tap gyp\src\components\AppIcons.tsx
+  69:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+D:\gym 2\tap gyp\src\components\AutomationEngine.tsx
+  25:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+D:\gym 2\tap gyp\src\components\DataQualityPanel.tsx
+  535:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  580:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  614:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+D:\gym 2\tap gyp\src\components\HealthBenchmarkWidget.tsx
+  121:13  warning  Unused eslint-disable directive (no problems were reported)
+
+D:\gym 2\tap gyp\src\components\MemberAdvancedComponents.tsx
+  22:9  error  'combinedSeed' is never reassigned. Use 'const' instead  prefer-const
+
+D:\gym 2\tap gyp\src\components\MemberAutomationEngine.tsx
+  610:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+D:\gym 2\tap gyp\src\components\mobile\MobileComponents.tsx
+  12:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+Γ£û 9 problems (1 error, 8 warnings)
+  1 error and 1 warning potentially fixable with the `--fix` option.
+

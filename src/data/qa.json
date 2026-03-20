@@ -1,0 +1,602 @@
+[
+    {
+        "id": "qa-001",
+        "question": "Tôi nên tập bao nhiêu buổi một tuần?",
+        "answer": "Tùy thuộc vào mục tiêu và lịch trình của bạn. Người mới bắt đầu nên tập 3-4 buổi/tuần (Full Body hoặc Upper/Lower). Người có kinh nghiệm có thể tập 5-6 buổi (PPL hoặc Split). Quan trọng nhất là tính kiên trì.",
+        "category": "Tập luyện"
+    },
+    {
+        "id": "qa-002",
+        "question": "Khi nào nên uống Whey Protein?",
+        "answer": "Thời điểm uống không quan trọng bằng tổng lượng Protein nạp vào trong ngày. Tuy nhiên, uống sau khi tập (Post-workout) là thời điểm tốt để cơ thể hấp thu nhanh. Uống sáng sớm hoặc phụ bữa cũng rất ổn.",
+        "category": "Dinh dưỡng"
+    },
+    {
+        "id": "qa-003",
+        "question": "Làm sao để giảm mỡ bụng nhanh nhất?",
+        "answer": "Không có cách nào giảm mỡ MỘT VÙNG (spot reduction) tự nhiên. Bạn phải giảm mỡ toàn thân thông qua việc thâm hụt Calo (Calorie Deficit). Khi tỷ lệ mỡ cơ thể thấp xuống, mỡ bụng sẽ dần biến mất.",
+        "category": "Giảm cân"
+    },
+    {
+        "id": "qa-004",
+        "question": "Cardio trước hay sau tập tạ?",
+        "answer": "Nếu mục tiêu là tăng cơ/sức mạnh: Hãy tập tạ trước khi còn nhiều sức, Cardio nhẹ sau buổi tập hoặc tách riêng buổi. Nếu tập Cardio cường độ cao trước, bạn sẽ không còn sức để nâng tạ hiệu quả.",
+        "category": "Tập luyện"
+    },
+    {
+        "id": "qa-005",
+        "question": "Đau cơ (DOMS) có phải là tập hiệu quả?",
+        "answer": "Không hẳn. Đau cơ chỉ là dấu hiệu cơ thể đang thích nghi với vận động mới. Khi bạn quen bài tập, bạn sẽ ít đau hơn nhưng vẫn tăng cơ nếu tăng tạ đều đặn (Progressive Overload). Đừng lấy độ đau làm thước đo hiệu quả.",
+        "category": "Kiến thức chung"
+    },
+    {
+        "id": "qa-006",
+        "question": "Con gái tập tạ có bị to thô không?",
+        "answer": "Rất khó. Phụ nữ có lượng Testosterone thấp hơn nam giới 10-20 lần, nên việc phát triển cơ bắp to như nam giới là cực kỳ khó (trừ khi dùng thuốc). Tập tạ giúp phụ nữ săn chắc, đường cong quyến rũ hơn.",
+        "category": "Tập luyện cho nữ"
+    },
+    {
+        "id": "qa-007",
+        "question": "Tôi bị chững cân (Hit Plateau) phải làm sao?",
+        "answer": "1. Kiểm tra lại Calo nạp vào (có thể bạn ăn lặt vặt không để ý).\n2. Tăng cường độ vận động (NEAT - đi bộ nhiều hơn).\n3. Nghỉ ngơi (Deload) 1 tuần để giảm Stress/Cortisol.\n4. Điều chỉnh lại Macro (tăng Protein, giảm Carb).",
+        "category": "Giảm cân"
+    },
+    {
+        "id": "qa-008",
+        "question": "Tập Dip có bị đau lưng không?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-009",
+        "question": "Thực đơn giảm mỡ với Creatine như thế nào?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-010",
+        "question": "Ăn Omega-3 nhiều có tốt không?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-011",
+        "question": "Tập Row có bị đau lưng không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-012",
+        "question": "Nên tập Cutting bao nhiêu lần 1 tuần?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-013",
+        "question": "Làm sao để tăng cơ Cơ Chân (Legs) nhanh nhất?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-014",
+        "question": "Tập Bench Press có bị đau lưng không?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-015",
+        "question": "Làm sao để tăng cơ Cơ Lưng (Back) nhanh nhất?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-020",
+        "question": "Thực đơn giảm mỡ với Bông cải xanh như thế nào?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-021",
+        "question": "Thực đơn giảm mỡ với Whey Protein như thế nào?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-022",
+        "question": "Bị đau khớp khi tập Overhead Press phải làm sao?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-024",
+        "question": "Tại sao tôi tập hoài không to?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-025",
+        "question": "Người mới tập có nên dùng Supplement không?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-026",
+        "question": "Ăn Yến mạch nhiều có tốt không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-027",
+        "question": "Ăn Whey Protein nhiều có tốt không?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-028",
+        "question": "Làm sao để tăng cơ Cơ Tay (Arms) nhanh nhất?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-029",
+        "question": "Nên tập Flexibility bao nhiêu lần 1 tuần?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-030",
+        "question": "Nên tập Calorie Deficit bao nhiêu lần 1 tuần?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-033",
+        "question": "Nên tập Hypertrophy bao nhiêu lần 1 tuần?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Phục Hồi"
+    },
+    {
+        "id": "qa-035",
+        "question": "Làm sao để tăng cơ Toàn Thân (Full Body) nhanh nhất?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-036",
+        "question": "Làm sao để tăng cơ Cơ Vai (Shoulder) nhanh nhất?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-037",
+        "question": "Bị đau khớp khi tập Row phải làm sao?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-038",
+        "question": "Tập Squat có bị đau lưng không?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-039",
+        "question": "Bị đau khớp khi tập Plank phải làm sao?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-042",
+        "question": "Bị đau khớp khi tập Squat phải làm sao?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-044",
+        "question": "Làm sao để tăng cơ Cơ Bụng (Abs) nhanh nhất?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-047",
+        "question": "Ăn Khoai lang nhiều có tốt không?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-048",
+        "question": "Thực đơn giảm mỡ với BCAA như thế nào?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-050",
+        "question": "Nên tập Progressive Overload bao nhiêu lần 1 tuần?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-051",
+        "question": "Thực đơn giảm mỡ với Omega-3 như thế nào?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-060",
+        "question": "Ăn Cá hồi nhiều có tốt không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-061",
+        "question": "Bị đau khớp khi tập Lunge phải làm sao?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-064",
+        "question": "Nên tập Macro bao nhiêu lần 1 tuần?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-067",
+        "question": "Làm sao để tăng cơ Cơ Ngực (Chest) nhanh nhất?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-074",
+        "question": "Bị đau khớp khi tập HIIT phải làm sao?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-075",
+        "question": "Ăn Trứng nhiều có tốt không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-076",
+        "question": "Tập HIIT có bị đau lưng không?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-077",
+        "question": "Thực đơn giảm mỡ với Khoai lang như thế nào?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-078",
+        "question": "Tập Overhead Press có bị đau lưng không?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-081",
+        "question": "Nên tập Strength bao nhiêu lần 1 tuần?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-083",
+        "question": "Bị đau khớp khi tập Cardio LISS phải làm sao?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-105",
+        "question": "Thực đơn giảm mỡ với Yến mạch như thế nào?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-112",
+        "question": "Ăn BCAA nhiều có tốt không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-113",
+        "question": "Nên tập Bulking bao nhiêu lần 1 tuần?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-121",
+        "question": "Ăn Ức gà nhiều có tốt không?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-124",
+        "question": "Bị đau khớp khi tập Deadlift phải làm sao?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-130",
+        "question": "Tập Plank có bị đau lưng không?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-134",
+        "question": "Bị đau khớp khi tập Pull Up phải làm sao?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-140",
+        "question": "Bị đau khớp khi tập Dip phải làm sao?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-143",
+        "question": "Ăn Bông cải xanh nhiều có tốt không?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-154",
+        "question": "Tập Cardio LISS có bị đau lưng không?",
+        "answer": "Khoảng 3-4 buổi/tuần là hợp lý cho người mới.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-163",
+        "question": "Nên tập Mobility bao nhiêu lần 1 tuần?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-164",
+        "question": "Bị đau khớp khi tập Bench Press phải làm sao?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-167",
+        "question": "Tập Pull Up có bị đau lưng không?",
+        "answer": "Rất tốt, nhưng cần cân đối macro trong ngày.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-168",
+        "question": "Ăn Creatine nhiều có tốt không?",
+        "answer": "Không bắt buộc, thức ăn tự nhiên vẫn là tốt nhất.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-170",
+        "question": "Thực đơn giảm mỡ với Cá hồi như thế nào?",
+        "answer": "Ngưng tập ngay và kiểm tra lại form, hoặc đi khám bác sĩ.",
+        "category": "Sức Khỏe Tinh Thần"
+    },
+    {
+        "id": "qa-171",
+        "question": "Tập Deadlift có bị đau lưng không?",
+        "answer": "Điều này hoàn toàn bình thường, nhưng cần kiểm tra lại kỹ thuật.",
+        "category": "Giải Phẫu Cơ Thể"
+    },
+    {
+        "id": "qa-172",
+        "question": "Nên tập Endurance bao nhiêu lần 1 tuần?",
+        "answer": "Hãy kết hợp thâm hụt calo và tập kháng lực.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-194",
+        "question": "Thực đơn giảm mỡ với Trứng như thế nào?",
+        "answer": "Có thể do bạn chưa ăn đủ calo hoặc chưa ngủ đủ giấc.",
+        "category": "Kiến Thức Tập Luyện"
+    },
+    {
+        "id": "qa-198",
+        "question": "Thực đơn giảm mỡ với Ức gà như thế nào?",
+        "answer": "Hãy tập trung vào Progressive Overload và ăn đủ đạm.",
+        "category": "Thực Phẩm Bổ Sung"
+    },
+    {
+        "id": "qa-208",
+        "question": "Bị bong gân cổ chân khi tập phải làm gì?",
+        "answer": "Ngưng tập ngay, chườm lạnh 15–20 phút mỗi 2–3 giờ trong 48h đầu. Băng ép nhẹ và kê chân cao. Tránh đi lại nhiều. Nếu sưng đau nhiều hoặc không đỡ sau 3–5 ngày nên đi khám để loại trừ rách dây chằng.",
+        "category": "Chấn thương thường gặp"
+    },
+    {
+        "id": "qa-209",
+        "question": "Đau vai khi tập đẩy ngực (Bench Press) xử lý thế nào?",
+        "answer": "Thường do kỹ thuật: hạ thanh tạ quá cao (gần cổ), mở rộng khuỷu quá 90°. Chỉnh form: kéo vai xuống và ép xương bả vai, hạ tạ xuống ngực dưới/giữa. Giảm tạ, tập warm-up kỹ vai. Nếu đau nhói hoặc kéo dài nên nghỉ và khám.",
+        "category": "Chấn thương thường gặp"
+    },
+    {
+        "id": "qa-210",
+        "question": "Đau thắt lưng khi Squat hoặc Deadlift phải làm sao?",
+        "answer": "Kiểm tra form: giữ lưng thẳng (neutral spine), không cong lưng dưới. Có thể do cơ core yếu hoặc cơ đùi sau quá căng. Tập mobility hông, tăng cường plank và dead bug. Giảm tạ đến mức không đau rồi tăng dần. Đau dai dẳng nên gặp bác sĩ hoặc PT.",
+        "category": "Chấn thương thường gặp"
+    },
+    {
+        "id": "qa-211",
+        "question": "Đau khớp gối khi chạy bộ hoặc Squat?",
+        "answer": "Thường do: gối đẩy qua mũi chân khi Squat, cơ tứ đầu/đùi sau mất cân bằng. Chỉnh: đẩy gối theo hướng mũi chân, không khóa gối. Tăng cường cơ đùi và cơ mông. Chạy bộ: chọn giày phù hợp, tránh tăng km đột ngột. Đau nhiều nên nghỉ và khám.",
+        "category": "Chấn thương thường gặp"
+    },
+    {
+        "id": "qa-212",
+        "question": "Căng cơ (bị giật/rách nhẹ) khi tập xử lý ra sao?",
+        "answer": "Ngưng tập ngay. 48–72h đầu: RICE — Rest (nghỉ), Ice (chườm lạnh 15–20 phút), Compression (băng ép nhẹ), Elevation (kê cao). Tránh kéo giãn mạnh hoặc xoa bóp trực tiếp vùng đau. Sau khi giảm sưng có thể giãn nhẹ và tập lại từ từ. Nếu sưng to hoặc bầm tím nhiều nên đi khám.",
+        "category": "Chấn thương thường gặp"
+    },
+    {
+        "id": "qa-213",
+        "question": "Đau cổ tay khi hít đất hoặc đẩy tạ?",
+        "answer": "Thường do cổ tay gập quá nhiều. Chỉnh: giữ cổ tay thẳng với cẳng tay, dùng thanh tạ cong (EZ bar) hoặc tay cầm nâng. Khởi động cổ tay (xoay, ép nhẹ) trước khi tập. Có thể dùng băng quấn cổ tay để hỗ trợ. Đau kéo dài nên khám để loại trừ viêm gân.",
+        "category": "Chấn thương thường gặp"
+    },
+    {
+        "id": "qa-214",
+        "question": "Viêm gân (tendonitis) ở khuỷu tay hoặc vai có nên tập tiếp?",
+        "answer": "Nên giảm tạ và tránh bài gây đau trực tiếp. Tập eccentric (hạ tạ chậm) nhẹ có thể hỗ trợ phục hồi. Chườm đá sau tập, tránh động tác lặp lại liên tục. Nghỉ 1–2 tuần nếu đau nhiều. Dùng thuốc/tiêm theo chỉ định bác sĩ nếu cần.",
+        "category": "Chấn thương thường gặp"
+    },
+    {
+        "id": "qa-215",
+        "question": "Căng cứng cơ sau khi ngủ dậy hoặc ngồi lâu là gì?",
+        "answer": "Cơ bị co rút và thiếu máu nuôi tạm thời. Không nguy hiểm. Nên vận động nhẹ 5–10 phút (đi bộ, xoay khớp), giãn cơ nhẹ nhàng. Uống đủ nước, tránh ngồi/đứng một tư thế quá lâu. Nếu căng cứng kèm đau nhức nhiều hoặc sưng cần kiểm tra thêm.",
+        "category": "Căng cứng cơ"
+    },
+    {
+        "id": "qa-216",
+        "question": "Làm sao để giảm căng cứng cơ vai và cổ?",
+        "answer": "Giãn cơ nhẹ: cúi đầu sang trái/phải, xoay vai. Tăng cường cơ lưng trên và cơ cổ. Tránh cúi điện thoại/máy tính quá lâu. Có thể dùng foam roll hoặc massage nhẹ. Ngủ gối vừa phải, không quá cao. Tập đều đặn giúp máu lưu thông tốt hơn.",
+        "category": "Căng cứng cơ"
+    },
+    {
+        "id": "qa-217",
+        "question": "Căng cứng đùi sau (hamstring) khi chạy hoặc gập người?",
+        "answer": "Đùi sau dễ bị căng do ít vận động hoặc kéo giãn đột ngột. Khởi động kỹ trước khi chạy, giãn cơ đùi sau nhẹ sau tập. Tập tăng cường hamstring (Romanian Deadlift, leg curl) với biên độ và tạ vừa phải. Foam roll nhẹ có thể giúp thư giãn cơ.",
+        "category": "Căng cứng cơ"
+    },
+    {
+        "id": "qa-218",
+        "question": "Foam rolling có giúp giảm căng cứng cơ không?",
+        "answer": "Có. Foam roll giúp thư giãn cơ, tăng lưu thông máu, giảm cảm giác căng. Nên dùng sau tập hoặc ngày nghỉ, lăn chậm 30–60 giây mỗi nhóm cơ, tránh lăn trực tiếp lên khớp hoặc xương. Kết hợp với giãn cơ và uống đủ nước hiệu quả hơn.",
+        "category": "Căng cứng cơ"
+    },
+    {
+        "id": "qa-219",
+        "question": "Căng cứng cơ bụng và lưng dưới nên làm gì?",
+        "answer": "Giãn cơ lưng: tư thế em bé (child's pose), gập người ngồi. Tăng cường core (plank, dead bug) để cân bằng. Tránh ngồi cong lưng lâu. Có thể chườm ấm nhẹ trước khi giãn. Nếu căng cứng kèm đau lan xuống chân nên đi khám.",
+        "category": "Căng cứng cơ"
+    },
+    {
+        "id": "qa-220",
+        "question": "Đau cơ (DOMS) kéo dài mấy ngày là bình thường?",
+        "answer": "DOMS thường đạt đỉnh 24–72 giờ sau tập và giảm dần trong 5–7 ngày. Bình thường nếu không sưng, không đau nhói khi ấn, không yếu cơ đột ngột. Uống đủ nước, ngủ đủ, ăn đủ đạm giúp phục hồi nhanh hơn.",
+        "category": "Đau cơ"
+    },
+    {
+        "id": "qa-221",
+        "question": "Đau cơ có nên tập tiếp hay nghỉ?",
+        "answer": "Nếu chỉ đau nhức nhẹ (DOMS), có thể tập nhóm cơ khác hoặc tập nhẹ cùng nhóm (active recovery). Tránh tập nặng cùng nhóm cơ đang đau. Nếu đau nhói, sưng, hoặc yếu cơ thì nên nghỉ đến khi đỡ hoặc đi khám.",
+        "category": "Đau cơ"
+    },
+    {
+        "id": "qa-222",
+        "question": "Làm gì để giảm đau cơ sau khi tập?",
+        "answer": "Ngủ đủ 7–8h, ăn đủ protein (khoảng 1.6–2.2g/kg thể trọng). Uống đủ nước. Vận động nhẹ (đi bộ, đạp xe nhẹ) giúp máu lưu thông. Có thể chườm lạnh nếu sưng nhẹ; chườm ấm giúp thư giãn. Tránh xoa bóp mạnh ngay sau tập.",
+        "category": "Đau cơ"
+    },
+    {
+        "id": "qa-223",
+        "question": "Đau cơ và đau do chấn thương khác nhau thế nào?",
+        "answer": "Đau cơ (DOMS): đau hai bên, đau khi co/giãn cơ, giảm dần sau vài ngày. Đau chấn thương: thường một bên, đau nhói hoặc khi ấn đúng điểm, có thể sưng bầm, yếu cơ. Khi nghi ngờ chấn thương nên nghỉ và khám.",
+        "category": "Đau cơ"
+    },
+    {
+        "id": "qa-224",
+        "question": "Massage có giúp giảm đau cơ sau tập không?",
+        "answer": "Massage nhẹ nhàng có thể giúp thư giãn và lưu thông máu, giảm cảm giác căng. Tránh massage mạnh hoặc day sâu ngay sau buổi tập nặng. Nên cách buổi tập ít nhất vài giờ hoặc dùng vào ngày nghỉ.",
+        "category": "Đau cơ"
+    },
+    {
+        "id": "qa-225",
+        "question": "Nên ăn gì trước khi tập gym?",
+        "answer": "1–2 giờ trước: bữa cân bằng (tinh bột + đạm + ít béo), ví dụ cơm + ức gà + rau. 30–60 phút trước: nhẹ hơn — chuối, bánh mì + mật ong, hoặc 1 ly whey. Tránh ăn no sát giờ tập để tránh tức bụng.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-226",
+        "question": "Sau khi tập nên ăn gì để phục hồi và tăng cơ?",
+        "answer": "Trong vòng 1–2 giờ: bữa có đạm (20–40g) và tinh bột (giúp bù glycogen). Ví dụ: cơm + thịt/cá + trứng + rau, hoặc bữa lắc protein + chuối. Ăn đủ calo và protein trong cả ngày quan trọng hơn chỉ một bữa sau tập.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-227",
+        "question": "Một ngày nên ăn bao nhiêu gram protein?",
+        "answer": "Tập gym tăng cơ/giữ cơ: khoảng 1.6–2.2g protein/kg thể trọng/ngày. Ví dụ 70kg: 112–154g protein. Chia đều 3–5 bữa (mỗi bữa 20–40g) giúp cơ thể hấp thu tốt hơn. Ưu tiên thịt, cá, trứng, sữa, đậu, đậu lăng.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-228",
+        "question": "Có nên nhịn tinh bột (carb) để giảm mỡ?",
+        "answer": "Giảm carb có thể giúp giảm calo và giảm mỡ, nhưng không cần cắt hẳn. Giữ một phần tinh bột (đặc biệt quanh buổi tập) giúp duy trì năng lượng và hiệu suất. Ưu tiên carb từ gạo lứt, khoai, bánh mì đen, trái cây.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-229",
+        "question": "Bữa sáng nên ăn gì cho người tập gym?",
+        "answer": "Bữa sáng cân bằng: đạm (trứng, sữa, đậu) + tinh bột (bánh mì, yến mạch, khoai) + rau/trái cây. Ví dụ: trứng ốp + bánh mì + chuối; hoặc cháo yến mạch + sữa + hạt. Nếu tập sáng sớm có thể ăn nhẹ trước (chuối, bánh) rồi ăn bữa chính sau tập.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-230",
+        "question": "Ăn đêm có làm mập không?",
+        "answer": "Không phải do giờ ăn mà do tổng calo trong ngày. Nếu bạn ăn trong khẩu phần calo cho phép thì ăn đêm không tự gây tăng mỡ. Tuy nhiên ăn no sát giờ ngủ có thể ảnh hưởng giấc ngủ và dễ ăn vặt — nên ăn nhẹ nếu đói.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-231",
+        "question": "Uống nước bao nhiêu khi tập gym?",
+        "answer": "Uống theo cảm giác khát và màu nước tiểu (vàng nhạt là ổn). Trung bình 2–3 lít/ngày, tăng thêm khi tập nặng hoặc nóng. Trong buổi tập: nhấp từng ngụm, khoảng 0.5–1 lít tùy thời gian và mồ hôi. Tránh uống quá nhiều một lúc.",
+        "category": "Dinh Dưỡng"
+    },
+    {
+        "id": "qa-232",
+        "question": "Tập gym buổi sáng có nên tập khi bụng đói?",
+        "answer": "Tập nhẹ–vừa khi đói (fasted cardio) có thể chấp nhận được. Với tập tạ nặng, nên ăn nhẹ (chuối, bánh, hoặc 1 ly whey) 20–30 phút trước để có sức. Nếu bạn quen tập sáng đói và vẫn đủ sức thì không bắt buộc phải ăn.",
+        "category": "Tập luyện"
+    },
+    {
+        "id": "qa-233",
+        "question": "Reps và set thế nào để tăng cơ (hypertrophy)?",
+        "answer": "Tăng cơ hiệu quả: khoảng 6–12 reps/set, 3–4 set/bài, tổng 10–20 set/nhóm cơ/tuần (chia 2–3 buổi). Tạ đủ nặng để 2–3 rep cuối khó. Nghỉ giữa set 1–2 phút. Kết hợp với ăn đủ calo và protein.",
+        "category": "Tập luyện"
+    },
+    {
+        "id": "qa-234",
+        "question": "Warm-up trước khi tập nên làm gì?",
+        "answer": "5–10 phút: máy cardio nhẹ (chạy bộ, đạp xe) để tăng nhịp tim. Sau đó động tác động (dynamic stretch): xoay khớp vai, hông, gối, cổ tay; và 1–2 set nhẹ của bài chính (khoảng 50% tạ làm việc). Tránh kéo giãn tĩnh (static) trước khi tập nặng.",
+        "category": "Tập luyện"
+    },
+    {
+        "id": "qa-235",
+        "question": "Nên nghỉ giữa các set bao lâu?",
+        "answer": "Tăng sức mạnh (1–5 reps): 3–5 phút. Tăng cơ (6–12 reps): 1–2 phút. Sức bền (15+ reps): 30–60 giây. Nghỉ đủ giúp hoàn thành set chất lượng; nghỉ quá ngắn dễ mệt sớm và giảm tạ.",
+        "category": "Tập luyện"
+    },
+    {
+        "id": "qa-236",
+        "question": "Tập cùng nhóm cơ 2 lần/tuần có tốt không?",
+        "answer": "Rất tốt. Hầu hết nghiên cứu cho thấy mỗi nhóm cơ 2 lần/tuần tối ưu cho tăng cơ hơn 1 lần. Ví dụ: ngực 2 buổi, lưng 2 buổi, chân 2 buổi trong tuần. Đảm bảo tổng volume (set) và cường độ phù hợp để không overtraining.",
+        "category": "Tập luyện"
+    },
+    {
+        "id": "qa-237",
+        "question": "Deload là gì và khi nào nên deload?",
+        "answer": "Deload là tuần giảm tạ/volume (khoảng 50–60% bình thường) để cơ và hệ thần kinh phục hồi. Nên deload mỗi 4–6 tuần hoặc khi cảm thấy mệt mỏi, đau khớp, không tiến bộ. Vẫn duy trì tập nhưng nhẹ hơn, không cố hết sức.",
+        "category": "Tập luyện"
+    },
+    {
+        "id": "qa-238",
+        "question": "Tập ngực với tạ đơn và tạ đòn khác nhau thế nào?",
+        "answer": "Tạ đòn (barbell): dễ tăng tạ nặng, ổn định, tốt cho sức mạnh nền. Tạ đơn (dumbbell): biên độ lớn hơn, cân bằng hai tay, giảm áp lực khớp vai. Nên kết hợp cả hai: đòn cho press nặng, đơn cho fly và biến thể.",
+        "category": "Tập luyện"
+    },
+    {
+        "id": "qa-239",
+        "question": "Squat sâu (deep squat) có hại gối không?",
+        "answer": "Squat đúng kỹ thuật (gối theo hướng mũi chân, lưng trung lập, mobility đủ) không gây hại gối mà còn tăng sức khỏe khớp. Người có tiền sử chấn thương gối nên chỉnh độ sâu và tạ theo hướng dẫn PT hoặc bác sĩ.",
+        "category": "Tập luyện"
+    },
+    {
+        "id": "qa-240",
+        "question": "Có nên tập bụng mỗi ngày?",
+        "answer": "Bụng cũng là cơ, cần thời gian phục hồi. Tập bụng 2–4 lần/tuần là đủ. Ưu tiên plank, dead bug, crunch có kiểm soát. Giảm mỡ bụng chủ yếu nhờ thâm hụt calo toàn thân, không phải chỉ gập bụng.",
+        "category": "Tập luyện"
+    }
+]

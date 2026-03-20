@@ -1,0 +1,487 @@
+/* ============================================================
+   TONY STYLE DESIGN SYSTEM — Luxury Dark Neon
+   Inspired by: Tony AI Art (tonyaiart.com)
+   ============================================================ */
+
+:root {
+    /* Base Colors */
+    --tony-bg: #09090B;
+    --tony-bg-alt: #111114;
+    --tony-surface: #18181B;
+    --tony-surface-2: #27272A;
+    --tony-border: rgba(255, 255, 255, 0.08);
+    --tony-separator: rgba(255, 255, 255, 0.05);
+
+    /* Accents */
+    --tony-red: #BE123C;
+    --tony-red-dim: rgba(190, 18, 60, 0.15);
+    --tony-amber: #F59E0B;
+    --tony-amber-dim: rgba(245, 158, 11, 0.15);
+    --tony-blue: #0A84FF;
+    --tony-purple: #8B5CF6;
+    --tony-neon-green: #22C55E;
+    --tony-lava: #FF4D00;
+    --tony-lava-dim: rgba(255, 77, 0, 0.15);
+
+    /* Gradients */
+    --tony-gradient-red: linear-gradient(135deg, #E11D48, #BE123C);
+    --tony-gradient-amber: linear-gradient(135deg, #F59E0B, #D97706);
+    --tony-gradient-dark: linear-gradient(180deg, rgba(24, 24, 27, 0.8), rgba(9, 9, 11, 1));
+    --tony-gradient-card: linear-gradient(to bottom, transparent, rgba(9, 9, 11, 0.95));
+    --tony-gradient-shine: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+
+    /* Glassmorphism */
+    --tony-glass-bg: rgba(9, 9, 11, 0.75);
+    --tony-glass-blur: blur(16px);
+    --tony-glass-border: 1px solid rgba(255, 255, 255, 0.08);
+
+    /* Text */
+    --tony-text: #F8F8F8;
+    --tony-text-2: #A1A1AA;
+    --tony-text-3: #71717A;
+}
+
+/* Global Fixes */
+/* Custom Lava Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--tony-bg);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--tony-gradient-red);
+    border-radius: 10px;
+    box-shadow: 0 0 10px var(--tony-red);
+}
+
+.tony-style {
+    background-color: var(--tony-bg);
+    color: var(--tony-text);
+    position: relative;
+    overflow-x: hidden;
+    cursor: default;
+}
+
+/* Animated Plasma Background */
+.tony-plasma-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background: radial-gradient(circle at 20% 30%, rgba(190, 18, 60, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(245, 158, 11, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(255, 77, 0, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 10% 90%, rgba(139, 92, 246, 0.1) 0%, transparent 30%),
+                var(--tony-bg);
+    filter: blur(80px);
+    animation: plasma-move 10s infinite alternate ease-in-out;
+}
+
+/* Floating Particles */
+.tony-particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    background-image: radial-gradient(circle, var(--tony-red) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.15;
+    animation: particles-move 60s linear infinite;
+}
+
+@keyframes particles-move {
+    from { background-position: 0 0; }
+    to { background-position: 1000px 1000px; }
+}
+
+@keyframes plasma-move {
+    0% { transform: scale(1) translate(0, 0); }
+    33% { transform: scale(1.1) translate(20px, -20px); }
+    66% { transform: scale(1.05) translate(-15px, 25px); }
+    100% { transform: scale(1) translate(0, 0); }
+}
+
+.tony-vignette {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.6) 100%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ===== TONY BUTTONS ===== */
+.tony-btn-primary {
+    background: var(--tony-gradient-red);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 13px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 0 4px 20px rgba(190, 18, 60, 0.4);
+    cursor: pointer;
+}
+
+.tony-btn-primary:active {
+    transform: scale(0.96);
+    box-shadow: 0 2px 10px rgba(190, 18, 60, 0.2);
+}
+
+/* Shine Effect Animation */
+.tony-btn-primary::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 20%;
+    height: 200%;
+    background: var(--tony-gradient-shine);
+    transform: rotate(30deg);
+    transition: none;
+}
+
+.tony-btn-primary:hover::after {
+    left: 140%;
+    transition: all 0.7s ease-in-out;
+}
+
+.tony-btn-amber {
+    background: var(--tony-gradient-amber);
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+}
+
+/* ===== TONY CARDS ===== */
+.tony-card {
+    background: var(--tony-surface);
+    border-radius: 20px;
+    border: var(--tony-glass-border);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tony-card:hover {
+    background: var(--tony-surface-2);
+    border-color: rgba(255,255,255,0.15);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.tony-card-glow-red::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: var(--tony-gradient-red);
+    z-index: -1;
+    filter: blur(8px);
+    opacity: 0.3;
+    animation: border-glow 4s infinite;
+}
+
+@keyframes border-glow {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.5; }
+}
+
+.tony-card:active {
+    transform: scale(0.98);
+}
+
+/* Immersive Image Card Styles */
+.tony-card-immersive {
+    aspect-ratio: 16/10;
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.tony-card-immersive-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    transition: transform 0.5s ease;
+}
+
+.tony-card-immersive:hover .tony-card-immersive-img {
+    transform: scale(1.05);
+}
+
+.tony-card-immersive-overlay {
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(to top, var(--tony-bg) 0%, transparent 70%);
+    z-index: 1;
+}
+
+.tony-card-immersive-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    z-index: 2;
+}
+
+/* ===== TONY NAV BAR ===== */
+.tony-nav {
+    background: var(--tony-glass-bg);
+    backdrop-filter: var(--tony-glass-blur);
+    -webkit-backdrop-filter: var(--tony-glass-blur);
+    border-bottom: var(--tony-glass-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.tony-nav-seamless {
+    background: transparent !important;
+    border-bottom: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Dynamic Island Simulation — Fine-tuned for header actions */
+.tony-island {
+    width: 126px;
+    height: 37px;
+    background: #000;
+    border-radius: 20px;
+    position: fixed;
+    top: 11px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+}
+
+.ios-nav-bar__top {
+    padding-top: 50px !important; /* Move icons down from Dynamic Island */
+}
+
+/* ===== TONY TAB BAR — Floating version for 16 Pro Max ===== */
+.tony-tabbar {
+    background: rgba(18, 18, 22, 0.7);
+    backdrop-filter: blur(25px) saturate(200%);
+    -webkit-backdrop-filter: blur(25px) saturate(200%);
+    border: 1px solid rgba(190, 18, 60, 0.2);
+    position: fixed;
+    bottom: 24px;
+    left: 20px;
+    right: 20px;
+    width: calc(100% - 40px);
+    max-width: 390px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 10px;
+    border-radius: 30px;
+    z-index: 1000;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(190, 18, 60, 0.2);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tony-tabbar:active {
+    transform: scale(0.98);
+}
+
+/* ===== TYPOGRAPHY ===== */
+.tony-title {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.tony-text-gradient {
+    background: var(--tony-gradient-red);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: text-pulse 3s infinite;
+}
+
+@keyframes text-pulse {
+    0%, 100% { filter: brightness(1) drop-shadow(0 0 0px var(--tony-red)); }
+    50% { filter: brightness(1.2) drop-shadow(0 0 8px var(--tony-red)); }
+}
+
+.tony-amber-gradient {
+    background: var(--tony-gradient-amber);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Floating Animation */
+@keyframes tony-float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-3px); }
+    100% { transform: translateY(0px); }
+}
+
+.tony-animate-float {
+    animation: tony-float 3s ease-in-out infinite;
+}
+
+/* Pulse Glow */
+@keyframes tony-pulse {
+    0% { box-shadow: 0 0 0 0 var(--tony-red-dim); }
+    70% { box-shadow: 0 0 0 10px rgba(190, 18, 60, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(190, 18, 60, 0); }
+}
+
+.tony-pulse-red {
+    animation: tony-pulse 2s infinite;
+}
+
+/* ================================================
+   📱 GLOBAL MOBILE LAYOUT FIX — iPhone 16 Pro Max
+   Fixes oversized headings, overflow, card gaps
+   Applied to ALL pages using .ios-animate-in
+   ================================================ */
+
+/* Prevent horizontal overflow on all pages */
+.ios-animate-in {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+}
+
+/* ── PAGE HEADER TITLES — downsize from 42px → 30px ── */
+/* Targets the large hero title pattern used on every sub-page */
+.ios-animate-in h1.superapp-text-gradient,
+.ios-animate-in h1.ios-title {
+    font-size: clamp(26px, 7vw, 34px) !important;
+    line-height: 1.05 !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+}
+
+/* Sub-page subtitle label */
+.ios-animate-in .text-\[10px\].uppercase.tracking-\[0\.4em\] {
+    letter-spacing: 0.25em !important;
+}
+
+/* ── SECTION LABEL OVERFLOW ── */
+.ios-animate-in span {
+    max-width: 100%;
+}
+
+/* ── SAFELY CLIP SCREEN-WIDE CARDS ── */
+.ios-animate-in .superapp-card-glass,
+.ios-animate-in .neural-island {
+    overflow: hidden;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* ── FIX HORIZONTAL SCROLL on filter/nav chips ── */
+.ios-animate-in .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+}
+.ios-animate-in .overflow-x-auto::-webkit-scrollbar {
+    display: none;
+}
+
+/* ── GRID FIXES for 2-col & 3-col on narrow screens ── */
+.ios-animate-in .grid.grid-cols-3 {
+    gap: 10px;
+}
+.ios-animate-in .grid.grid-cols-2 {
+    gap: 12px;
+}
+
+/* ── CONSISTENT SECTION SPACING ── */
+.ios-animate-in .mb-10 {
+    margin-bottom: 32px !important;
+}
+
+/* ── HEADER SECTION PADDING ── */
+.ios-animate-in .pt-8.pb-8 {
+    padding-top: 20px !important;
+    padding-bottom: 16px !important;
+}
+
+/* ── CARD PADDING RESPONSE ── */
+.ios-animate-in .superapp-card-glass.p-8 {
+    padding: 20px !important;
+}
+.ios-animate-in .neural-island.p-8 {
+    padding: 20px !important;
+}
+.ios-animate-in .superapp-card-glass.p-10 {
+    padding: 24px !important;
+}
+
+/* ── SECTION LABEL CONSISTENCY ── */
+.ios-animate-in [class*="tracking-[0.4em]"] {
+    letter-spacing: 0.2em;
+    font-size: 10px;
+}
+
+/* ── KNOWLEDGE PAGE FIX ── */
+.ios-animate-in .text-white\/90:not(h1):not(h2):not(h3) {
+    word-break: break-word;
+}
+
+/* ── CALORIE PAGE TITLE ── */
+.ios-animate-in h1 {
+    max-width: calc(100vw - 120px); /* Account for the settings gear button */
+}
+
+/* ══════════════════════════════════════════
+   HT-STRENGTH LOGO BADGE — Apple Icon Style
+   ══════════════════════════════════════════ */
+
+/* Squircle container — exactly like iOS app icon */
+.ht-logo-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;            /* iOS squircle ≈ 22% of size */
+    background: #fff;
+    box-shadow:
+        0 2px 4px rgba(0,0,0,0.5),
+        0 6px 20px rgba(0,0,0,0.45),
+        0 1px 1px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    cursor: pointer;
+}
+
+.ht-logo-badge:active {
+    transform: scale(0.93);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+/* No pseudo sheen needed on white bg */
+.ht-logo-badge::before {
+    display: none;
+}
+
+/* Logo image — full color, no filter */
+.ht-logo-badge .ht-logo-img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    display: block;
+    position: relative;
+    z-index: 1;
+}

@@ -1,0 +1,43 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !^/api/
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# CẤU HÌNH TƯỜNG LỬA (SECURITY HEADERS)
+<IfModule mod_headers.c>
+  # 1. Chống Clickjacking (Khung chứa trái phép)
+  Header set X-Frame-Options "SAMEORIGIN"
+
+  # 2. Ngăn chặn giả mạo kiểu nội dung (MIME type sniffing)
+  Header set X-Content-Type-Options "nosniff"
+
+  # 3. Kích hoạt bộ lọc XSS (Cross Site Scripting) của trình duyệt
+  Header set X-XSS-Protection "1; mode=block"
+
+  # 4. Kiểm soát thông tin đường dẫn giới thiệu (Tránh lộ dữ liệu nhạy cảm ở URL)
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # 5. Ép buộc sử dụng HTTPS (HSTS) tránh mã độc nghe lén mạng
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+  # 6. Hạn chế quyền hạn (Permissions Policy)
+  Header set Permissions-Policy "geolocation=(self), microphone=(), camera=()"
+
+  # Bỏ comment dòng dưới để kích hoạt CSP (Cần test kỹ trước)
+  # Header set Content-Security-Policy "default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:; img-src 'self' data: blob: https:;"
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+</IfModule>

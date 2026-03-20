@@ -1,0 +1,44 @@
+{
+    "name": "POST_01_Volume_Load_Analysis",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "analyze-volume",
+                "options": {}
+            },
+            "name": "Webhook Input",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                100,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "const logs = items[0].json.body.logs; // Array of sets\nconst muscleGroups = {};\n\n// 1. Sum Tonnage per Muscle\nfor (const set of logs) {\n  const muscle = set.muscleTarget || 'General';\n  if (!muscleGroups[muscle]) muscleGroups[muscle] = 0;\n  muscleGroups[muscle] += (set.weight * set.reps);\n}\n\n// 2. Check MRV (Max Recoverable Volume)\nconst warnings = [];\nconst limits = { 'Chest': 8000, 'Legs': 12000, 'Back': 10000 };\n\nfor (const [m, vol] of Object.entries(muscleGroups)) {\n  if (limits[m] && vol > limits[m]) {\n    warnings.push(`Overreaching detected: ${m} volume (${vol}kg) exceeds cap.`);\n  }\n}\n\nreturn [{ json: { muscleGroups, warnings } }];"
+            },
+            "name": "Volume Calc Engine",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                300,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook Input": {
+            "main": [
+                [
+                    {
+                        "node": "Volume Calc Engine",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

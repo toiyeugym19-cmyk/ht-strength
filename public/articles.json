@@ -1,0 +1,66 @@
+[
+    {
+        "id": "art-001",
+        "title": "Khoa học về xây dựng cơ bắp (Hypertrophy)",
+        "category": "Kiến Thức Tập Luyện",
+        "summary": "Cơ chế chính của việc tăng cơ bao gồm áp lực cơ học, tổn thương sợi cơ và áp lực chuyển hóa. Hiểu rõ để tập luyện hiệu quả hơn.",
+        "content": "Để tối ưu hóa sự phát triển cơ bắp (Hypertrophy), bạn cần tập trung vào 3 yếu tố chính:\n\n1. **Áp lực cơ học (Mechanical Tension):** Đây là yếu tố quan trọng nhất. Bạn cần nâng khối lượng tạ đủ nặng để tạo áp lực lên sợi cơ, đặc biệt là ở giai đoạn giãn cơ (eccentric).\n2. **Tổn thương cơ bắp (Muscle Damage):** Cảm giác đau nhức sau tập (DOMS) là dấu hiệu của việc vi sợi cơ bị xé rách và đang phục hồi để trở nên to hơn, khỏe hơn.\n3. **Áp lực chuyển hóa (Metabolic Stress):** Cảm giác 'bơm cơ' (pump) khi tập nhiều reps, tích tụ axit lactic và các chất chuyển hóa giúp kích thích hormone tăng trưởng.\n\n**Lời khuyên:** Hãy áp dụng Progressive Overload (Tăng dần áp lực) bằng cách tăng tạ, tăng reps hoặc giảm thời gian nghỉ theo thời gian.",
+        "date": "2024-03-15"
+    },
+    {
+        "id": "art-002",
+        "title": "TDEE và BMR: Bạn cần ăn bao nhiêu?",
+        "category": "Dinh Dưỡng",
+        "summary": "Cách tính toán lượng calo cần thiết để tăng cân hoặc giảm cân dựa trên chỉ số TDEE và BMR.",
+        "content": "**BMR (Basal Metabolic Rate):** Là lượng calo cơ thể đốt cháy khi nghỉ ngơi hoàn toàn (duy trì sự sống).\n**TDEE (Total Daily Energy Expenditure):** Là tổng lượng calo bạn đốt cháy trong ngày (BMR + Vận động).\n\nĐể **giảm cân**, bạn cần ăn thâm hụt calo (ít hơn TDEE khoảng 300-500 kcal).\nĐể **tăng cân**, bạn cần ăn dư thừa calo (nhiều hơn TDEE khoảng 300-500 kcal).\n\nĐừng quên nạp đủ Protein (1.6g - 2.2g trên mỗi kg trọng lượng cơ thể) để giữ cơ bắp khi giảm mỡ!",
+        "date": "2024-03-20"
+    },
+    {
+        "id": "art-003",
+        "title": "Tầm quan trọng của giấc ngủ trong Fitness",
+        "category": "Phục Hồi",
+        "summary": "Cơ bắp không phát triển trong phòng tập, chúng phát triển khi bạn ngủ. Giấc ngủ kém sẽ phá hủy mọi nỗ lực tập luyện của bạn.",
+        "content": "Khi bạn ngủ, đặc biệt là giai đoạn ngủ sâu (Deep Sleep), cơ thể giải phóng Hormone Tăng Trưởng (HGH) nhiều nhất. Đây là lúc các sợi cơ bị tổn thương được sửa chữa.\n\n**Tác hại của thiếu ngủ:**\n- Giảm tổng hợp Protein (khó tăng cơ).\n- Tăng Cortisol (hormone căng thẳng gây tích mỡ, dị hóa cơ).\n- Giảm sức mạnh và sự tập trung cho buổi tập hôm sau.\n\n**Mẹo:** Cố gắng ngủ đủ 7-9 tiếng mỗi đêm và tắt các thiết bị điện tử 1 tiếng trước khi ngủ.",
+        "date": "2024-04-01"
+    },
+    {
+        "id": "art-004",
+        "title": "Creatine Monohydrate: Thực phẩm bổ sung an toàn nhất?",
+        "category": "Dinh Dưỡng",
+        "summary": "Creatine là gì, nó hoạt động như thế nào và tại sao nó là 'vua' của các loại supplement tự nhiên.",
+        "content": "Creatine là một chất tự nhiên được tìm thấy trong tế bào cơ, giúp cơ bắp sản sinh năng lượng khi nâng vật nặng hoặc tập cường độ cao.\n\n**Lợi ích đã được chứng minh:**\n- Tăng sức mạnh và sức bền cơ bắp.\n- Cải thiện tín hiệu giữa các tế bào.\n- Tăng lượng nước trong tế bào cơ (giúp cơ trông to hơn).\n- Hỗ trợ chức năng não bộ.\n\n**Cách dùng:** Nạp 5g mỗi ngày, bất kể thời điểm. Loại tốt nhất và rẻ nhất là Creatine Monohydrate (Creapure).",
+        "date": "2024-04-05"
+    },
+    {
+        "id": "art-005",
+        "title": "Mobility vs Flexibility: Đừng nhầm lẫn!",
+        "category": "Kiến Thức Tập Luyện",
+        "summary": "Bạn có thể dẻo (flexible) nhưng khả năng vận động (mobility) lại kém. Tại sao mobility quan trọng hơn cho người tập tạ?",
+        "content": "**Flexibility (Độ dẻo):** Khả năng kéo giãn của cơ bắp một cách thụ động.\n**Mobility (Độ linh hoạt):** Khả năng kiểm soát chuyển động của khớp qua hết biên độ vận động (Range of Motion) một cách chủ động.\n\nVí dụ: Bạn có thể dùng tay kéo chân lên cao (dẻo), nhưng nếu không dùng tay mà vẫn đá chân lên cao được và giữ lại, đó là mobility.\n\nTrong Gym, Mobility quan trọng hơn để thực hiện đúng kỹ thuật (ví dụ: Squat sâu mà không bị cong lưng). Hãy tập các bài giãn cơ động (Dynamic Stretching) trước buổi tập.",
+        "date": "2024-04-10"
+    },
+    {
+        "id": "art-006",
+        "title": "Stress ảnh hưởng đến cân nặng như thế nào?",
+        "category": "Sức Khỏe Tinh Thần",
+        "summary": "Căng thẳng kéo dài không chỉ hại thần kinh mà còn là kẻ thù của vóc dáng thông qua hormone Cortisol.",
+        "content": "Khi bạn bị stress, cơ thể tiết ra Cortisol. Nồng độ Cortisol cao kéo dài sẽ:\n1. Kích thích cảm giác thèm ăn (đặc biệt là đồ ngọt, dầu mỡ).\n2. Thúc đẩy cơ thể tích trữ mỡ thừa, đặc biệt là mỡ nội tạng vùng bụng.\n3. Phá vỡ mô cơ để lấy năng lượng (dị hóa).\n\n**Giải pháp:** Thiền (Mindfulness), tập hít thở, đi bộ nhẹ nhàng và quản lý công việc hợp lý là cách tốt nhất để giảm mỡ bụng do stress.",
+        "date": "2024-04-15"
+    },
+    {
+        "id": "art-007",
+        "title": "Deload Week: Nghỉ ngơi để tiến xa hơn",
+        "category": "Phục Hồi",
+        "summary": "Tại sao bạn nên có một tuần tập nhẹ (Deload) sau mỗi 6-8 tuần tập nặng?",
+        "content": "Deload Week là một tuần bạn chủ động giảm khối lượng tạ (còn 50-60%) hoặc giảm khối lượng bài tập. Mục đích là để hệ thần kinh trung ương (CNS) và khớp xương phục hồi hoàn toàn sau chu kỳ tích lũy mệt mỏi.\n\nDấu hiệu cần Deload: Mất ngủ, tạ bỗng nhiên cảm thấy nặng hơn bình thường, hay cáu gắt, đau nhức khớp dai dẳng. Đừng sợ mất cơ, Deload sẽ giúp bạn quay lại mạnh mẽ hơn!",
+        "date": "2024-04-22"
+    },
+    {
+        "id": "art-008",
+        "title": "Ăn chay có tập Gym được không?",
+        "category": "Dinh Dưỡng",
+        "summary": "Hướng dẫn xây dựng cơ bắp cho người ăn chay (Vegetarian/Vegan).",
+        "content": "Hoàn toàn CÓ THỂ. Nguyên tắc vẫn là đủ Protein và Calo. Tuy nhiên, protein thực vật thường không hoàn chỉnh (thiếu một số axit amin thiết yếu).\n\n**Nguồn Protein thực vật tốt:**\n- Đậu nành, đậu hũ, tempeh (Protein hoàn chỉnh).\n- Đậu lăng (Lentils), đậu gà.\n- Hạt chia, hạt gai dầu.\n- Bột protein thực vật (Pea Protein).\n\nLưu ý bổ sung thêm Vitamin B12, Sắt và Kẽm vì chế độ ăn chay thường thiếu hụt các vi chất này.",
+        "date": "2024-05-01"
+    }
+]

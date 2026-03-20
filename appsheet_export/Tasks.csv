@@ -1,0 +1,4 @@
+ID,Text,Completed,Category,Date,Priority
+task_001,Review project proposal,FALSE,Work,2026-01-12,High
+task_002,Buy groceries,FALSE,Personal,2026-01-12,Low
+task_003,Hit the Gym,FALSE,Personal,2026-01-12,Medium

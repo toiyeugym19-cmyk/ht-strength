@@ -1,0 +1,216 @@
+{
+    "name": "Gym App - Birthday Data Collection",
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "cronExpression",
+                            "expression": "0 8 * * *"
+                        }
+                    ]
+                }
+            },
+            "name": "Schedule - Daily 8AM",
+            "type": "n8n-nodes-base.schedule",
+            "typeVersion": 1,
+            "position": [
+                250,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "SELECT * FROM members WHERE date_of_birth IS NULL AND phone IS NOT NULL LIMIT 50;"
+            },
+            "name": "Database - Get Missing DOB",
+            "type": "n8n-nodes-base.mySql",
+            "typeVersion": 1,
+            "position": [
+                450,
+                300
+            ],
+            "credentials": {
+                "mySql": {
+                    "id": "YOUR_MYSQL_CREDENTIAL_ID",
+                    "name": "Gym Database"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "message": "=👋 Chào {{ $json.name }}! Hệ thống Gym nhận thấy bạn chưa cập nhật Ngày Sinh để nhận quà ưu đãi. Vui lòng reply tin nhắn này theo cú pháp: SN NGAY/THANG/NAM (Ví dụ: SN 15/05/1995) để cập nhật nhé! 🎂",
+                "phoneNumber": "={{ $json.phone }}"
+            },
+            "name": "SMS Sender (Zalo/Twilio)",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 1,
+            "position": [
+                650,
+                300
+            ],
+            "notes": "Replace with your actual SMS provider API"
+        },
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "webhook/sms-reply",
+                "responseMode": "lastNode"
+            },
+            "name": "Webhook - SMS Reply",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                250,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const message = $json.body.message; // \"SN 15/05/1995\"\nconst regex = /SN\\s+(\\d{1,2})\\/(\\d{1,2})\\/(\\d{4})/i;\nconst match = message.match(regex);\n\nif (match) {\n  const day = match[1].padStart(2, '0');\n  const month = match[2].padStart(2, '0');\n  const year = match[3];\n  return {\n    valid: true,\n    dob: `${year}-${month}-${day}`,\n    phone: $json.body.phone\n  };\n} else {\n  return { valid: false };\n}"
+            },
+            "name": "Data Parser",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 1,
+            "position": [
+                450,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "boolean": [
+                        {
+                            "value1": "={{ $json.valid }}",
+                            "value2": true
+                        }
+                    ]
+                }
+            },
+            "name": "Is Valid Format?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 1,
+            "position": [
+                650,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "=UPDATE members SET date_of_birth = '{{ $json.dob }}' WHERE phone = '{{ $json.phone }}';"
+            },
+            "name": "Update Database",
+            "type": "n8n-nodes-base.mySql",
+            "typeVersion": 1,
+            "position": [
+                850,
+                450
+            ]
+        },
+        {
+            "parameters": {
+                "message": "✅ Cập nhật ngày sinh thành công! Cảm ơn bạn.",
+                "phoneNumber": "={{ $json.phone }}"
+            },
+            "name": "Send Confirmation",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 1,
+            "position": [
+                1050,
+                450
+            ]
+        },
+        {
+            "parameters": {
+                "message": "❌ Định dạng chưa đúng. Vui lòng nhập lại: SN NGAY/THANG/NAM",
+                "phoneNumber": "={{ $json.phone }}"
+            },
+            "name": "Send Error Msg",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 1,
+            "position": [
+                850,
+                600
+            ]
+        }
+    ],
+    "connections": {
+        "Schedule - Daily 8AM": {
+            "main": [
+                [
+                    {
+                        "node": "Database - Get Missing DOB",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Database - Get Missing DOB": {
+            "main": [
+                [
+                    {
+                        "node": "SMS Sender (Zalo/Twilio)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook - SMS Reply": {
+            "main": [
+                [
+                    {
+                        "node": "Data Parser",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Data Parser": {
+            "main": [
+                [
+                    {
+                        "node": "Is Valid Format?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Is Valid Format?": {
+            "main": [
+                [
+                    {
+                        "node": "Update Database",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Send Error Msg",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update Database": {
+            "main": [
+                [
+                    {
+                        "node": "Send Confirmation",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

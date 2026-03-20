@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CAPACITOR_DEBUG</key>
+	<string>$(CAPACITOR_DEBUG)</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>vi</string>
+	<key>CFBundleDisplayName</key>
+	<string>HT Strength</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
+
+	<!-- ===== Device Support ===== -->
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UIDeviceFamily</key>
+	<array>
+		<!-- 1 = iPhone, 2 = iPad -->
+		<integer>1</integer>
+		<integer>2</integer>
+	</array>
+
+	<!-- ===== Orientation: iPhone ===== -->
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+
+	<!-- ===== Orientation: iPad (all) ===== -->
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+
+	<!-- ===== Status Bar ===== -->
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
+
+	<!-- ===== Multitasking (iPad) ===== -->
+	<key>UIRequiresFullScreen</key>
+	<false/>
+	<key>UISupportsDocumentBrowser</key>
+	<false/>
+
+	<!-- ===== Background Modes ===== -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>processing</string>
+	</array>
+
+	<!-- ===== HealthKit Permissions ===== -->
+	<key>NSHealthShareUsageDescription</key>
+	<string>HT Strength cần đọc dữ liệu sức khỏe của bạn (bước chân, nhịp tim, giấc ngủ, cân nặng, tỷ lệ mỡ cơ thể, calories tiêu hao, lượng nước uống, huyết áp, oxygen trong máu) để theo dõi và đánh giá chỉ số thể chất, luyện tập hàng ngày.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>HT Strength cần ghi dữ liệu vào ứng dụng Sức khỏe để lưu nhật ký luyện tập, bài tập, và chỉ số thể chất của bạn sau mỗi buổi tập.</string>
+	<key>NSHealthClinicalHealthRecordsShareUsageDescription</key>
+	<string>HT Strength cần truy cập hồ sơ sức khỏe lâm sàng để cung cấp phân tích toàn diện về tình trạng sức khỏe của bạn.</string>
+
+	<!-- ===== App Transport Security ===== -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+</dict>
+</plist>

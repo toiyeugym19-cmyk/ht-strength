@@ -1,0 +1,79 @@
+[
+    {
+        "id": "IMG_01",
+        "screen_name": "Onboarding - Goal Selection",
+        "description": "User selects primary goal (Muscle, Strength, Endurance). Visual cards with neon selection states.",
+        "n8n_tasks": [
+            "USER_01_Profile_Init",
+            "PLAN_01_MacroCycle_Design"
+        ]
+    },
+    {
+        "id": "IMG_02",
+        "screen_name": "Workout Hub - Program List",
+        "description": "List of available workout programs with difficulty tags and muscle focus.",
+        "n8n_tasks": [
+            "DB_01_Fetch_Programs"
+        ]
+    },
+    {
+        "id": "IMG_03",
+        "screen_name": "Workout Detail - Overview",
+        "description": "Details of selected workout: Duration, Intensity, Exercise List.",
+        "n8n_tasks": [
+            "DB_02_Fetch_Workout_Details"
+        ]
+    },
+    {
+        "id": "IMG_04",
+        "screen_name": "Workout Player - Exercise View",
+        "description": "Active exercise screen with timer, reps/sets input, and previous history.",
+        "n8n_tasks": [
+            "CORE_01_Log_Set_Logic",
+            "CORE_03_Plate_Math_Solver",
+            "CORE_04_Rest_Timer_Optimizer"
+        ]
+    },
+    {
+        "id": "IMG_05",
+        "screen_name": "Rest Timer Overlay",
+        "description": "Full screen overlay during rest periods with tip of the day.",
+        "n8n_tasks": [
+            "CORE_04_Rest_Timer_Optimizer"
+        ]
+    },
+    {
+        "id": "IMG_06",
+        "screen_name": "RPE Selector",
+        "description": "Slider or button grid for selecting RPE after a set.",
+        "n8n_tasks": [
+            "CORE_01_Log_Set_Logic"
+        ]
+    },
+    {
+        "id": "IMG_16",
+        "screen_name": "Plate Loader Visualizer",
+        "description": "Visual representation of plates on the bar.",
+        "n8n_tasks": [
+            "CORE_03_Plate_Math_Solver"
+        ]
+    },
+    {
+        "id": "IMG_17",
+        "screen_name": "Warmup Set List",
+        "description": "Calculated warm-up sets based on working weight.",
+        "n8n_tasks": [
+            "CORE_02_Warmup_Generator"
+        ]
+    },
+    {
+        "id": "IMG_26",
+        "screen_name": "Analytics Dashboard",
+        "description": "Charts for Volume, 1RM, and Fatigue.",
+        "n8n_tasks": [
+            "POST_01_Volume_Load_Analysis",
+            "POST_02_Fatigue_Management",
+            "POST_03_Plateau_Breaker"
+        ]
+    }
+]

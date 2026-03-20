@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/logo-hts.png" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>HT-STRENGTH | Elite Gym Management</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script>
+    console.log("HTML: Root div detected:", !!document.getElementById('root'));
+    window.onerror = function (msg, url, line, col, error) {
+      console.error("GLOBAL ERROR DETECTED:", msg, "at", url, line + ":" + col);
+    };
+  </script>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>

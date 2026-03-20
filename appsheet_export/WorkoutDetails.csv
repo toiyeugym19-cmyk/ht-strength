@@ -1,0 +1,6 @@
+ID,PlanID,ExerciseName,Sets,Reps,Weight_Target
+detail_001,plan_001,Bench Press,5,5,80
+detail_002,plan_001,Overhead Press,3,8,40
+detail_003,plan_001,Tricep Extension,3,12,20
+detail_004,plan_002,Deadlift,3,5,100
+detail_005,plan_002,Pull Ups,4,10,0

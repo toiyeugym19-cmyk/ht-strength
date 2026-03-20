@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Data Population - Antigravity OS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #030014 0%, #0a0a1f 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #a855f7, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: #71717a;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            margin-bottom: 30px;
+        }
+
+        .button {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            border: none;
+            border-radius: 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(168, 85, 247, 0.5);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .status {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            border-left: 4px solid #a855f7;
+            font-size: 13px;
+            line-height: 1.8;
+            display: none;
+        }
+
+        .status.show {
+            display: block;
+        }
+
+        .success {
+            color: #22c55e;
+        }
+
+        .warning {
+            color: #f59e0b;
+        }
+
+        .log {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: #71717a;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🚀 DATA SEEDER</h1>
+        <p class="subtitle">Antigravity OS Auto-Population</p>
+
+        <button class="button" onclick="generate100Members()">
+            📊 TẠO 100 HỘI VIÊN MẪU
+        </button>
+
+        <button class="button" onclick="generate100Tasks()">
+            ✅ TẠO 100 NHIỆM VỤ MẪU
+        </button>
+
+        <button class="button" onclick="initializeFull()">
+            🌟 KHỞI TẠO TOÀN BỘ HỆ THỐNG
+        </button>
+
+        <div id="status" class="status">
+            <div id="statusText"></div>
+            <div id="log" class="log"></div>
+        </div>
+    </div>
+
+    <script>
+        const showStatus = (message, type = 'success') => {
+            const status = document.getElementById('status');
+            const statusText = document.getElementById('statusText');
+            statusText.innerHTML = `<span class="${type}">${message}</span>`;
+            status.classList.add('show');
+        };
+
+        const addLog = (text) => {
+            const log = document.getElementById('log');
+            log.innerHTML += `<div>${new Date().toLocaleTimeString()} - ${text}</div>`;
+        };
+
+        // ====== DATA GENERATORS ======
+
+        function generateRandomName() {
+            const firstNames = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Phan', 'Vũ', 'Đặng', 'Bùi', 'Đỗ'];
+            const lastNames = ['Minh', 'Hải', 'Tân', 'Quang', 'Anh', 'Linh', 'Hùng', 'Thảo', 'Duy', 'Nam'];
+            return `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`;
+        }
+
+        function generateRandomPhone() {
+            return `0${Math.floor(Math.random() * 9) + 1}${Math.floor(Math.random() * 100000000).toString().padStart(8, '0')}`;
+        }
+
+        function generateMembers(count) {
+            const members = [];
+            const statuses = ['Active', 'Expired', 'Pending'];
+            const types = ['1 Month', '3 Months', '6 Months', '1 Year'];
+
+            for (let i = 0; i < count; i++) {
+                const joinDate = new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000);
+                const status = statuses[Math.floor(Math.random() * statuses.length)];
+                const type = types[Math.floor(Math.random() * types.length)];
+                const sessionsTotal = type.includes('1 Month') ? 20 : type.includes('3') ? 60 : 120;
+                const sessionsUsed = Math.floor(Math.random() * sessionsTotal);
+
+                members.push({
+                    id: `member_${Date.now()}_${i}`,
+                    name: generateRandomName(),
+                    phone: generateRandomPhone(),
+                    email: `user${i}@gym.vn`,
+                    status: status,
+                    membershipType: type,
+                    joinDate: joinDate.toISOString(),
+                    expiryDate: new Date(joinDate.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+                    sessionsTotal: sessionsTotal,
+                    sessionsUsed: sessionsUsed,
+                    lastCheckIn: status === 'Active' ? new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString() : 'N/A',
+                    avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(generateRandomName())}&background=random`,
+                    dateOfBirth: new Date(1980 + Math.random() * 30, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1).toISOString()
+                });
+            }
+
+            return members;
+        }
+
+        function generateTasks(count) {
+            const tasks = {};
+            const priorities = ['low', 'medium', 'high'];
+            const categories = ['CRM', 'Marketing', 'Operations', 'Finance'];
+            const templates = [
+                'Gọi điện tư vấn khách hàng',
+                'Follow-up gia hạn gói tập',
+                'Chăm sóc khách hàng VIP',
+                'Kiểm tra thiết bị phòng gym',
+                'Cập nhật thông tin hội viên',
+                'Tổ chức event workshop',
+                'Review doanh thu tháng'
+            ];
+
+            for (let i = 0; i < count; i++) {
+                const id = `task_${Date.now()}_${i}`;
+                const dueDate = new Date(Date.now() + (Math.random() - 0.5) * 30 * 24 * 60 * 60 * 1000);
+
+                tasks[id] = {
+                    id: id,
+                    content: templates[Math.floor(Math.random() * templates.length)],
+                    completed: Math.random() > 0.7,
+                    priority: priorities[Math.floor(Math.random() * priorities.length)],
+                    category: categories[Math.floor(Math.random() * categories.length)],
+                    date: dueDate.toISOString(),
+                    createdAt: new Date(Date.now() - Math.random() * 10 * 24 * 60 * 60 * 1000).toISOString()
+                };
+            }
+
+            return tasks;
+        }
+
+        // ====== ACTIONS ======
+
+        function generate100Members() {
+            addLog('Đang tạo 100 hội viên...');
+            const members = generateMembers(100);
+
+            // Update member store
+            const memberStore = {
+                state: {
+                    members: members,
+                    schedule: []
+                },
+                version: 0
+            };
+
+            localStorage.setItem('member-storage-v5', JSON.stringify(memberStore));
+            addLog(`✓ Đã tạo ${members.length} hội viên`);
+            showStatus('✅ Thành công! Đã tạo 100 hội viên mẫu. Reload trang để xem.', 'success');
+        }
+
+        function generate100Tasks() {
+            addLog('Đang tạo 100 nhiệm vụ...');
+            const tasks = generateTasks(100);
+
+            // Update board store
+            const boardStore = {
+                state: {
+                    tasks: tasks,
+                    columns: {
+                        'pending': { id: 'pending', title: 'Pending', order: 0 },
+                        'in-progress': { id: 'in-progress', title: 'In Progress', order: 1 },
+                        'done': { id: 'done', title: 'Done', order: 2 }
+                    }
+                },
+                version: 0
+            };
+
+            localStorage.setItem('board-storage-v1', JSON.stringify(boardStore));
+            addLog(`✓ Đã tạo ${Object.keys(tasks).length} tasks`);
+            showStatus('✅ Thành công! Đã tạo 100 nhiệm vụ mẫu. Reload trang để xem.', 'success');
+        }
+
+        function initializeFull() {
+            addLog('Bắt đầu khởi tạo toàn bộ hệ thống...');
+
+            // Generate all data
+            const members = generateMembers(100);
+            const tasks = generateTasks(100);
+
+            addLog('✓ Tạo 100 members');
+            addLog('✓ Tạo 100 tasks');
+
+            // Member Store
+            localStorage.setItem('member-storage-v5', JSON.stringify({
+                state: { members: members, schedule: [] },
+                version: 0
+            }));
+
+            // Board Store
+            localStorage.setItem('board-storage-v1', JSON.stringify({
+                state: {
+                    tasks: tasks,
+                    columns: {
+                        'pending': { id: 'pending', title: 'Pending', order: 0 },
+                        'in-progress': { id: 'in-progress', title: 'In Progress', order: 1 },
+                        'done': { id: 'done', title: 'Done', order: 2 }
+                    }
+                },
+                version: 0
+            }));
+
+            // Automation Store
+            localStorage.setItem('member-automation-store-v1', JSON.stringify({
+                state: {
+                    tasks: {},
+                    logs: [],
+                    todayStats: { callsMade: 0, followUps: 0, conversions: 0 },
+                    plans: [],
+                    isEngineRunning: true,
+                    lastEngineRun: new Date().toISOString(),
+                    n8nStatus: 'connected'
+                },
+                version: 0
+            }));
+
+            addLog('✓ Cấu hình automation');
+            addLog('✓ Hoàn tất!');
+
+            showStatus('🎉 HỆ THỐNG ĐÃ ĐƯỢC KHOẢI TẠO HOÀN TẤT! Reload trang để trải nghiệm.', 'success');
+
+            // Auto reload after 2 seconds
+            setTimeout(() => {
+                window.location.href = 'http://localhost:5173';
+            }, 2000);
+        }
+    </script>
+</body>
+
+</html>

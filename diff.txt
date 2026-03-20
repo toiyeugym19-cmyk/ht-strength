@@ -1,0 +1,379 @@
+﻿diff --git a/src/components/Layout.tsx b/src/components/Layout.tsx
+index cec12c4..9d0bf47 100644
+--- a/src/components/Layout.tsx
++++ b/src/components/Layout.tsx
+@@ -5,13 +5,12 @@ import {
+     Barbell,
+     Users,
+     ChartBar,
+-    Sun,
+-    Moon,
+     CaretLeft,
+     CalendarBlank,
+     Trophy,
+     BookOpenText,
+     UserCircle,
++    Brain
+ } from '@phosphor-icons/react';
+ import { useState, useEffect, useRef } from 'react';
+ import { motion, AnimatePresence } from 'framer-motion';
+@@ -19,54 +18,52 @@ import { Toaster } from 'sonner';
+ import CommandPalette from './CommandPalette';
+ import InstallPWA from './InstallPWA';
+ import { useMemberStore } from '../store/useMemberStore';
+-import { useTheme } from '../hooks/useTheme';
+ 
+ // ============================================================
+-//  TAB BAR ΓÇö Admin: Quß║ún l├╜ | Member: Tß║¡p luyß╗çn & Tiß║┐n ─æß╗Ö
++//  TAB CONFIGURATION
+ // ============================================================
+ const ADMIN_TABS = [
+-    { to: "/", icon: House, label: "Trang Chß╗º" },
++    { to: "/", icon: House, label: "Tß╗òng Quan" },
+     { to: "/members", icon: Users, label: "Hß╗Öi Vi├¬n" },
+-    { to: "/calendar", icon: CalendarBlank, label: "Lß╗ïch" },
++    { to: "/calendar", icon: CalendarBlank, label: "Lß╗ïch Tr├¼nh" },
+     { to: "/analytics", icon: ChartBar, label: "Ph├ón T├¡ch" },
+-    { to: "/profile", icon: UserCircle, label: "Hß╗ô S╞í" },
++    { to: "/profile", icon: UserCircle, label: "C├í Nh├ón" },
+ ];
+ 
+-/* Member: Trang chß╗º | B├ái tß║¡p | Tiß║┐n ─æß╗Ö | Thß╗æng k├¬ | Kiß║┐n thß╗⌐c */
+ const MEMBER_TABS = [
+     { to: "/", icon: House, label: "Trang Chß╗º" },
+     { to: "/exercises", icon: Barbell, label: "B├ái Tß║¡p" },
+-    { to: "/my-progress", icon: ChartBar, label: "Tiß║┐n ─Éß╗Ö" },
+-    { to: "/my-stats", icon: Trophy, label: "Thß╗æng K├¬" },
+-    { to: "/knowledge", icon: BookOpenText, label: "Cß║⌐m Nang" },
++    { to: "/meditation", icon: Brain, label: "Thiß╗ün" },
++    { to: "/my-progress", icon: ChartBar, label: "Chß╗ë Sß╗æ" },
++    { to: "/my-stats", icon: Trophy, label: "Hß║íng" },
++    { to: "/knowledge", icon: BookOpenText, label: "Tra Cß╗⌐u" },
+ ];
+ 
+-// iOS-style page titles
+ const PAGE_TITLES: Record<string, string> = {
+-    '/': 'Trang Chß╗º',
+-    '/exercises': 'B├ái Tß║¡p',
+-    '/my-workout': 'Buß╗òi Tß║¡p H├┤m Nay',
+-    '/my-plan': 'Kß║┐ Hoß║ích Cß╗ºa T├┤i',
+-    '/my-progress': 'Tiß║┐n Tr├¼nh',
+-    '/my-stats': 'Thß╗æng K├¬',
+-    '/members': 'Hß╗Öi Vi├¬n',
++    '/': 'Trung T├óm ─Éiß╗üu Khiß╗ân',
++    '/exercises': 'Kho B├ái Tß║¡p',
++    '/my-workout': 'Trong Buß╗òi Tß║¡p',
++    '/my-plan': 'Kß║┐ Hoß║ích Chiß║┐n L╞░ß╗úc',
++    '/my-progress': 'Ph├ón T├¡ch Sinh Hß╗ìc',
++    '/my-stats': 'Bß║úng Xß║┐p Hß║íng',
++    '/members': 'Mß║íng L╞░ß╗¢i Hß╗Öi Vi├¬n',
+     '/pt': 'Huß║Ñn Luyß╗çn Vi├¬n',
+-    '/gym': 'Ph├▓ng Gym',
+-    '/analytics': 'Ph├ón T├¡ch',
+-    '/settings': 'C├ái ─Éß║╖t',
+-    '/work': 'Nhiß╗çm Vß╗Ñ',
+-    '/calendar': 'Lß╗ïch',
+-    '/nutrition': 'Dinh D╞░ß╗íng',
+-    '/knowledge': 'Kiß║┐n Thß╗⌐c',
+-    '/journal': 'Nhß║¡t K├╜',
+-    '/review-hub': 'Review Hub',
+-    '/ecosystem': 'Hß╗ç Sinh Th├íi',
+-    '/calories': 'Calories',
+-    '/steps': 'B╞░ß╗¢c Ch├ón',
+-    '/meditation': 'Thiß╗ün',
+-    '/progress': 'Tiß║┐n Tr├¼nh',
+-    '/social': 'Th╞░ß╗ƒng & XH',
+-    '/profile': 'Hß╗ô S╞í',
++    '/gym': 'C╞í Sß╗ƒ Hß║í Tß║ºng',
++    '/analytics': 'Tr├¡ Tuß╗ç Hß╗ç Thß╗æng',
++    '/settings': 'Cß║Ñu H├¼nh Hß╗ç Thß╗æng',
++    '/work': 'Vß║¡n H├ánh',
++    '/calendar': 'Lß╗ïch Tr├¼nh',
++    '/nutrition': 'N─âng L╞░ß╗úng Bio',
++    '/knowledge': 'Tra Cß╗⌐u Kiß║┐n Thß╗⌐c',
++    '/journal': 'Nhß║¡t K├╜ Neural',
++    '/review-hub': 'V├▓ng Lß║╖p Phß║ún Hß╗ôi',
++    '/ecosystem': 'Mß║íng L╞░ß╗¢i Sinh Th├íi',
++    '/calories': 'D├▓ng N─âng L╞░ß╗úng',
++    '/steps': 'Chß╗ë Sß╗æ Vß║¡n ─Éß╗Öng',
++    '/meditation': 'Cß╗æt L├╡i Thiß╗ün',
++    '/progress': 'Tiß║┐n H├│a',
++    '/social': 'Phß║ºn Th╞░ß╗ƒng',
++    '/profile': 'Danh T├¡nh Ng╞░ß╗¥i D├╣ng',
+ };
+ 
+ export default function Layout() {
+@@ -74,39 +71,23 @@ export default function Layout() {
+     const navigate = useNavigate();
+     const scrollRef = useRef<HTMLDivElement>(null);
+     const [isLargeTitle, setIsLargeTitle] = useState(true);
+-    const { theme, setLight, setDark } = useTheme();
+ 
+     useEffect(() => {
+         useMemberStore.getState().refreshMemberStatus();
+     }, []);
+ 
+-    // Track scroll for iOS large title collapse
+     useEffect(() => {
+         const el = scrollRef.current;
+         if (!el) return;
+ 
+-        let ticking = false;
+         const handler = () => {
+-            if (!ticking) {
+-                window.requestAnimationFrame(() => {
+-                    const current = el.scrollTop;
+-                    // Hysteresis: collapse at 45, expand only when nearly at top (5)
+-                    // Added a wider deadzone to prevent jittery layout shifts
+-                    setIsLargeTitle((prev) => {
+-                        if (prev && current > 45) return false;
+-                        if (!prev && current < 5) return true;
+-                        return prev;
+-                    });
+-                    ticking = false;
+-                });
+-                ticking = true;
+-            }
++            const current = el.scrollTop;
++            setIsLargeTitle(current < 45);
+         };
+         el.addEventListener('scroll', handler, { passive: true });
+         return () => el.removeEventListener('scroll', handler);
+-    }, [location.pathname]);
++    }, []);
+ 
+-    // Reset scroll on navigation
+     useEffect(() => {
+         if (scrollRef.current) {
+             scrollRef.current.scrollTop = 0;
+@@ -114,129 +95,102 @@ export default function Layout() {
+         }
+     }, [location.pathname]);
+ 
+-    const currentTitle = PAGE_TITLES[location.pathname] || 'HT-Strength';
++    const currentTitle = PAGE_TITLES[location.pathname] || 'HT-STRENGTH';
+     const isHome = location.pathname === '/';
+     const canGoBack = !isHome && window.history.length > 1;
+ 
+     return (
+-        <div className="ios-app-root gym-app">
++        <div className="ios-app-root bg-black text-white font-sans selection:bg-[#0A84FF]/30">
+             <CommandPalette />
+ 
+-            <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+-                {/* ============ iOS STATUS BAR ============ */}
+-                <div className="ios-status-bar-spacer" />
+-
+-                {/* ============ iOS NAVIGATION BAR ============ */}
+-                <header className={`ios-nav-bar ${!isLargeTitle ? 'ios-nav-bar--collapsed' : ''}`}>
+-                    <div className="ios-nav-bar__top">
+-                        <div className="ios-nav-bar__left">
+-                            {canGoBack ? (
+-                                <button onClick={() => navigate(-1)} className="ios-nav-back">
+-                                    <CaretLeft size={24} weight="bold" />
+-                                    <span>Quay lß║íi</span>
+-                                </button>
+-                            ) : (
+-                                <div className="ios-nav-bar__logo">
+-                                    <img src="/logo-hts.png" alt="HTS" className="ios-nav-logo-img" />
+-                                </div>
+-                            )}
+-                        </div>
++            <div className="flex flex-col h-[100dvh] relative overflow-hidden bg-black">
++                {/* ΓöÇΓöÇ iOS STATIC BACKGROUND ΓöÇΓöÇ */}
++                <div className="fixed inset-0 pointer-events-none z-[-1] bg-black" />
+ 
+-                        <motion.div className="ios-nav-bar__center"
+-                            initial={false}
+-                            animate={{
+-                                opacity: isLargeTitle ? 0 : 1,
+-                                y: isLargeTitle ? 8 : 0,
+-                                pointerEvents: isLargeTitle ? 'none' : 'auto'
+-                            }}
+-                            transition={{ duration: 0.2 }}>
+-                            <span className="ios-nav-small-title">{currentTitle}</span>
+-                        </motion.div>
+-
+-                        <div className="ios-nav-bar__right" style={{ gap: 6, position: 'relative', zIndex: 1000 }}>
++                {/* ΓöÇΓöÇ TOP NAVIGATION BAR (iOS Glassmorphism) ΓöÇΓöÇ */}
++                <header className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${!isLargeTitle ? 'bg-[#1C1C1E]/80 backdrop-blur-2xl border-b border-white/10' : 'bg-transparent'} pt-12`}>
++                    <div className="max-w-[430px] mx-auto h-11 px-4 flex items-center justify-between relative">
++                        {canGoBack ? (
+                             <button
+-                                onClick={(e) => { e.stopPropagation(); setLight(); }}
+-                                className={`ios-nav-action ${theme === 'light' ? 'ios-nav-action--active' : ''}`}
+-                                title="Light"
+-                                aria-label="Light mode"
+-                                style={{
+-                                    opacity: theme === 'light' ? 1 : 0.5,
+-                                    transform: theme === 'light' ? 'scale(1)' : 'scale(0.85)',
+-                                    transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
+-                                }}
++                                onClick={() => navigate(-1)}
++                                className="flex items-center gap-1 text-[#0A84FF] active:opacity-50 transition-opacity z-10"
+                             >
+-                                <Sun size={20} weight={theme === 'light' ? 'fill' : 'bold'} />
+-                            </button>
+-                            <button
+-                                onClick={(e) => { e.stopPropagation(); setDark(); }}
+-                                className={`ios-nav-action ${theme === 'dark' ? 'ios-nav-action--active' : ''}`}
+-                                title="Dark"
+-                                aria-label="Dark mode"
+-                                style={{
+-                                    opacity: theme === 'dark' ? 1 : 0.5,
+-                                    transform: theme === 'dark' ? 'scale(1)' : 'scale(0.85)',
+-                                    transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
+-                                }}
+-                            >
+-                                <Moon size={20} weight={theme === 'dark' ? 'fill' : 'bold'} />
++                                <CaretLeft size={24} weight="bold" className="-ml-1" />
++                                <span className="text-[17px] font-medium leading-none">Trß╗ƒ lß║íi</span>
+                             </button>
++                        ) : (
++                            <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center z-10">
++                                <img src="/logo-hts.png" alt="HTS" className="w-full h-full object-contain" />
++                            </div>
++                        )}
++
++                        <AnimatePresence mode="wait">
++                            {!isLargeTitle && (
++                                <motion.div
++                                    initial={{ opacity: 0 }}
++                                    animate={{ opacity: 1 }}
++                                    exit={{ opacity: 0 }}
++                                    className="absolute inset-0 flex items-center justify-center pointer-events-none"
++                                >
++                                    <span className="text-[17px] font-semibold text-white tracking-tight">
++                                        {currentTitle}
++                                    </span>
++                                </motion.div>
++                            )}
++                        </AnimatePresence>
++
++                        <div className="flex items-center z-10">
++                            {/* Empty div for layout balance, or small actions here */}
+                         </div>
+                     </div>
+-
+-                    <motion.div className="ios-nav-bar__large-title"
+-                        animate={{ opacity: isLargeTitle ? 1 : 0, height: isLargeTitle ? 'auto' : 0, marginBottom: isLargeTitle ? 4 : 0 }}
+-                        transition={{ duration: 0.2 }}>
+-                        <h1 className="ios-large-title">{currentTitle}</h1>
+-                    </motion.div>
+                 </header>
+ 
+-                {/* ============ MAIN SCROLL CONTENT ============ */}
+-                <div ref={scrollRef} className="ios-content-scroll">
+-                    <div className="ios-content-inner">
++                {/* ΓöÇΓöÇ CONTENT AREA ΓöÇΓöÇ */}
++                <main
++                    ref={scrollRef}
++                    className="flex-1 overflow-y-auto no-scrollbar pt-[100px] pb-[100px] relative z-10"
++                >
++                    <div className="max-w-[430px] mx-auto px-4">
+                         <AnimatePresence mode="wait">
+                             <motion.div
+                                 key={location.pathname}
+-                                initial={{ opacity: 0, y: 6 }}
+-                                animate={{ opacity: 1, y: 0 }}
+-                                exit={{ opacity: 0, y: -4 }}
+-                                transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+-                                style={{ minHeight: '100%' }}
++                                initial={{ opacity: 0, x: 10 }}
++                                animate={{ opacity: 1, x: 0 }}
++                                exit={{ opacity: 0, x: -10 }}
++                                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                             >
++                                {isLargeTitle && (
++                                    <h1 className="text-[34px] font-bold text-white tracking-tight mb-4 leading-none">
++                                        {currentTitle}
++                                    </h1>
++                                )}
+                                 <Outlet />
+                             </motion.div>
+                         </AnimatePresence>
+                     </div>
+-                </div>
++                </main>
+ 
+-                {/* ============ iOS TAB BAR ============ */}
+-                <IOSTabBar />
++                {/* ΓöÇΓöÇ iOS BOTTOM TAB BAR ΓöÇΓöÇ */}
++                <div className="fixed bottom-0 left-0 right-0 z-[100] bg-[#1C1C1E]/85 backdrop-blur-3xl border-t border-white/10 pb-safe">
++                    <nav className="max-w-[430px] mx-auto h-[83px] px-2 flex items-start pt-2 justify-around">
++                        <EnhancedTabBar />
++                    </nav>
++                </div>
+             </div>
+ 
+             <InstallPWA />
+-            {/* <AutomationMonitor /> */}
+             <Toaster
+                 theme="dark"
+                 position="top-center"
+                 toastOptions={{
+-                    style: {
+-                        borderRadius: '14px',
+-                        fontSize: '13px',
+-                        fontWeight: '500',
+-                        background: '#1E1E22',
+-                        border: '1px solid rgba(255,255,255,0.1)',
+-                        color: '#F0F0F5',
+-                        padding: '12px 16px',
+-                    }
++                    className: 'bg-[#1C1C1E]/90 backdrop-blur-xl border border-white/10 text-white font-medium rounded-2xl p-4 shadow-[0_8px_30px_rgba(0,0,0,0.4)]',
+                 }}
+             />
+         </div>
+     );
+ }
+ 
+-// ============================================================
+-//  iOS 18 TAB BAR ΓÇö Pixel-perfect native design
+-// ============================================================
+-function IOSTabBar() {
++function EnhancedTabBar() {
+     const location = useLocation();
+     const { user } = useAuth();
+     const isAdmin = user?.role === 'admin' || user?.role === 'pt';
+@@ -244,24 +198,33 @@ function IOSTabBar() {
+     const tabs = user?.role === 'pt' ? baseTabs.filter(t => t.to !== '/pt') : baseTabs;
+ 
+     return (
+-        <nav className="ios-tabbar">
++        <div className="flex items-center justify-around w-full">
+             {tabs.map(tab => {
+                 const isActive = tab.to === '/'
+                     ? location.pathname === '/'
+                     : location.pathname.startsWith(tab.to);
+                 const Icon = tab.icon;
++
+                 return (
+-                    <NavLink key={tab.to} to={tab.to} end={tab.to === '/'}
+-                        className={({ isActive }) => `ios-tabbar__item${isActive ? ' ios-tabbar__item--active' : ''}`}>
+-                        <div className={`ios-tabbar__icon ${isActive ? 'ios-tabbar__icon--active' : ''}`}>
+-                            <Icon size={24} weight={isActive ? 'fill' : 'duotone'} />
++                    <NavLink
++                        key={tab.to}
++                        to={tab.to}
++                        end={tab.to === '/'}
++                        className="flex flex-col items-center gap-1 group relative w-[64px] active:scale-90 transition-transform"
++                    >
++                        <div className="relative">
++                            <Icon
++                                size={28}
++                                weight={isActive ? 'fill' : 'regular'}
++                                className={`transition-colors duration-200 ${isActive ? 'text-[#0A84FF]' : 'text-[#8E8E93]'}`}
++                            />
+                         </div>
+-                        <span className={`ios-tabbar__label ${isActive ? 'ios-tabbar__label--active' : ''}`}>
++                        <span className={`text-[10px] font-medium tracking-tight whitespace-nowrap transition-colors duration-200 ${isActive ? 'text-[#0A84FF]' : 'text-[#8E8E93]'}`}>
+                             {tab.label}
+                         </span>
+                     </NavLink>
+                 );
+             })}
+-        </nav>
++        </div>
+     );
+ }

@@ -1,0 +1,44 @@
+{
+    "name": "PLAN_01_MacroCycle_Design",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "macro-plan",
+                "options": {}
+            },
+            "name": "Webhook Input",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                100,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "const { age, goal, level } = items[0].json.body;\n\n// 1. Determine Phase Length\nlet weeks = 6;\nif (age > 35) weeks = 4; // Older athletes verify recovery sooner\nif (goal === 'PEAKING') weeks = 3;\n\n// 2. Set Volume Baseline (MEV)\nlet volume = { 'Chest': 12, 'Legs': 12, 'Back': 14 };\nif (level === 'ADVANCED') {\n  volume = { 'Chest': 16, 'Legs': 16, 'Back': 20 };\n}\n\n// 3. Set Rep Ranges\nlet repRange = '8-12';\nif (goal === 'STRENGTH') repRange = '3-6';\nif (goal === 'ENDURANCE') repRange = '15-20';\n\nreturn [{ json: { plan: { weeks, volume, repRange }, generatedAt: new Date() } }];"
+            },
+            "name": "Periodization Engine",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                300,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook Input": {
+            "main": [
+                [
+                    {
+                        "node": "Periodization Engine",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

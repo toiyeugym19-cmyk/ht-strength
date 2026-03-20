@@ -1,0 +1,576 @@
+/* ==========================================
+   📱 MOBILE PREMIUM STYLES - Brite Thor Pro
+   iOS-inspired styling system
+   ========================================== */
+
+/* ============ BASE MOBILE STYLES ============ */
+[data-device="mobile"] {
+    --mobile-header-height: 100px;
+    --mobile-tab-height: 80px;
+    --mobile-spacing-xs: 4px;
+    --mobile-spacing-sm: 8px;
+    --mobile-spacing-md: 16px;
+    --mobile-spacing-lg: 24px;
+    --mobile-spacing-xl: 32px;
+    --mobile-radius-sm: 12px;
+    --mobile-radius-md: 20px;
+    --mobile-radius-lg: 28px;
+    --mobile-radius-full: 9999px;
+}
+
+/* ============ PREMIUM GLASS EFFECT ============ */
+.mobile-glass {
+    background: rgba(28, 28, 30, 0.8);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mobile-glass-dark {
+    background: rgba(10, 10, 15, 0.9);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+}
+
+/* ============ MOBILE HEADER ============ */
+.mobile-header {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    padding: 16px 20px 12px;
+    background: linear-gradient(to bottom, rgba(3, 0, 20, 1) 0%, rgba(3, 0, 20, 0.95) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.mobile-header-title {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: white;
+    line-height: 1.1;
+}
+
+.mobile-header-subtitle {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+
+/* ============ MOBILE TAB BAR ============ */
+.mobile-tab-bar {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 80px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    padding: 0 8px !important;
+    padding-bottom: env(safe-area-inset-bottom, 0) !important;
+    background: rgba(10, 10, 15, 0.98) !important;
+    backdrop-filter: blur(32px) !important;
+    -webkit-backdrop-filter: blur(32px) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    z-index: 9999 !important;
+}
+
+.mobile-tab-bar>* {
+    flex: 1 !important;
+    max-width: 80px !important;
+}
+
+
+.mobile-tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 16px;
+    border-radius: 16px;
+    transition: all 0.2s ease;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.mobile-tab-item.active {
+    color: var(--primary);
+}
+
+.mobile-tab-item.active .mobile-tab-icon {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 12px var(--primary));
+}
+
+.mobile-tab-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ============ MOBILE CARDS ============ */
+.mobile-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 24px;
+    padding: 20px;
+    transition: all 0.2s ease;
+}
+
+.mobile-card:active {
+    transform: scale(0.97);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.mobile-card-glow {
+    position: relative;
+    overflow: hidden;
+}
+
+.mobile-card-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(180deg, rgba(var(--primary-rgb), 0.15) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+/* ============ STAT CARDS ============ */
+.mobile-stat-card {
+    background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.2) 0%, transparent 100%);
+    border: 1px solid rgba(var(--primary-rgb), 0.2);
+    border-radius: 24px;
+    padding: 20px;
+}
+
+.mobile-stat-value {
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: white;
+    line-height: 1;
+}
+
+.mobile-stat-label {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 8px;
+}
+
+/* ============ LIST ITEMS ============ */
+.mobile-list-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.15s ease;
+}
+
+.mobile-list-item:active {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.mobile-list-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-list-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 2px;
+}
+
+.mobile-list-subtitle {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* ============ CHIPS & BADGES ============ */
+.mobile-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-chip-primary {
+    background: rgba(var(--primary-rgb), 0.2);
+    color: var(--primary);
+    border-color: rgba(var(--primary-rgb), 0.3);
+}
+
+.mobile-chip-success {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+    border-color: rgba(34, 197, 94, 0.3);
+}
+
+.mobile-chip-warning {
+    background: rgba(251, 191, 36, 0.2);
+    color: #fbbf24;
+    border-color: rgba(251, 191, 36, 0.3);
+}
+
+.mobile-chip-danger {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* ============ BUTTONS ============ */
+.mobile-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 24px;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.mobile-btn:active {
+    transform: scale(0.96);
+}
+
+.mobile-btn-primary {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 8px 24px rgba(var(--primary-rgb), 0.3);
+}
+
+.mobile-btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-btn-ghost {
+    background: transparent;
+    color: var(--primary);
+}
+
+/* ============ SEARCH BAR ============ */
+.mobile-search {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    margin: 0 16px 16px;
+}
+
+.mobile-search input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    color: white;
+}
+
+.mobile-search input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* ============ SEGMENT CONTROL ============ */
+.mobile-segment {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    margin: 0 16px 16px;
+}
+
+.mobile-segment-item {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    transition: all 0.2s ease;
+}
+
+.mobile-segment-item.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 16px rgba(var(--primary-rgb), 0.3);
+}
+
+/* ============ BOTTOM SHEET ============ */
+.mobile-sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+}
+
+.mobile-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #1c1c1e;
+    border-radius: 32px 32px 0 0;
+    z-index: 101;
+    max-height: 90vh;
+    overflow: hidden;
+}
+
+.mobile-sheet-handle {
+    width: 40px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 100px;
+    margin: 12px auto 8px;
+}
+
+.mobile-sheet-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+.mobile-sheet-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: white;
+}
+
+.mobile-sheet-content {
+    overflow-y: auto;
+    max-height: calc(90vh - 80px);
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+}
+
+/* ============ FAB ============ */
+.mobile-fab {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(var(--primary-rgb), 0.4);
+    z-index: 90;
+    border: 4px solid #030014;
+    transition: all 0.2s ease;
+}
+
+.mobile-fab:active {
+    transform: scale(0.9);
+}
+
+/* ============ KANBAN MOBILE ============ */
+.mobile-kanban-column {
+    min-width: 280px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 24px;
+    padding: 16px;
+    flex-shrink: 0;
+}
+
+.mobile-kanban-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.mobile-kanban-title {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.mobile-kanban-count {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    font-size: 11px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.mobile-kanban-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.mobile-kanban-card:active {
+    transform: scale(0.98);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.mobile-kanban-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.mobile-kanban-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.mobile-kanban-tag {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.mobile-kanban-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mobile-kanban-progress {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    overflow: hidden;
+    flex: 1;
+    margin-right: 12px;
+}
+
+.mobile-kanban-progress-bar {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 100px;
+    transition: width 0.3s ease;
+}
+
+.mobile-kanban-date {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ============ ANIMATIONS ============ */
+@keyframes mobile-slide-up {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes mobile-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes mobile-scale-in {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes mobile-shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.mobile-skeleton {
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0.05) 100%);
+    background-size: 200% 100%;
+    animation: mobile-shimmer 1.5s infinite;
+    border-radius: 12px;
+}
+
+/* ============ SAFE AREA ============ */
+.pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.pt-safe {
+    padding-top: env(safe-area-inset-top, 0);
+}
+
+.mobile-content-area {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0) + 20px);
+}

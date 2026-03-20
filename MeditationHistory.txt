@@ -1,0 +1,1691 @@
+﻿commit ab7b7a43d3c7fc8d994a95cc1e9d0cd51eb9c3bd
+Author: AI Agent <agent@htstrength.com>
+Date:   Sat Mar 7 18:02:04 2026 +0700
+
+    IPad and Auth optimizations
+
+diff --git a/src/pages/MeditationPage.tsx b/src/pages/MeditationPage.tsx
+index ba0ff83..f60f170 100644
+--- a/src/pages/MeditationPage.tsx
++++ b/src/pages/MeditationPage.tsx
+@@ -1,18 +1,321 @@
+ import { useState, useEffect, useRef } from 'react';
+ import { motion, AnimatePresence } from 'framer-motion';
+-import { Play, Pause, RotateCcw, Clock, Wind, Brain, Heart, Leaf, Waves, Volume2 } from 'lucide-react';
++import { Play, Pause, ArrowCounterClockwise, Clock, Wind, Brain, Heart, Leaf, Moon, Sparkle, SunHorizon, Mountains, Tree, Fire, Timer, Waves, X } from '@phosphor-icons/react';
+ import { toast } from 'sonner';
+ 
+ // ============================================================
+-//  MEDITATION PAGE ΓÇö Mibro Fit Dark Theme (Functional Timer)
++//  MEDITATION PAGE ΓÇö Premium Dark Theme with Rich Data
+ // ============================================================
+ 
++/* ΓöÇΓöÇ Guided meditation scripts ΓöÇΓöÇ */
++const GUIDED_SCRIPTS: Record<string, { steps: { time: number; text: string }[] }> = {
++    focus: {
++        steps: [
++            { time: 0, text: 'H├úy nhß║»m mß║»t v├á h├¡t thß╗ƒ s├óu...' },
++            { time: 15, text: 'Cß║úm nhß║¡n c╞í thß╗â bß║ín ─æang th╞░ gi├ún...' },
++            { time: 30, text: 'Tß║¡p trung v├áo h╞íi thß╗ƒ...' },
++            { time: 60, text: 'H├¡t v├áo... 1... 2... 3... 4...' },
++            { time: 70, text: 'Thß╗ƒ ra... 1... 2... 3... 4...' },
++            { time: 90, text: 'Mß╗ùi khi t├óm tr├¡ lang thang, nhß║╣ nh├áng quay vß╗ü h╞íi thß╗ƒ...' },
++            { time: 120, text: 'Bß║ín ─æang l├ám rß║Ñt tß╗æt. Tiß║┐p tß╗Ñc h├¡t thß╗ƒ ─æß╗üu ─æß║╖n...' },
++            { time: 180, text: 'Cß║úm nhß║¡n sß╗▒ t─⌐nh lß║╖ng b├¬n trong...' },
++            { time: 240, text: 'H├¡t s├óu th├¬m mß╗Öt h╞íi nß╗»a...' },
++            { time: 270, text: 'Chuß║⌐n bß╗ï kß║┐t th├║c, tß╗½ tß╗½ mß╗ƒ mß║»t...' },
++        ]
++    },
++    relax: {
++        steps: [
++            { time: 0, text: 'T├¼m mß╗Öt t╞░ thß║┐ thoß║úi m├íi nhß║Ñt...' },
++            { time: 15, text: 'Nhß║»m mß║»t... thß║ú lß╗Ång vai...' },
++            { time: 30, text: 'Thß║ú lß╗Ång c╞í mß║╖t, h├ám, tr├ín...' },
++            { time: 60, text: 'Cß║úm nhß║¡n trß╗ìng l╞░ß╗úng c╞í thß╗â ─æang ch├¼m xuß╗æng...' },
++            { time: 90, text: 'H├¡t v├áo tinh thß║ºn b├¼nh an...' },
++            { time: 100, text: 'Thß╗ƒ ra c─âng thß║│ng v├á mß╗çt mß╗Åi...' },
++            { time: 150, text: 'T╞░ß╗ƒng t╞░ß╗úng ├ính s├íng ß║Ñm ├íp bao phß╗º to├án th├ón...' },
++            { time: 210, text: 'Tß╗½ng v├╣ng c╞í ─æang ─æ╞░ß╗úc th╞░ gi├ún ho├án to├án...' },
++            { time: 300, text: 'Bß║ín ─æang ß╗ƒ n╞íi an to├án v├á b├¼nh y├¬n nhß║Ñt...' },
++            { time: 420, text: 'Cß║úm nhß║¡n sß╗▒ biß║┐t ╞ín vß╗¢i c╞í thß╗â m├¼nh...' },
++            { time: 540, text: 'Tß╗½ tß╗½ mß╗ƒ mß║»t khi bß║ín sß║╡n s├áng...' },
++        ]
++    },
++    sleep: {
++        steps: [
++            { time: 0, text: 'Nß║▒m xuß╗æng, nhß║»m mß║»t lß║íi...' },
++            { time: 20, text: 'H├¡t thß╗ƒ nhß║╣ nh├áng... ─æß╗üu ─æß║╖n...' },
++            { time: 45, text: 'Thß║ú lß╗Ång ─æ├┤i ch├ón... bß║»p ─æ├╣i... h├┤ng...' },
++            { time: 75, text: 'Thß║ú lß╗Ång bß╗Ñng... ngß╗▒c... vai...' },
++            { time: 105, text: 'Thß║ú lß╗Ång c├ính tay... b├án tay...' },
++            { time: 135, text: 'Thß║ú lß╗Ång cß╗ò... khu├┤n mß║╖t... ─æ├┤i mß║»t...' },
++            { time: 180, text: 'T╞░ß╗ƒng t╞░ß╗úng bß║ín ─æang nß║▒m tr├¬n b├úi biß╗ân y├¬n t─⌐nh...' },
++            { time: 240, text: 'Nghe tiß║┐ng s├│ng vß╗ù nhß║╣... gi├│ biß╗ân m├ít...' },
++            { time: 360, text: 'Mß╗ùi h╞íi thß╗ƒ ─æ╞░a bß║ín s├óu h╞ín v├áo giß║Ñc ngß╗º...' },
++            { time: 480, text: 'Bß║ín ─æang rß║Ñt an to├án... v├á b├¼nh y├¬n...' },
++            { time: 600, text: 'Ch├¼m dß║ºn... ch├¼m dß║ºn v├áo giß║Ñc ngß╗º...' },
++            { time: 780, text: 'Zzz... ngß╗º ngon nh├⌐...' },
++        ]
++    },
++    calm: {
++        steps: [
++            { time: 0, text: 'H├úy nhß║»m mß║»t v├á mß╗ëm c╞░ß╗¥i nhß║╣...' },
++            { time: 20, text: 'Ngh─⌐ vß╗ü mß╗Öt ng╞░ß╗¥i bß║ín y├¬u th╞░╞íng...' },
++            { time: 45, text: 'Gß╗¡i ─æß║┐n hß╗ì lß╗¥i ch├║c: "Mong bß║ín lu├┤n hß║ính ph├║c"...' },
++            { time: 75, text: 'Ngh─⌐ vß╗ü bß║ún th├ón m├¼nh...' },
++            { time: 100, text: '"Mong t├┤i lu├┤n khß╗Åe mß║ính v├á b├¼nh an"...' },
++            { time: 135, text: 'Cß║úm nhß║¡n t├¼nh y├¬u th╞░╞íng tß╗Åa ra tß╗½ tr├íi tim...' },
++            { time: 180, text: 'Ngh─⌐ vß╗ü tß║Ñt cß║ú mß╗ìi ng╞░ß╗¥i xung quanh...' },
++            { time: 220, text: '"Mong mß╗ìi ng╞░ß╗¥i ─æß╗üu hß║ính ph├║c v├á b├¼nh y├¬n"...' },
++            { time: 300, text: 'Cß║úm nhß║¡n l├▓ng biß║┐t ╞ín vß╗ü cuß╗Öc sß╗æng...' },
++            { time: 360, text: 'Tß╗½ tß╗½ trß╗ƒ lß║íi, mang theo sß╗▒ b├¼nh an n├áy...' },
++        ]
++    },
++    morning: {
++        steps: [
++            { time: 0, text: 'Ch├áo buß╗òi s├íng! H├¡t mß╗Öt h╞íi thß║¡t s├óu...' },
++            { time: 15, text: 'Cß║úm ╞ín c╞í thß╗â ─æ├ú nghß╗ë ng╞íi ─æ├¬m qua...' },
++            { time: 30, text: 'H├┤m nay sß║╜ l├á mß╗Öt ng├áy tuyß╗çt vß╗¥i...' },
++            { time: 60, text: '─Éß║╖t ├╜ ─æß╗ïnh cho ng├áy h├┤m nay...' },
++            { time: 90, text: 'Bß║ín muß╗æn cß║úm thß║Ñy thß║┐ n├áo khi kß║┐t th├║c ng├áy?' },
++            { time: 120, text: 'H├¡t thß╗ƒ... nß║íp ─æß║ºy n─âng l╞░ß╗úng...' },
++            { time: 180, text: 'Bß║ín ─æ├ú sß║╡n s├áng cho mß╗Öt ng├áy mß╗¢i...' },
++            { time: 240, text: 'Tß╗½ tß╗½ mß╗ƒ mß║»t... mß╗ëm c╞░ß╗¥i...' },
++            { time: 270, text: 'H├úy bß║»t ─æß║ºu ng├áy mß╗¢i ─æß║ºy n─âng l╞░ß╗úng! ≡ƒîà' },
++        ]
++    },
++    breathe: {
++        steps: [
++            { time: 0, text: 'Bß║»t ─æß║ºu Box Breathing: H├¡t v├áo 4 gi├óy...' },
++            { time: 10, text: 'Giß╗» 4 gi├óy... Thß╗ƒ ra 4 gi├óy... Giß╗» 4 gi├óy...' },
++            { time: 30, text: 'Tiß║┐p tß╗Ñc nhß╗ïp 4-4-4-4...' },
++            { time: 60, text: 'Bß║ín ─æang l├ám rß║Ñt tß╗æt. Giß╗» nhß╗ïp ─æß╗üu...' },
++            { time: 120, text: 'Cß║úm nhß║¡n nhß╗ïp tim chß║¡m lß║íi...' },
++            { time: 180, text: 'Hß╗ç thß║ºn kinh ─æang ─æ╞░ß╗úc reset...' },
++            { time: 210, text: 'Ho├án th├ánh! Bß║ín ─æ├ú thß║¡t b├¼nh t─⌐nh rß╗ôi ─æß║Ñy.' },
++        ]
++    },
++    'quick-reset': {
++        steps: [
++            { time: 0, text: 'Reset nhanh! H├¡t thß║¡t s├óu...' },
++            { time: 10, text: 'Thß╗ƒ ra mß║ính... bu├┤ng bß╗Å mß╗ìi c─âng thß║│ng!' },
++            { time: 20, text: 'H├¡t v├áo... nß║íp n─âng l╞░ß╗úng mß╗¢i...' },
++            { time: 30, text: 'Thß╗ƒ ra... xß║ú hß║┐t sß╗▒ mß╗çt mß╗Åi...' },
++            { time: 60, text: 'Lß║»c vai, xoay cß╗ò nhß║╣ nh├áng...' },
++            { time: 90, text: 'H├¡t s├óu th├¬m 3 h╞íi nß╗»a...' },
++            { time: 120, text: 'Bß║ín ─æ├ú sß║╡n s├áng chiß║┐n ─æß║Ñu tiß║┐p! ≡ƒÆ¬' },
++            { time: 150, text: 'Reset ho├án tß║Ñt! Tiß║┐p tß╗Ñc n├áo!' },
++        ]
++    },
++    'post-workout': {
++        steps: [
++            { time: 0, text: 'Tuyß╗çt vß╗¥i! Buß╗òi tß║¡p ─æ├ú kß║┐t th├║c...' },
++            { time: 15, text: 'H├¡t thß╗ƒ nhß║╣ nh├áng... hß║í nhß╗ïp tim xuß╗æng...' },
++            { time: 30, text: 'Cß║úm ╞ín c╞í thß╗â ─æ├ú nß╗ù lß╗▒c h├┤m nay...' },
++            { time: 60, text: 'Thß║ú lß╗Ång tß╗½ng nh├│m c╞í vß╗½a tß║¡p...' },
++            { time: 120, text: 'Cß║úm nhß║¡n m├íu l╞░u th├┤ng ─æß║┐n c├íc c╞í...' },
++            { time: 180, text: 'C╞í thß╗â ─æang phß╗Ñc hß╗ôi v├á mß║ính mß║╜ h╞ín...' },
++            { time: 240, text: 'Mß╗ùi buß╗òi tß║¡p ─æß╗üu ─æ╞░a bß║ín gß║ºn h╞ín mß╗Ñc ti├¬u...' },
++            { time: 300, text: 'H├¡t thß╗ƒ s├óu... th╞░ gi├ún ho├án to├án...' },
++            { time: 360, text: 'Bß║ín xß╗⌐ng ─æ├íng ─æ╞░ß╗úc nghß╗ë ng╞íi. Tß╗æt lß║»m!' },
++        ]
++    },
++    'body-scan': {
++        steps: [
++            { time: 0, text: 'Nß║▒m thoß║úi m├íi, nhß║»m mß║»t lß║íi...' },
++            { time: 20, text: 'Ch├║ ├╜ ─æß║┐n ng├│n ch├ón... cß║úm nhß║¡n ch├║ng...' },
++            { time: 45, text: 'Di chuyß╗ân sß╗▒ ch├║ ├╜ l├¬n b├án ch├ón... mß║»t c├í...' },
++            { time: 75, text: 'Cß║úm nhß║¡n bß║»p ch├ón... ─æß║ºu gß╗æi...' },
++            { time: 110, text: '─É├╣i... h├┤ng... bß╗Ñng d╞░ß╗¢i...' },
++            { time: 150, text: 'Bß╗Ñng... ngß╗▒c... n╞íi tr├íi tim ─æang ─æß║¡p...' },
++            { time: 200, text: 'Vai... c├ính tay... b├án tay...' },
++            { time: 250, text: 'Cß╗ò... khu├┤n mß║╖t... ─æß╗ënh ─æß║ºu...' },
++            { time: 300, text: 'Cß║úm nhß║¡n to├án bß╗Ö c╞í thß╗â nh╞░ mß╗Öt khß╗æi thß╗æng nhß║Ñt...' },
++            { time: 380, text: 'Bß║ín kß║┐t nß╗æi s├óu vß╗¢i ch├¡nh m├¼nh...' },
++            { time: 420, text: 'Tß╗½ tß╗½ trß╗ƒ lß║íi... cß╗¡ ─æß╗Öng nhß║╣ c├íc ng├│n tay...' },
++        ]
++    },
++    'nature': {
++        steps: [
++            { time: 0, text: 'Nhß║»m mß║»t... h├¡t thß╗ƒ s├óu...' },
++            { time: 20, text: 'T╞░ß╗ƒng t╞░ß╗úng bß║ín ─æang ß╗ƒ mß╗Öt khu rß╗½ng xanh m├ít...' },
++            { time: 45, text: 'Nghe tiß║┐ng chim h├│t... gi├│ thß╗òi qua l├í c├óy...' },
++            { time: 75, text: '├ünh nß║»ng chiß║┐u qua t├ín l├í, ß║Ñm ├íp tr├¬n da...' },
++            { time: 120, text: 'Cß║úm nhß║¡n m├╣i ─æß║Ñt, m├╣i cß╗Å t╞░╞íi...' },
++            { time: 180, text: 'Mß╗Öt con suß╗æi nhß╗Å chß║úy gß║ºn b├¬n...' },
++            { time: 240, text: 'Tiß║┐ng n╞░ß╗¢c chß║úy r├│c r├ích thß║¡t dß╗à chß╗ïu...' },
++            { time: 300, text: 'Bß║ín l├á mß╗Öt phß║ºn cß╗ºa thi├¬n nhi├¬n...' },
++            { time: 360, text: 'B├¼nh y├¬n... t─⌐nh lß║╖ng... h├ái h├▓a...' },
++            { time: 420, text: 'Mang theo cß║úm gi├íc n├áy khi trß╗ƒ vß╗ü...' },
++        ]
++    },
++    'gratitude': {
++        steps: [
++            { time: 0, text: 'H├úy nhß║»m mß║»t v├á mß╗ëm c╞░ß╗¥i...' },
++            { time: 15, text: 'Ngh─⌐ vß╗ü 3 ─æiß╗üu bß║ín biß║┐t ╞ín h├┤m nay...' },
++            { time: 45, text: '─Éiß╗üu thß╗⌐ nhß║Ñt... cß║úm nhß║¡n l├▓ng biß║┐t ╞ín...' },
++            { time: 90, text: '─Éiß╗üu thß╗⌐ hai... ─æß╗â sß╗▒ biß║┐t ╞ín lan tß╗Åa...' },
++            { time: 135, text: '─Éiß╗üu thß╗⌐ ba... mß╗ëm c╞░ß╗¥i vß╗¢i n├│...' },
++            { time: 180, text: 'Cß║úm ╞ín c╞í thß╗â khß╗Åe mß║ính cß╗ºa bß║ín...' },
++            { time: 240, text: 'Cß║úm ╞ín nhß╗»ng ng╞░ß╗¥i y├¬u th╞░╞íng bß║ín...' },
++            { time: 300, text: 'Cß║úm ╞ín ch├¡nh bß║ín v├¼ ─æ├ú cß╗æ gß║»ng mß╗ùi ng├áy...' },
++            { time: 360, text: 'L├▓ng biß║┐t ╞ín sß║╜ ─æß╗òi mß╗¢i cuß╗Öc sß╗æng bß║ín...' },
++            { time: 420, text: 'Tß╗½ tß╗½ mß╗ƒ mß║»t, mang theo niß╗üm vui n├áy...' },
++        ]
++    },
++    'energy': {
++        steps: [
++            { time: 0, text: 'Ngß╗ôi thß║│ng l╞░ng, mß║»t nhß║»m nhß║╣...' },
++            { time: 10, text: 'H├¡t mß║ính qua m┼⌐i... n─âng l╞░ß╗úng ─æang chß║úy v├áo...' },
++            { time: 20, text: 'Thß╗ƒ ra mß║ính qua miß╗çng... ─æß║⌐y hß║┐t sß╗▒ mß╗çt mß╗Åi!' },
++            { time: 30, text: 'Lß║╖p lß║íi: H├¡t v├áo mß║ính... 1... 2... 3!' },
++            { time: 40, text: 'Thß╗ƒ ra mß║ính! Cß║úm nhß║¡n n─âng l╞░ß╗úng b├╣ng nß╗ò!' },
++            { time: 60, text: 'Siß║┐t nhß║╣ nß║»m tay... rß╗ôi thß║ú ra...' },
++            { time: 90, text: 'N─âng l╞░ß╗úng ─æang lan tß╗Åa khß║»p c╞í thß╗â...' },
++            { time: 120, text: 'Bß║ín mß║ính mß║╜! Bß║ín ─æß║ºy n─âng l╞░ß╗úng!' },
++            { time: 150, text: 'Mß╗ƒ mß║»t! Bß║»t ─æß║ºu chinh phß╗Ñc th├┤i! ≡ƒöÑ' },
++        ]
++    }
++};
++
+ const SESSIONS = [
+-    { id: 'focus', label: 'Tß║¡p trung', icon: Brain, color: '#0A84FF', dimColor: 'rgba(10,132,255,0.15)', duration: 300, desc: 'T─⌐nh t├óm, tß║¡p trung v├áo h╞íi thß╗ƒ' },
+-    { id: 'relax', label: 'Th╞░ gi├ún', icon: Leaf, color: '#30D158', dimColor: 'rgba(48,209,88,0.15)', duration: 600, desc: 'Giß║úi tß╗Åa c─âng thß║│ng sau buß╗òi tß║¡p' },
+-    { id: 'sleep', label: 'Ngß╗º ngon', icon: Waves, color: '#BF5AF2', dimColor: 'rgba(191,90,242,0.15)', duration: 900, desc: 'Chuß║⌐n bß╗ï c╞í thß╗â cho giß║Ñc ngß╗º s├óu' },
+-    { id: 'breathe', label: 'Box Breathing', icon: Wind, color: '#64D2FF', dimColor: 'rgba(100,210,255,0.15)', duration: 240, desc: '4-4-4-4 h├¡t-giß╗»-thß╗ƒ-giß╗»' },
+-    { id: 'calm', label: 'B├¼nh y├¬n', icon: Heart, color: '#FF375F', dimColor: 'rgba(255,55,95,0.15)', duration: 420, desc: 'Thiß╗ün y├¬u th╞░╞íng & l├▓ng biß║┐t ╞ín' },
++    { id: 'morning', label: 'Buß╗òi S├íng Tß╗ënh Thß╗⌐c', icon: SunHorizon, color: '#F59E0B', dimColor: 'rgba(245,158,11,0.15)', duration: 300, desc: 'Khß╗ƒi ─æß║ºu ng├áy mß╗¢i ─æß║ºy n─âng l╞░ß╗úng', category: 'mindfulness', benefit: 'T─âng sß╗▒ tß╗ënh t├ío & tß║¡p trung' },
++    { id: 'focus', label: 'Tß║¡p Trung S├óu', icon: Brain, color: '#0A84FF', dimColor: 'rgba(10,132,255,0.15)', duration: 300, desc: 'T─⌐nh t├óm, tß║¡p trung v├áo h╞íi thß╗ƒ', category: 'focus', benefit: 'Cß║úi thiß╗çn khß║ú n─âng tß║¡p trung 40%' },
++    { id: 'relax', label: 'Th╞░ Gi├ún S├óu', icon: Leaf, color: '#30D158', dimColor: 'rgba(48,209,88,0.15)', duration: 600, desc: 'Giß║úi tß╗Åa c─âng thß║│ng sau buß╗òi tß║¡p', category: 'mindfulness', benefit: 'Giß║úm cortisol, phß╗Ñc hß╗ôi nhanh h╞ín' },
++    { id: 'sleep', label: 'Ngß╗º Ngon', icon: Moon, color: '#BF5AF2', dimColor: 'rgba(191,90,242,0.15)', duration: 900, desc: 'Chuß║⌐n bß╗ï c╞í thß╗â cho giß║Ñc ngß╗º s├óu', category: 'sleep', benefit: 'Cß║úi thiß╗çn chß║Ñt l╞░ß╗úng giß║Ñc ngß╗º' },
++    { id: 'breathe', label: 'Box Breathing', icon: Wind, color: '#64D2FF', dimColor: 'rgba(100,210,255,0.15)', duration: 240, desc: '4-4-4-4 h├¡t-giß╗»-thß╗ƒ-giß╗»', category: 'breathing', benefit: 'Kß╗╣ thuß║¡t qu├ón ─æß╗Öi SEAL, giß║úm stress cß║Ñp tß╗æc' },
++    { id: 'calm', label: 'Y├¬u Th╞░╞íng & Biß║┐t ╞án', icon: Heart, color: '#FF375F', dimColor: 'rgba(255,55,95,0.15)', duration: 420, desc: 'Thiß╗ün y├¬u th╞░╞íng & l├▓ng biß║┐t ╞ín', category: 'mindfulness', benefit: 'T─âng cß║úm x├║c t├¡ch cß╗▒c, giß║úm lo ├óu' },
++    { id: 'quick-reset', label: 'Reset Nhanh 3 Ph├║t', icon: Fire, color: '#FF9F0A', dimColor: 'rgba(255,159,10,0.15)', duration: 180, desc: '3 ph├║t reset n─âng l╞░ß╗úng giß╗»a ng├áy', category: 'focus', benefit: 'Nß║íp lß║íi n─âng l╞░ß╗úng tß╗⌐c th├¼' },
++    { id: 'post-workout', label: 'Hß╗ôi Phß╗Ñc Sau Tß║¡p', icon: Sparkle, color: '#EF4444', dimColor: 'rgba(239,68,68,0.15)', duration: 420, desc: 'Cool-down t├óm tr├¡ sau buß╗òi gym', category: 'recovery', benefit: 'Tß╗æi ╞░u phß╗Ñc hß╗ôi c╞í bß║»p' },
++    { id: 'body-scan', label: 'Body Scan', icon: Waves, color: '#06B6D4', dimColor: 'rgba(6,182,212,0.15)', duration: 480, desc: 'Qu├⌐t to├án th├ón, nhß║¡n biß║┐t c╞í thß╗â', category: 'mindfulness', benefit: 'N├óng cao nhß║¡n thß╗⌐c c╞í thß╗â' },
++    { id: 'nature', label: 'Thi├¬n Nhi├¬n Y├¬n B├¼nh', icon: Tree, color: '#22C55E', dimColor: 'rgba(34,197,94,0.15)', duration: 480, desc: 'H├¼nh dung rß╗½ng xanh, suß╗æi chß║úy', category: 'visualization', benefit: 'Giß║úm huyß║┐t ├íp, th╞░ gi├ún s├óu' },
++    { id: 'gratitude', label: 'Thiß╗ün Biß║┐t ╞án', icon: Heart, color: '#EC4899', dimColor: 'rgba(236,72,153,0.15)', duration: 480, desc: 'Nu├┤i d╞░ß╗íng l├▓ng biß║┐t ╞ín mß╗ùi ng├áy', category: 'mindfulness', benefit: 'Cß║úi thiß╗çn t├óm trß║íng & giß║Ñc ngß╗º' },
++    { id: 'energy', label: 'Nß║íp N─âng L╞░ß╗úng', icon: Fire, color: '#F97316', dimColor: 'rgba(249,115,22,0.15)', duration: 180, desc: 'K├¡ch hoß║ít n─âng l╞░ß╗úng tr╞░ß╗¢c tß║¡p', category: 'focus', benefit: 'T─âng hiß╗çu suß║Ñt tß║¡p luyß╗çn 25%' },
++];
++
++const CATEGORIES = [
++    { id: 'all', label: 'Tß║Ñt cß║ú', icon: <Sparkle size={14} weight="duotone" /> },
++    { id: 'mindfulness', label: 'T─⌐nh T├óm', icon: <Leaf size={14} weight="duotone" /> },
++    { id: 'breathing', label: 'H╞íi Thß╗ƒ', icon: <Wind size={14} weight="duotone" /> },
++    { id: 'focus', label: 'Tß║¡p Trung', icon: <Brain size={14} weight="duotone" /> },
++    { id: 'sleep', label: 'Giß║Ñc Ngß╗º', icon: <Moon size={14} weight="duotone" /> },
++    { id: 'recovery', label: 'Phß╗Ñc Hß╗ôi', icon: <Heart size={14} weight="duotone" /> },
++    { id: 'visualization', label: 'H├¼nh Dung', icon: <Mountains size={14} weight="duotone" /> },
++];
++
++/* ΓöÇΓöÇ Ambient sounds ΓöÇΓöÇ */
++const ASHISH_URL = 'https://raw.githubusercontent.com/ashishlotake/Focusly/main/public/sounds';
++const MOODIST_URL = 'https://raw.githubusercontent.com/remvze/moodist/main/public/sounds';
++
++const SOUND_FILES: Record<string, string> = {
++    rain: `${ASHISH_URL}/rain.mp3`,
++    ocean: `${ASHISH_URL}/ocean.mp3`,
++    forest: '/sounds/forest.mp3',
++    fire: `${ASHISH_URL}/fire.mp3`,
++    wind: `${ASHISH_URL}/wind.mp3`,
++    bowl: '/sounds/singing-bowl.mp3',
++    temple: '/sounds/temple.mp3',
++    church: '/sounds/church.mp3',
++    birds: `${ASHISH_URL}/bird.mp3`,
++    crickets: '/sounds/crickets.mp3',
++    river: `${ASHISH_URL}/river.mp3`,
++    waterfall: '/sounds/waterfall.mp3',
++    thunder: `${ASHISH_URL}/thunder.mp3`,
++    chimes: `${MOODIST_URL}/things/wind-chimes.mp3`,
++    night: `${ASHISH_URL}/night.mp3`,
++    droplets: '/sounds/droplets.mp3',
++    coffee: `${ASHISH_URL}/coffee-shop.mp3`,
++    train: `${ASHISH_URL}/train.mp3`,
++    white: `${MOODIST_URL}/noise/white-noise.wav`,
++    pink: `${MOODIST_URL}/noise/pink-noise.wav`,
++    brown: `${MOODIST_URL}/noise/brown-noise.wav`,
++    alpha: `${MOODIST_URL}/binaural/binaural-alpha.wav`,
++    beta: `${MOODIST_URL}/binaural/binaural-beta.wav`,
++    delta: `${MOODIST_URL}/binaural/binaural-delta.wav`,
++    gamma: `${MOODIST_URL}/binaural/binaural-gamma.wav`,
++    theta: `${MOODIST_URL}/binaural/binaural-theta.wav`,
++    mm_om: '/sounds/meditative-mind/om-chanting.mp3',
++    mm_432deep: '/sounds/meditative-mind/432hz-deep-healing.mp3',
++    mm_432spark: '/sounds/meditative-mind/432hz-spark.mp3',
++    mm_ancient: '/sounds/meditative-mind/ancient-healing.mp3',
++    mm_oasis: '/sounds/meditative-mind/cosmic-oasis.mp3',
++    mm_alphaheal: '/sounds/meditative-mind/alpha-waves-heal.mp3',
++    mm_angelic: '/sounds/meditative-mind/angelic-healing.mp3',
++    mm_detox: '/sounds/meditative-mind/detox-cleanse.mp3',
++    mm_nammyoho: '/sounds/meditative-mind/nam-myoho.mp3',
++    mm_tibetan: '/sounds/meditative-mind/tibetan-healing.mp3',
++    mm_chakra: '/sounds/meditative-mind/chakra-healing.mp3',
++    mm_shores: '/sounds/meditative-mind/cosmic-shores.mp3',
++};
++
++const SOUND_GROUPS = [
++    {
++        label: '≡ƒºÿ Meditative Mind (Local)', sounds: [
++            { id: 'mm_om', emoji: '≡ƒòë∩╕Å', name: 'OM Chanting 1 Hour' },
++            { id: 'mm_432deep', emoji: 'Γ£¿', name: '432Hz Deep Healing' },
++            { id: 'mm_angelic', emoji: '≡ƒæ╝', name: 'Angelic Deep Relax' },
++            { id: 'mm_tibetan', emoji: '≡ƒ¬ÿ', name: 'Tibetan Hang Drum' },
++            { id: 'mm_chakra', emoji: '≡ƒîê', name: 'Full Chakra Healing' },
++            { id: 'mm_ancient', emoji: 'ΓÅ│', name: 'Ancient Miracles' },
++            { id: 'mm_nammyoho', emoji: '≡ƒîº∩╕Å', name: 'Nam Myoho (Cosmic Rain)' },
++            { id: 'mm_oasis', emoji: '≡ƒîî', name: 'Cosmic Oasis' },
++            { id: 'mm_shores', emoji: '≡ƒîá', name: 'Cosmic Shores' },
++            { id: 'mm_alphaheal', emoji: '≡ƒºá', name: 'Alpha Waves Heal' },
++            { id: 'mm_432spark', emoji: 'ΓÜí', name: '432Hz Spark' },
++            { id: 'mm_detox', emoji: '≡ƒî┐', name: 'Detox Cleanse' },
++        ]
++    },
++    {
++        label: '≡ƒÄº S├│ng N├úo', sounds: [
++            { id: 'alpha', emoji: '≡ƒ¬╖', name: 'Alpha (Th╞░ Gi├ún)' },
++            { id: 'beta', emoji: 'ΓÜí', name: 'Beta (Tß║¡p Trung)' },
++            { id: 'theta', emoji: '≡ƒîè', name: 'Theta (Thiß╗ün S├óu)' },
++            { id: 'delta', emoji: '≡ƒ¢î', name: 'Delta (Ngß╗º Mi├¬n)' },
++            { id: 'gamma', emoji: '≡ƒæü∩╕Å', name: 'Gamma (Nhß║¡n Thß╗⌐c)' },
++        ]
++    },
++    {
++        label: '≡ƒî½∩╕Å ß╗Æn Trß║»ng', sounds: [
++            { id: 'white', emoji: '≡ƒô╗', name: 'White Noise' },
++            { id: 'pink', emoji: '≡ƒî╕', name: 'Pink Noise' },
++            { id: 'brown', emoji: '≡ƒƒñ', name: 'Brown Noise' },
++        ]
++    },
++    {
++        label: '≡ƒÅ» Zen / Ch├╣a', sounds: [
++            { id: 'chimes', emoji: '≡ƒÄÉ', name: 'Chu├┤ng Gi├│ Thiß╗ün' },
++            { id: 'bowl', emoji: '≡ƒöö', name: 'Chu├┤ng B├ít' },
++            { id: 'temple', emoji: '≡ƒÅ»', name: 'Ch├╣a' },
++            { id: 'church', emoji: 'Γ¢¬', name: 'Nh├á Thß╗¥' },
++        ]
++    },
++    {
++        label: '≡ƒÆº N╞░ß╗¢c', sounds: [
++            { id: 'rain', emoji: '≡ƒîº∩╕Å', name: 'M╞░a' },
++            { id: 'thunder', emoji: 'Γ¢ê∩╕Å', name: 'Sß║Ñm' },
++            { id: 'ocean', emoji: '≡ƒîè', name: 'Biß╗ân' },
++            { id: 'river', emoji: '≡ƒÅ₧∩╕Å', name: 'Suß╗æi' },
++            { id: 'waterfall', emoji: '≡ƒÆº', name: 'Th├íc' },
++            { id: 'droplets', emoji: '≡ƒÆª', name: 'Giß╗ìt N╞░ß╗¢c' },
++        ]
++    },
++    {
++        label: '≡ƒî┐ Thi├¬n Nhi├¬n', sounds: [
++            { id: 'forest', emoji: '≡ƒî▓', name: 'Rß╗½ng' },
++            { id: 'fire', emoji: '≡ƒöÑ', name: 'Lß╗¡a' },
++            { id: 'wind', emoji: '≡ƒÆ¿', name: 'Gi├│' },
++        ]
++    },
++    {
++        label: '≡ƒÉª Sinh Vß║¡t', sounds: [
++            { id: 'birds', emoji: '≡ƒÉª', name: 'Chim' },
++            { id: 'crickets', emoji: '≡ƒªù', name: 'Dß║┐' },
++            { id: 'night', emoji: '≡ƒîÖ', name: '─É├¬m' },
++        ]
++    },
++    {
++        label: '≡ƒÅÖ∩╕Å ─Éß╗¥i Sß╗æng', sounds: [
++            { id: 'coffee', emoji: 'Γÿò', name: 'C├á Ph├¬' },
++            { id: 'train', emoji: '≡ƒÜé', name: 'T├áu Hß╗Åa' },
++        ]
++    },
+ ];
+ 
+ const STORAGE_KEY = 'ht-meditation-log';
+@@ -31,13 +334,69 @@ export default function MeditationPage() {
+     const [isPlaying, setIsPlaying] = useState(false);
+     const [totalDuration, setTotalDuration] = useState(0);
+     const [customMinutes, setCustomMinutes] = useState('');
++    const [selectedCategory, setSelectedCategory] = useState('all');
++    const [guidedText, setGuidedText] = useState('');
++
+     const intervalRef = useRef<number | null>(null);
+ 
++    // Multi-sound system
++    const [activeSounds, setActiveSounds] = useState<Record<string, { audio: HTMLAudioElement; volume: number }>>({});
++
++
++
++
++    const stopAllSounds = () => {
++        Object.values(activeSounds).forEach(s => { s.audio.pause(); s.audio.currentTime = 0; });
++        setActiveSounds({});
++    };
++
++    // Pause/resume all sounds with timer
++    useEffect(() => {
++        Object.values(activeSounds).forEach(s => {
++            if (isPlaying) s.audio.play().catch(() => { });
++            else s.audio.pause();
++        });
++    }, [isPlaying]);
++
++    // Stop sounds when session ends
++    useEffect(() => {
++        if (timeLeft === 0 && !isPlaying && activeSession) {
++            // Don't stop sounds, user might want to keep listening
++        }
++    }, [timeLeft, isPlaying]);
++
++    // Cleanup on unmount
++    useEffect(() => {
++        return () => { Object.values(activeSounds).forEach(s => { s.audio.pause(); }); };
++    }, []);
++
++    const activeCount = Object.keys(activeSounds).length;
++
+     // Total meditation minutes
+     const log = getMeditationLog();
+     const totalMinutes = log.reduce((s, l) => s + l.minutes, 0);
+     const todayMinutes = log.filter(l => l.date.startsWith(new Date().toISOString().split('T')[0]))
+         .reduce((s, l) => s + l.minutes, 0);
++    const totalSessions = log.length;
++
++    // Streak calculation
++    const getStreak = () => {
++        const dates = [...new Set(log.map(l => l.date.split('T')[0]))].sort().reverse();
++        if (dates.length === 0) return 0;
++        let streak = 0;
++        const today = new Date().toISOString().split('T')[0];
++        const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
++        if (dates[0] !== today && dates[0] !== yesterday) return 0;
++        let checkDate = dates[0] === today ? new Date() : new Date(Date.now() - 86400000);
++        for (const d of dates) {
++            if (d === checkDate.toISOString().split('T')[0]) {
++                streak++;
++                checkDate = new Date(checkDate.getTime() - 86400000);
++            } else break;
++        }
++        return streak;
++    };
++    const streak = getStreak();
+ 
+     const startSession = (session: typeof SESSIONS[0], customDuration?: number) => {
+         const dur = customDuration || session.duration;
+@@ -45,8 +404,23 @@ export default function MeditationPage() {
+         setTimeLeft(dur);
+         setTotalDuration(dur);
+         setIsPlaying(true);
++        setGuidedText('');
++        // Start playing any pre-selected sounds
++        Object.values(activeSounds).forEach(s => s.audio.play().catch(() => { }));
++        // Scroll to top so user sees the timer immediately
++        window.scrollTo({ top: 0, behavior: 'smooth' });
+     };
+ 
++    // Guided text updater
++    useEffect(() => {
++        if (!isPlaying || !activeSession) return;
++        const elapsed = totalDuration - timeLeft;
++        const script = GUIDED_SCRIPTS[activeSession.id];
++        if (!script) return;
++        const currentStep = [...script.steps].reverse().find(s => elapsed >= s.time);
++        if (currentStep) setGuidedText(currentStep.text);
++    }, [timeLeft, isPlaying, activeSession, totalDuration]);
++
+     useEffect(() => {
+         if (isPlaying && timeLeft > 0) {
+             intervalRef.current = window.setInterval(() => {
+@@ -56,19 +430,19 @@ export default function MeditationPage() {
+             setIsPlaying(false);
+             const minutes = Math.round(totalDuration / 60);
+             addMeditationLog(minutes, activeSession.id);
+-            toast.success(`≡ƒºÿ Ho├án th├ánh ${minutes} ph├║t thiß╗ün!`);
++            toast.success(`≡ƒºÿ Ho├án th├ánh ${minutes} ph├║t thiß╗ün ${activeSession.label}!`);
+         }
+         return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+     }, [isPlaying, timeLeft]);
+ 
+     const togglePause = () => setIsPlaying(!isPlaying);
+-    const resetTimer = () => { setIsPlaying(false); setTimeLeft(totalDuration); };
+-    const exitSession = () => { setIsPlaying(false); setActiveSession(null); setTimeLeft(0); };
++    const resetTimer = () => { setIsPlaying(false); setTimeLeft(totalDuration); setGuidedText(''); };
++    const exitSession = () => { setIsPlaying(false); stopAllSounds(); setActiveSession(null); setTimeLeft(0); setGuidedText(''); };
+ 
+     const formatTime = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
+     const progress = totalDuration > 0 ? (totalDuration - timeLeft) / totalDuration : 0;
+ 
+-    const ringSize = 220;
++    const ringSize = 300;
+     const strokeW = 8;
+     const radius = (ringSize - strokeW) / 2;
+     const circumference = 2 * Math.PI * radius;
+@@ -78,7 +452,7 @@ export default function MeditationPage() {
+     const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.06 } } };
+ 
+     // Breathing animation for box breathing
+-    const [breathPhase, setBreathPhase] = useState(0); // 0-3: h├¡t, giß╗», thß╗ƒ, giß╗»
++    const [breathPhase, setBreathPhase] = useState(0);
+     useEffect(() => {
+         if (!isPlaying || activeSession?.id !== 'breathe') return;
+         const id = setInterval(() => setBreathPhase(p => (p + 1) % 4), 4000);
+@@ -86,71 +460,371 @@ export default function MeditationPage() {
+     }, [isPlaying, activeSession]);
+     const breathLabels = ['H├¡t v├áo...', 'Giß╗»...', 'Thß╗ƒ ra...', 'Giß╗»...'];
+ 
+-    return (
+-        <div className="h-full overflow-y-auto pb-28 no-scrollbar" style={{ background: 'var(--bg-app)' }}>
+-            <motion.div variants={stagger} initial="hidden" animate="show" className="px-5 pt-6 space-y-5">
+-
+-                <motion.div variants={fadeUp}>
+-                    <h1 className="text-2xl font-bold">Thiß╗ün ─æß╗ïnh</h1>
+-                    <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>Th╞░ gi├ún tinh thß║ºn, phß╗Ñc hß╗ôi c╞í thß╗â</p>
+-                </motion.div>
+-
+-                {/* Stats */}
+-                <motion.div variants={fadeUp} className="grid grid-cols-2 gap-3">
+-                    <div className="rounded-2xl p-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+-                        <Clock size={16} className="text-[#BF5AF2] mb-2" />
+-                        <p className="text-xl font-bold">{todayMinutes}</p>
+-                        <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>Ph├║t h├┤m nay</p>
+-                    </div>
+-                    <div className="rounded-2xl p-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+-                        <Brain size={16} className="text-[#0A84FF] mb-2" />
+-                        <p className="text-xl font-bold">{totalMinutes}</p>
+-                        <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>Tß╗òng ph├║t thiß╗ün</p>
++    const filteredSessions = SESSIONS.filter(s => selectedCategory === 'all' || s.category === selectedCategory);
++
++    // Split sounds into two distinct categories
++    const MUSIC_SOUNDS = SOUND_GROUPS[0].sounds; // Meditative Mind (Local)
++    const AMBIENT_SOUNDS = SOUND_GROUPS.slice(1).flatMap(g => g.sounds); // Everything else
++    const ALL_SOUNDS = [...MUSIC_SOUNDS, ...AMBIENT_SOUNDS];
++
++    const findSoundInfo = (id: string) => ALL_SOUNDS.find(s => s.id === id) || null;
++
++    // Helper to check if an active sound is from a specific group
++    const hasActiveMusic = () => MUSIC_SOUNDS.some(s => !!activeSounds[s.id]);
++    const hasActiveAmbient = () => AMBIENT_SOUNDS.some(s => !!activeSounds[s.id]);
++
++    const toggleSoundFixed = (id: string) => {
++        const next = { ...activeSounds };
++        const isMusic = MUSIC_SOUNDS.some(s => s.id === id);
++
++        // Nß║┐u ├óm thanh ─æang ph├ít, tß║»t n├│ ─æi
++        if (next[id]) {
++            next[id].audio.pause();
++            next[id].audio.currentTime = 0;
++            delete next[id];
++            setActiveSounds(next);
++            return;
++        }
++
++        if (isMusic) {
++            // Bß║¡t Nhß║íc: Tß║»t Mß╗îI C├üC ├óm thanh kh├íc (cß║ú nhß║íc c┼⌐ lß║½n nß╗ün)
++            Object.keys(next).forEach(k => {
++                next[k].audio.pause();
++                next[k].audio.currentTime = 0;
++                delete next[k];
++            });
++        } else {
++            // Bß║¡t ├ém Nß╗ün: Tß║«T hß║┐t Nhß║íc (nß║┐u c├│)
++            MUSIC_SOUNDS.forEach(s => {
++                if (next[s.id]) {
++                    next[s.id].audio.pause();
++                    next[s.id].audio.currentTime = 0;
++                    delete next[s.id];
++                }
++            });
++
++            // Kiß╗âm tra giß╗¢i hß║ín mix 3 ├óm thanh nß╗ün
++            const activeAmbientCount = Object.keys(next).filter(k => AMBIENT_SOUNDS.some(as => as.id === k)).length;
++            if (activeAmbientCount >= 3) {
++                toast('Chß╗ë n├¬n mix tß╗æi ─æa 3 loß║íi ├óm thanh nß╗ün!', {
++                    icon: 'ΓÜá∩╕Å',
++                    style: {
++                        borderRadius: '16px',
++                        background: 'var(--bg-elevated)',
++                        color: 'var(--text-primary)',
++                        border: '1px solid var(--border-color)'
++                    }
++                });
++                return; // Hß╗ºy, kh├┤ng cho bß║¡t th├¬m
++            }
++        }
++
++        // Bß║¡t ├óm thanh mß╗¢i
++        const audio = new Audio(SOUND_FILES[id]);
++        audio.loop = true;
++
++        // Chß╗ë ph├ít nhß║íc nß║┐u ─æang ß╗ƒ trang ngo├ái (!activeSession) HOß║╢C ─æang bß║Ñm n├║t Play
++        if (!activeSession || isPlaying) {
++            audio.play().catch(() => { });
++        }
++
++        audio.volume = 0.5; // Default volume 50%
++        next[id] = { audio, volume: 0.5 };
++        setActiveSounds(next);
++    };
++
++    const handleVolumeChange = (id: string, newVolume: number) => {
++        setActiveSounds(prev => {
++            if (!prev[id]) return prev;
++            const next = { ...prev };
++            next[id].audio.volume = newVolume;
++            next[id].volume = newVolume;
++            return next;
++        });
++    };
++
++    /* ΓöÇΓöÇ Inline Sound Buttons (mutually exclusive boxes) ΓöÇΓöÇ */
++    const renderSoundButtons = () => (
++        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
++
++            {/* Box 1: Music (Meditative Mind) */}
++            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', background: 'var(--bg-card)', padding: '16px 0', borderRadius: '20px', border: '1px solid var(--border-color)' }}>
++                <div style={{ display: 'flex', alignItems: 'center', justifyItems: 'center', gap: '8px', width: '100%', justifyContent: 'center', padding: '0 16px' }}>
++                    <p className="text-sm font-semibold" style={{ color: 'var(--text-muted)', margin: 0 }}>≡ƒÄ╡ Nhß║íc (Meditative Mind)</p>
++                    {hasActiveMusic() && (
++                        <button onClick={() => {
++                            const next = { ...activeSounds };
++                            MUSIC_SOUNDS.forEach(s => {
++                                if (next[s.id]) {
++                                    next[s.id].audio.pause();
++                                    delete next[s.id];
++                                }
++                            });
++                            setActiveSounds(next);
++                        }}
++                            style={{
++                                fontSize: '12px', fontWeight: 600, padding: '4px 12px', borderRadius: '8px',
++                                background: 'rgba(255,55,95,0.1)', color: '#FF375F', border: 'none', cursor: 'pointer',
++                                flex: 'none', width: 'auto',
++                            }}>Tß║»t nhß║íc</button>
++                    )}
++                </div>
++                <div className="w-full pb-2 mt-2" style={{
++                    display: 'grid',
++                    gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
++                    gap: '12px',
++                    paddingLeft: '16px',
++                    paddingRight: '16px',
++                    justifyContent: 'center'
++                }}>
++                    {MUSIC_SOUNDS.map(s => {
++                        const isActive = !!activeSounds[s.id];
++                        return (
++                            <button key={s.id} onClick={() => toggleSoundFixed(s.id)}
++                                style={{
++                                    display: 'inline-flex',
++                                    alignItems: 'center',
++                                    gap: '8px',
++                                    padding: '10px 16px',
++                                    borderRadius: '14px',
++                                    fontSize: '13px',
++                                    fontWeight: 500,
++                                    whiteSpace: 'nowrap' as const,
++                                    cursor: 'pointer',
++                                    transition: 'all 0.15s ease',
++                                    width: '100%',
++                                    justifyContent: 'flex-start',
++                                    background: isActive ? 'rgba(48,209,88,0.15)' : 'var(--bg-elevated, var(--bg-card))',
++                                    color: isActive ? '#30D158' : 'var(--text-secondary)',
++                                    border: `1px solid ${isActive ? 'rgba(48,209,88,0.4)' : 'var(--border-color)'}`,
++                                    boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
++                                }}>
++                                <span className="text-[18px]">{s.emoji}</span> <span className="truncate">{s.name}</span>
++                            </button>
++                        );
++                    })}
++                </div>
++            </div>
++
++            {/* Box 2: Ambient Sounds */}
++            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', background: 'var(--bg-card)', padding: '16px 0', borderRadius: '20px', border: '1px solid var(--border-color)' }}>
++                <div style={{ display: 'flex', alignItems: 'center', justifyItems: 'center', gap: '8px', width: '100%', justifyContent: 'center', padding: '0 16px' }}>
++                    <p className="text-sm font-semibold" style={{ color: 'var(--text-muted)', margin: 0 }}>≡ƒìâ ├ém thanh nß╗ün (Thi├¬n nhi├¬n / ß╗Æn Trß║»ng)</p>
++                    {hasActiveAmbient() && (
++                        <button onClick={() => {
++                            const next = { ...activeSounds };
++                            AMBIENT_SOUNDS.forEach(s => {
++                                if (next[s.id]) {
++                                    next[s.id].audio.pause();
++                                    delete next[s.id];
++                                }
++                            });
++                            setActiveSounds(next);
++                        }}
++                            style={{
++                                fontSize: '12px', fontWeight: 600, padding: '4px 12px', borderRadius: '8px',
++                                background: 'rgba(255,55,95,0.1)', color: '#FF375F', border: 'none', cursor: 'pointer',
++                                flex: 'none', width: 'auto',
++                            }}>Tß║»t ├óm nß╗ün</button>
++                    )}
++                </div>
++                <div className="w-full pb-2 mt-2" style={{
++                    display: 'grid',
++                    gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
++                    gap: '12px',
++                    paddingLeft: '16px',
++                    paddingRight: '16px',
++                    justifyContent: 'center'
++                }}>
++                    {AMBIENT_SOUNDS.map(s => {
++                        const isActive = !!activeSounds[s.id];
++                        return (
++                            <button key={s.id} onClick={() => toggleSoundFixed(s.id)}
++                                style={{
++                                    display: 'inline-flex',
++                                    alignItems: 'center',
++                                    gap: '8px',
++                                    padding: '10px 16px',
++                                    borderRadius: '14px',
++                                    fontSize: '13px',
++                                    fontWeight: 500,
++                                    whiteSpace: 'nowrap' as const,
++                                    cursor: 'pointer',
++                                    transition: 'all 0.15s ease',
++                                    width: '100%',
++                                    justifyContent: 'flex-start',
++                                    background: isActive ? 'rgba(48,209,88,0.15)' : 'var(--bg-elevated, var(--bg-card))',
++                                    color: isActive ? '#30D158' : 'var(--text-secondary)',
++                                    border: `1px solid ${isActive ? 'rgba(48,209,88,0.4)' : 'var(--border-color)'}`,
++                                    boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
++                                }}>
++                                <span className="text-[18px]">{s.emoji}</span> <span className="truncate">{s.name}</span>
++                            </button>
++                        );
++                    })}
++                </div>
++            </div>
++
++            {/* Active sounds summary (bottom) */}
++            {activeCount > 0 && (
++                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center', marginTop: '16px', borderTop: '1px solid var(--border-color)', paddingTop: '16px' }}>
++                    <span className="text-[12px] font-medium" style={{ color: '#30D158' }}>Γû╢ ─Éang ph├ít (Chß╗ënh ├óm l╞░ß╗úng):</span>
++                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center', width: '100%' }}>
++                        {Object.keys(activeSounds).map(id => {
++                            const info = findSoundInfo(id);
++                            if (!info) return null;
++                            const soundConf = activeSounds[id];
++                            return (
++                                <div key={id} style={{
++                                    display: 'flex', alignItems: 'center', gap: '8px',
++                                    background: 'var(--bg-elevated, var(--bg-card))',
++                                    padding: '8px 12px', borderRadius: '12px',
++                                    border: '1px solid var(--border-color)'
++                                }}>
++                                    <span className="text-[13px] font-medium" style={{ color: '#30D158', minWidth: '90px' }}>
++                                        {info.emoji} <span className="truncate">{info.name}</span>
++                                    </span>
++                                    <input
++                                        type="range"
++                                        min="0" max="1" step="0.05"
++                                        value={soundConf.volume}
++                                        onChange={(e) => handleVolumeChange(id, parseFloat(e.target.value))}
++                                        style={{ width: '80px', accentColor: '#30D158' }}
++                                    />
++                                    <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
++                                        {Math.round(soundConf.volume * 100)}%
++                                    </span>
++                                </div>
++                            );
++                        })}
+                     </div>
+-                </motion.div>
+-
+-                <AnimatePresence mode="wait">
+-                    {!activeSession ? (
+-                        /* Session List */
+-                        <motion.div key="list" variants={fadeUp} className="space-y-3">
+-                            <h2 className="text-base font-bold">Chß╗ìn b├ái thiß╗ün</h2>
+-                            {SESSIONS.map(s => (
++                </div>
++            )}
++        </div>
++    );
++
++    const activeColor = activeSession?.color || 'var(--bg-app)';
++    const bgStyle = activeSession
++        ? { background: `radial-gradient(ellipse at top, ${activeColor}20 0%, var(--bg-app) 70%)` }
++        : { background: 'var(--bg-app)' };
++
++    return (
++        <div className="h-full overflow-y-auto pb-28 no-scrollbar" style={{ ...bgStyle, transition: 'background 0.8s ease' }}>
++            <AnimatePresence mode="wait">
++                {!activeSession ? (
++                    <motion.div key="list" variants={stagger} initial="hidden" animate="show" exit="hidden" className="px-5 pt-6 space-y-5">
++                        <motion.div variants={fadeUp}>
++                            <h1 className="text-2xl font-bold">≡ƒºÿ Thiß╗ün ─Éß╗ïnh</h1>
++                            <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>Th╞░ gi├ún tinh thß║ºn, phß╗Ñc hß╗ôi c╞í thß╗â</p>
++                        </motion.div>
++
++                        {/* Stats Grid */}
++                        <motion.div variants={fadeUp} className="grid grid-cols-4 gap-2">
++                            {[
++                                { icon: <Clock size={16} weight="duotone" className="text-[#BF5AF2]" />, value: todayMinutes, label: 'H├┤m nay' },
++                                { icon: <Brain size={16} weight="duotone" className="text-[#0A84FF]" />, value: totalMinutes, label: 'Tß╗òng' },
++                                { icon: <Timer size={16} weight="duotone" className="text-[#30D158]" />, value: totalSessions, label: 'Buß╗òi' },
++                                { icon: <Fire size={16} weight="duotone" className="text-[#FF9F0A]" />, value: streak, label: 'Streak' },
++                            ].map((stat, i) => (
++                                <div key={i} className="rounded-2xl p-3 text-center" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
++                                    <div className="flex justify-center mb-1.5">{stat.icon}</div>
++                                    <p className="text-lg font-bold">{stat.value}</p>
++                                    <p className="text-[10px]" style={{ color: 'var(--text-muted)' }}>{stat.label}</p>
++                                </div>
++                            ))}
++                        </motion.div>
++
++                        {/* Session List (Page 1) */}
++                        <motion.div variants={fadeUp} className="space-y-4 pt-2 border-t mt-4" style={{ borderColor: 'var(--border-color)' }}>
++                            {/* Category filter */}
++                            <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
++                                {CATEGORIES.map(cat => (
++                                    <button key={cat.id} onClick={() => setSelectedCategory(cat.id)}
++                                        className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all"
++                                        style={{
++                                            background: selectedCategory === cat.id ? 'var(--primary)' : 'var(--bg-card)',
++                                            color: selectedCategory === cat.id ? 'white' : 'var(--text-secondary)',
++                                            border: '1px solid var(--border-color)'
++                                        }}>
++                                        {cat.icon} {cat.label}
++                                    </button>
++                                ))}
++                            </div>
++
++                            <h2 className="text-base font-bold">Chß╗ìn b├ái thiß╗ün ({filteredSessions.length})</h2>
++
++                            {filteredSessions.map(s => (
+                                 <motion.button key={s.id} whileTap={{ scale: 0.97 }}
+                                     onClick={() => startSession(s)}
+                                     className="w-full rounded-2xl p-4 flex items-center gap-4 text-left"
+                                     style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+-                                    <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: s.dimColor }}>
+-                                        <s.icon size={22} style={{ color: s.color }} />
++                                    <div className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: s.dimColor }}>
++                                        <s.icon size={26} weight="duotone" style={{ color: s.color }} />
+                                     </div>
+-                                    <div className="flex-1">
++                                    <div className="flex-1 min-w-0">
+                                         <p className="text-sm font-semibold">{s.label}</p>
+                                         <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{s.desc}</p>
++                                        <p className="text-[10px] mt-1 font-medium" style={{ color: s.color }}>Γ£ª {s.benefit}</p>
++                                    </div>
++                                    <div className="flex flex-col items-end gap-1 flex-shrink-0">
++                                        <span className="text-xs font-bold px-2 py-1 rounded-lg" style={{ background: s.dimColor, color: s.color }}>
++                                            {Math.round(s.duration / 60)} ph├║t
++                                        </span>
++                                        {GUIDED_SCRIPTS[s.id] && (
++                                            <span className="text-[9px] px-1.5 py-0.5 rounded-md font-medium" style={{ background: 'rgba(48,209,88,0.15)', color: '#30D158' }}>Guided</span>
++                                        )}
+                                     </div>
+-                                    <span className="text-xs font-medium" style={{ color: s.color }}>{Math.round(s.duration / 60)} ph├║t</span>
+                                 </motion.button>
+                             ))}
+ 
+                             {/* Custom timer */}
+                             <div className="rounded-2xl p-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+-                                <p className="text-sm font-semibold mb-2">Tuß╗│ chß╗ënh thß╗¥i gian</p>
++                                <p className="text-sm font-semibold mb-3">ΓÅ▒∩╕Å Tuß╗│ chß╗ënh thß╗¥i gian</p>
+                                 <div className="flex gap-2">
+                                     <input type="number" value={customMinutes} onChange={e => setCustomMinutes(e.target.value)}
+-                                        placeholder="Sß╗æ ph├║t" className="input-clean flex-1 !py-2.5" />
++                                        placeholder="Sß╗æ ph├║t" className="input-clean flex-1 !py-2.5" min="1" max="120" />
+                                     <button onClick={() => {
+                                         const m = parseInt(customMinutes);
+-                                        if (m > 0) startSession(SESSIONS[0], m * 60);
++                                        if (m > 0 && m <= 120) startSession(SESSIONS[0], m * 60);
++                                        else toast.error('Nhß║¡p tß╗½ 1-120 ph├║t');
+                                     }} className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
+-                                        style={{ background: '#BF5AF2' }}>Bß║»t ─æß║ºu</button>
++                                        style={{ background: 'linear-gradient(135deg, #BF5AF2, #8B5CF6)' }}>Bß║»t ─æß║ºu</button>
+                                 </div>
+                             </div>
++
++                            {/* Tips card */}
++                            <div className="rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, rgba(191,90,242,0.1), rgba(10,132,255,0.1))', border: '1px solid rgba(191,90,242,0.2)' }}>
++                                <p className="text-sm font-bold mb-2">≡ƒÆí Mß║╣o thiß╗ün hiß╗çu quß║ú</p>
++                                <ul className="text-xs space-y-1.5" style={{ color: 'var(--text-secondary)' }}>
++                                    <li>ΓÇó Thiß╗ün 5-10 ph├║t/ng├áy ─æ├ú ─æß╗º ─æß╗â thß║Ñy sß╗▒ kh├íc biß╗çt sau 2 tuß║ºn</li>
++                                    <li>ΓÇó Mix tiß║┐ng Ch├╣a ≡ƒÅ» + M╞░a ≡ƒîº∩╕Å + Phong Linh ≡ƒÄÉ cß╗▒c nghß╗ç</li>
++                                    <li>ΓÇó T├óm tr├¡ lang thang l├á b├¼nh th╞░ß╗¥ng ΓÇö nhß║╣ nh├áng quay lß║íi h╞íi thß╗ƒ</li>
++                                    <li>ΓÇó Sau buß╗òi gym, thiß╗ün 5 ph├║t gi├║p phß╗Ñc hß╗ôi nhanh h╞ín 30%</li>
++                                </ul>
++                            </div>
+                         </motion.div>
+-                    ) : (
+-                        /* Active Session */
+-                        <motion.div key="active" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+-                            exit={{ opacity: 0, scale: 0.95 }} className="flex flex-col items-center pt-4 space-y-6">
++                    </motion.div>
++                ) : (
++                    /* Active Session (Page 2) */
++                    <motion.div key="active" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
++                        exit={{ opacity: 0, y: 15 }} className="flex flex-col items-center justify-between min-h-[90vh] px-6 pt-10 pb-6">
++
++                        {/* Top info */}
++                        <div className="w-full flex flex-col items-center text-center">
++                            <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 0.2, duration: 0.6 }}
++                                className="w-16 h-1 rounded-full mb-8" style={{ background: `${activeSession.color}50` }} />
++                            <h2 className="text-[28px] font-bold tracking-tight leading-tight" style={{ color: activeSession.color }}>
++                                {activeSession.label}
++                            </h2>
++                            <p className="text-[15px] mt-2 opacity-80" style={{ color: 'var(--text-secondary)' }}>
++                                {activeSession.desc}
++                            </p>
++                        </div>
+ 
++                        {/* Active Session Player */}
++                        <div className="flex flex-col items-center justify-center w-full relative flex-1">
+                             {/* Timer Ring */}
+-                            <div className="relative" style={{ width: ringSize, height: ringSize }}>
++                            <div className="relative mt-8 flex items-center justify-center" style={{ width: ringSize, height: ringSize }}>
+                                 <svg width={ringSize} height={ringSize} style={{ transform: 'rotate(-90deg)' }}>
+                                     <circle cx={ringSize / 2} cy={ringSize / 2} r={radius}
+                                         fill="none" stroke={`${activeSession.color}20`} strokeWidth={strokeW} />
+@@ -160,12 +834,11 @@ export default function MeditationPage() {
+                                         style={{ transition: 'stroke-dashoffset 1s linear' }} />
+                                 </svg>
+                                 <div className="absolute inset-0 flex flex-col items-center justify-center">
+-                                    <span className="text-4xl font-bold tracking-wider" style={{ color: activeSession.color }}>
++                                    <span className="text-6xl font-bold tracking-wider" style={{ color: activeSession.color, textShadow: `0 4px 20px ${activeSession.color}30` }}>
+                                         {formatTime(timeLeft)}
+                                     </span>
+-                                    <span className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>{activeSession.label}</span>
+                                     {activeSession.id === 'breathe' && isPlaying && (
+-                                        <motion.span key={breathPhase} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
++                                        <motion.span key={breathPhase} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }}
+                                             className="text-sm mt-2 font-medium" style={{ color: activeSession.color }}>
+                                             {breathLabels[breathPhase]}
+                                         </motion.span>
+@@ -178,32 +851,59 @@ export default function MeditationPage() {
+                                 <motion.div
+                                     animate={{ scale: breathPhase === 0 ? 1.3 : breathPhase === 2 ? 0.7 : 1 }}
+                                     transition={{ duration: 3.5, ease: 'easeInOut' }}
+-                                    className="w-16 h-16 rounded-full"
+-                                    style={{ background: `${activeSession.color}30`, border: `2px solid ${activeSession.color}` }} />
++                                    className="w-16 h-16 rounded-full absolute"
++                                    style={{ background: `${activeSession.color}30`, border: `2px solid ${activeSession.color}`, zIndex: -1 }} />
++                            )}
++
++                            {/* Guided text */}
++                            {guidedText && (
++                                <motion.div
++                                    key={guidedText}
++                                    initial={{ opacity: 0, y: 10 }}
++                                    animate={{ opacity: 1, y: 0 }}
++                                    transition={{ duration: 0.5 }}
++                                    className="rounded-2xl px-6 py-4 text-center max-w-sm mx-auto"
++                                    style={{ background: `${activeSession.color}10`, border: `1px solid ${activeSession.color}20` }}>
++                                    <p className="text-sm italic leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
++                                        {guidedText}
++                                    </p>
++                                </motion.div>
+                             )}
+ 
+                             {/* Controls */}
+-                            <div className="flex items-center gap-5">
++                            <div className="flex items-center justify-center gap-6 mt-8">
+                                 <motion.button whileTap={{ scale: 0.9 }} onClick={resetTimer}
+                                     className="w-14 h-14 rounded-full flex items-center justify-center"
+                                     style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+-                                    <RotateCcw size={20} style={{ color: 'var(--text-secondary)' }} />
++                                    <ArrowCounterClockwise size={22} style={{ color: 'var(--text-secondary)' }} />
+                                 </motion.button>
+                                 <motion.button whileTap={{ scale: 0.9 }} onClick={togglePause}
+-                                    className="w-20 h-20 rounded-full flex items-center justify-center text-white"
+-                                    style={{ background: activeSession.color, boxShadow: `0 8px 24px ${activeSession.color}40` }}>
+-                                    {isPlaying ? <Pause size={28} /> : <Play size={28} className="ml-1" />}
++                                    className="w-24 h-24 rounded-full flex items-center justify-center text-white relative"
++                                    style={{ background: activeSession.color, boxShadow: `0 8px 32px ${activeSession.color}40` }}>
++                                    {isPlaying ? <Pause size={36} weight="fill" /> : <Play size={36} weight="fill" className="ml-1" />}
+                                 </motion.button>
+                                 <motion.button whileTap={{ scale: 0.9 }} onClick={exitSession}
+                                     className="w-14 h-14 rounded-full flex items-center justify-center"
+                                     style={{ background: 'rgba(255,55,95,0.1)', border: '1px solid rgba(255,55,95,0.2)' }}>
+-                                    <span className="text-[#FF375F] text-sm font-bold">Γ£ò</span>
++                                    <X size={22} weight="bold" style={{ color: '#FF375F' }} />
+                                 </motion.button>
+                             </div>
++                        </div>
++
++                        {/* Sound Buttons - only in active session view  */}
++                        <motion.div
++                            initial={{ opacity: 0, y: 20 }}
++                            animate={{ opacity: 1, y: 0 }}
++                            transition={{ delay: 0.25 }}
++                            className="w-full mt-10"
++                            style={{ paddingBottom: '20px' }}>
++                            {renderSoundButtons()}
+                         </motion.div>
+-                    )}
+-                </AnimatePresence>
+-            </motion.div>
++                    </motion.div>
++                )}
++            </AnimatePresence>
+         </div>
+     );
+ }
++
++
+
+commit 4edb6fa761249d96b100dcacf8e0daaac58a9683
+Author: AI Agent <agent@htstrength.com>
+Date:   Sun Mar 1 10:03:06 2026 +0700
+
+    feat(ui): complete Mibro Fit dark theme for Dashboard, Steps, Progress, Profile, Meditation, Social pages - all functional with real data
+
+diff --git a/src/pages/MeditationPage.tsx b/src/pages/MeditationPage.tsx
+index 8b28a10..ba0ff83 100644
+--- a/src/pages/MeditationPage.tsx
++++ b/src/pages/MeditationPage.tsx
+@@ -1,263 +1,209 @@
+ import { useState, useEffect, useRef } from 'react';
+-import { motion } from 'framer-motion';
+-import {
+-    Wind, Heart, Moon, Sparkles, Play, Pause, RotateCcw,
+-    Clock, Headphones, Leaf, Brain, Volume2
+-} from 'lucide-react';
++import { motion, AnimatePresence } from 'framer-motion';
++import { Play, Pause, RotateCcw, Clock, Wind, Brain, Heart, Leaf, Waves, Volume2 } from 'lucide-react';
++import { toast } from 'sonner';
+ 
+ // ============================================================
+-//  MEDITATION SESSIONS DATA
++//  MEDITATION PAGE ΓÇö Mibro Fit Dark Theme (Functional Timer)
+ // ============================================================
++
+ const SESSIONS = [
+-    { id: 'morning', title: 'Morning Mindfulness', duration: 300, icon: '≡ƒîà', color: '#F59E0B', category: 'mindfulness', description: 'Start your day with clarity and intention' },
+-    { id: 'breathing', title: 'Deep Breathing', duration: 180, icon: '≡ƒî¼∩╕Å', color: '#06B6D4', category: 'breathing', description: 'Box breathing for stress relief' },
+-    { id: 'focus', title: 'Focus Flow', duration: 600, icon: '≡ƒºá', color: '#8B5CF6', category: 'focus', description: 'Enhance concentration and mental clarity' },
+-    { id: 'sleep', title: 'Sleep Meditation', duration: 900, icon: '≡ƒîÖ', color: '#6366F1', category: 'sleep', description: 'Drift into deep, restful sleep' },
+-    { id: 'body-scan', title: 'Body Scan', duration: 480, icon: '≡ƒºÿ', color: '#EC4899', category: 'mindfulness', description: 'Release tension from head to toe' },
+-    { id: 'gratitude', title: 'Gratitude Practice', duration: 300, icon: '≡ƒÖÅ', color: '#22C55E', category: 'mindfulness', description: 'Cultivate thankfulness and joy' },
+-    { id: 'energy', title: 'Energy Boost', duration: 240, icon: 'ΓÜí', color: '#FF6B00', category: 'breathing', description: 'Energizing breathwork for vitality' },
+-    { id: 'post-workout', title: 'Post-Workout Calm', duration: 420, icon: '≡ƒÅï∩╕Å', color: '#EF4444', category: 'recovery', description: 'Cool down mind and body after training' },
++    { id: 'focus', label: 'Tß║¡p trung', icon: Brain, color: '#0A84FF', dimColor: 'rgba(10,132,255,0.15)', duration: 300, desc: 'T─⌐nh t├óm, tß║¡p trung v├áo h╞íi thß╗ƒ' },
++    { id: 'relax', label: 'Th╞░ gi├ún', icon: Leaf, color: '#30D158', dimColor: 'rgba(48,209,88,0.15)', duration: 600, desc: 'Giß║úi tß╗Åa c─âng thß║│ng sau buß╗òi tß║¡p' },
++    { id: 'sleep', label: 'Ngß╗º ngon', icon: Waves, color: '#BF5AF2', dimColor: 'rgba(191,90,242,0.15)', duration: 900, desc: 'Chuß║⌐n bß╗ï c╞í thß╗â cho giß║Ñc ngß╗º s├óu' },
++    { id: 'breathe', label: 'Box Breathing', icon: Wind, color: '#64D2FF', dimColor: 'rgba(100,210,255,0.15)', duration: 240, desc: '4-4-4-4 h├¡t-giß╗»-thß╗ƒ-giß╗»' },
++    { id: 'calm', label: 'B├¼nh y├¬n', icon: Heart, color: '#FF375F', dimColor: 'rgba(255,55,95,0.15)', duration: 420, desc: 'Thiß╗ün y├¬u th╞░╞íng & l├▓ng biß║┐t ╞ín' },
+ ];
+ 
+-const CATEGORIES = [
+-    { id: 'all', label: 'All', icon: <Sparkles size={14} /> },
+-    { id: 'mindfulness', label: 'Mindfulness', icon: <Leaf size={14} /> },
+-    { id: 'breathing', label: 'Breathing', icon: <Wind size={14} /> },
+-    { id: 'focus', label: 'Focus', icon: <Brain size={14} /> },
+-    { id: 'sleep', label: 'Sleep', icon: <Moon size={14} /> },
+-    { id: 'recovery', label: 'Recovery', icon: <Heart size={14} /> },
+-];
++const STORAGE_KEY = 'ht-meditation-log';
++function getMeditationLog(): { date: string; minutes: number; session: string }[] {
++    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
++}
++function addMeditationLog(minutes: number, sessionId: string) {
++    const log = getMeditationLog();
++    log.push({ date: new Date().toISOString(), minutes, session: sessionId });
++    localStorage.setItem(STORAGE_KEY, JSON.stringify(log));
++}
+ 
+-// ============================================================
+-//  MEDITATION PAGE
+-// ============================================================
+ export default function MeditationPage() {
+-    const [category, setCategory] = useState('all');
+     const [activeSession, setActiveSession] = useState<typeof SESSIONS[0] | null>(null);
++    const [timeLeft, setTimeLeft] = useState(0);
+     const [isPlaying, setIsPlaying] = useState(false);
+-    const [elapsed, setElapsed] = useState(0);
+-    const [breathPhase, setBreathPhase] = useState<'inhale' | 'hold' | 'exhale' | 'rest'>('inhale');
++    const [totalDuration, setTotalDuration] = useState(0);
++    const [customMinutes, setCustomMinutes] = useState('');
+     const intervalRef = useRef<number | null>(null);
+ 
+-    const filtered = category === 'all' ? SESSIONS : SESSIONS.filter(s => s.category === category);
++    // Total meditation minutes
++    const log = getMeditationLog();
++    const totalMinutes = log.reduce((s, l) => s + l.minutes, 0);
++    const todayMinutes = log.filter(l => l.date.startsWith(new Date().toISOString().split('T')[0]))
++        .reduce((s, l) => s + l.minutes, 0);
++
++    const startSession = (session: typeof SESSIONS[0], customDuration?: number) => {
++        const dur = customDuration || session.duration;
++        setActiveSession(session);
++        setTimeLeft(dur);
++        setTotalDuration(dur);
++        setIsPlaying(true);
++    };
+ 
+     useEffect(() => {
+-        if (isPlaying && activeSession) {
++        if (isPlaying && timeLeft > 0) {
+             intervalRef.current = window.setInterval(() => {
+-                setElapsed(prev => {
+-                    if (prev >= activeSession.duration) {
+-                        setIsPlaying(false);
+-                        return prev;
+-                    }
+-                    return prev + 1;
+-                });
++                setTimeLeft(t => t - 1);
+             }, 1000);
++        } else if (timeLeft === 0 && isPlaying && activeSession) {
++            setIsPlaying(false);
++            const minutes = Math.round(totalDuration / 60);
++            addMeditationLog(minutes, activeSession.id);
++            toast.success(`≡ƒºÿ Ho├án th├ánh ${minutes} ph├║t thiß╗ün!`);
+         }
+         return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+-    }, [isPlaying, activeSession]);
++    }, [isPlaying, timeLeft]);
+ 
+-    // Breathing animation cycle (4-4-4-4 box breathing)
+-    useEffect(() => {
+-        if (!isPlaying || !activeSession?.category.includes('breathing')) return;
+-        const cycle = elapsed % 16;
+-        if (cycle < 4) setBreathPhase('inhale');
+-        else if (cycle < 8) setBreathPhase('hold');
+-        else if (cycle < 12) setBreathPhase('exhale');
+-        else setBreathPhase('rest');
+-    }, [elapsed, isPlaying, activeSession]);
+-
+-    const startSession = (session: typeof SESSIONS[0]) => {
+-        setActiveSession(session);
+-        setElapsed(0);
+-        setIsPlaying(true);
+-    };
+-
+-    const formatTime = (s: number) => {
+-        const m = Math.floor(s / 60);
+-        const sec = s % 60;
+-        return `${m}:${sec.toString().padStart(2, '0')}`;
+-    };
++    const togglePause = () => setIsPlaying(!isPlaying);
++    const resetTimer = () => { setIsPlaying(false); setTimeLeft(totalDuration); };
++    const exitSession = () => { setIsPlaying(false); setActiveSession(null); setTimeLeft(0); };
+ 
+-    if (activeSession) {
+-        const progress = elapsed / activeSession.duration;
+-        const remaining = activeSession.duration - elapsed;
+-        const isBreathing = activeSession.category === 'breathing';
++    const formatTime = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
++    const progress = totalDuration > 0 ? (totalDuration - timeLeft) / totalDuration : 0;
+ 
+-        return (
+-            <motion.div className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden"
+-                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+-                style={{ background: `radial-gradient(ellipse at 50% 30%, ${activeSession.color}15, #0a0a1a 70%)` }}>
++    const ringSize = 220;
++    const strokeW = 8;
++    const radius = (ringSize - strokeW) / 2;
++    const circumference = 2 * Math.PI * radius;
++    const offset = circumference - (progress * circumference);
+ 
+-                {/* Ambient circles */}
+-                <motion.div className="absolute w-96 h-96 rounded-full opacity-10"
+-                    animate={{ scale: isPlaying ? [1, 1.3, 1] : 1 }}
+-                    transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+-                    style={{ background: `radial-gradient(${activeSession.color}, transparent)` }} />
++    const fadeUp = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.3 } } };
++    const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.06 } } };
+ 
+-                {/* Session Info */}
+-                <button onClick={() => { setActiveSession(null); setIsPlaying(false); }}
+-                    className="absolute top-6 left-4 text-gray-400 text-sm">ΓåÉ Back</button>
+-
+-                <span className="text-5xl mb-4 relative z-10">{activeSession.icon}</span>
+-                <h2 className="text-white font-bold text-xl mb-1 relative z-10">{activeSession.title}</h2>
+-                <p className="text-gray-400 text-sm mb-8 relative z-10">{activeSession.description}</p>
+-
+-                {/* Breathing Circle */}
+-                {isBreathing && isPlaying && (
+-                    <div className="mb-6 relative z-10">
+-                        <motion.div
+-                            className="w-32 h-32 rounded-full flex items-center justify-center"
+-                            animate={{
+-                                scale: breathPhase === 'inhale' ? 1.4 : breathPhase === 'exhale' ? 0.8 : 1.1,
+-                            }}
+-                            transition={{ duration: 4, ease: 'easeInOut' }}
+-                            style={{ background: `${activeSession.color}20`, border: `2px solid ${activeSession.color}40` }}
+-                        >
+-                            <span className="text-white text-sm font-semibold capitalize">{breathPhase}</span>
+-                        </motion.div>
+-                    </div>
+-                )}
+-
+-                {/* Timer */}
+-                <div className="relative z-10 mb-8">
+-                    <div className="relative w-56 h-56 mx-auto">
+-                        <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+-                            <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="3" />
+-                            <motion.circle cx="50" cy="50" r="44" fill="none"
+-                                stroke={activeSession.color} strokeWidth="3" strokeLinecap="round"
+-                                strokeDasharray={`${progress * 276} 276`}
+-                                animate={{ strokeDasharray: `${progress * 276} 276` }}
+-                            />
+-                        </svg>
+-                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+-                            <span className="text-4xl font-black text-white">{formatTime(remaining)}</span>
+-                            <span className="text-gray-500 text-xs mt-1">remaining</span>
+-                        </div>
+-                    </div>
+-                </div>
++    // Breathing animation for box breathing
++    const [breathPhase, setBreathPhase] = useState(0); // 0-3: h├¡t, giß╗», thß╗ƒ, giß╗»
++    useEffect(() => {
++        if (!isPlaying || activeSession?.id !== 'breathe') return;
++        const id = setInterval(() => setBreathPhase(p => (p + 1) % 4), 4000);
++        return () => clearInterval(id);
++    }, [isPlaying, activeSession]);
++    const breathLabels = ['H├¡t v├áo...', 'Giß╗»...', 'Thß╗ƒ ra...', 'Giß╗»...'];
+ 
+-                {/* Controls */}
+-                <div className="flex items-center gap-6 relative z-10">
+-                    <motion.button whileTap={{ scale: 0.9 }}
+-                        onClick={() => { setElapsed(0); }}
+-                        className="w-12 h-12 rounded-full flex items-center justify-center"
+-                        style={{ background: 'rgba(255,255,255,0.08)' }}>
+-                        <RotateCcw size={18} className="text-gray-400" />
+-                    </motion.button>
+-                    <motion.button whileTap={{ scale: 0.9 }}
+-                        onClick={() => setIsPlaying(!isPlaying)}
+-                        className="w-16 h-16 rounded-full flex items-center justify-center"
+-                        style={{ background: `linear-gradient(135deg, ${activeSession.color}, ${activeSession.color}CC)` }}>
+-                        {isPlaying ? <Pause size={24} className="text-white" /> : <Play size={24} className="text-white ml-1" />}
+-                    </motion.button>
+-                    <motion.button whileTap={{ scale: 0.9 }}
+-                        className="w-12 h-12 rounded-full flex items-center justify-center"
+-                        style={{ background: 'rgba(255,255,255,0.08)' }}>
+-                        <Volume2 size={18} className="text-gray-400" />
+-                    </motion.button>
+-                </div>
++    return (
++        <div className="h-full overflow-y-auto pb-28 no-scrollbar" style={{ background: 'var(--bg-app)' }}>
++            <motion.div variants={stagger} initial="hidden" animate="show" className="px-5 pt-6 space-y-5">
+ 
+-                {elapsed >= activeSession.duration && (
+-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+-                        className="mt-8 text-center relative z-10">
+-                        <p className="text-2xl mb-2">≡ƒÄë</p>
+-                        <p className="text-white font-semibold">Session Complete!</p>
+-                        <p className="text-gray-400 text-sm">Great job staying present.</p>
+-                    </motion.div>
+-                )}
+-            </motion.div>
+-        );
+-    }
++                <motion.div variants={fadeUp}>
++                    <h1 className="text-2xl font-bold">Thiß╗ün ─æß╗ïnh</h1>
++                    <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>Th╞░ gi├ún tinh thß║ºn, phß╗Ñc hß╗ôi c╞í thß╗â</p>
++                </motion.div>
+ 
+-    return (
+-        <div className="min-h-screen pb-24" style={{ background: '#0a0a1a' }}>
+-            {/* Header */}
+-            <div className="px-4 pt-4 pb-2">
+-                <h1 className="text-xl font-bold text-white flex items-center gap-2">
+-                    <div className="w-8 h-8 rounded-full flex items-center justify-center"
+-                        style={{ background: 'linear-gradient(135deg, #6366F1, #8B5CF6)' }}>
+-                        <Sparkles size={16} className="text-white" />
++                {/* Stats */}
++                <motion.div variants={fadeUp} className="grid grid-cols-2 gap-3">
++                    <div className="rounded-2xl p-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
++                        <Clock size={16} className="text-[#BF5AF2] mb-2" />
++                        <p className="text-xl font-bold">{todayMinutes}</p>
++                        <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>Ph├║t h├┤m nay</p>
+                     </div>
+-                    Meditation
+-                </h1>
+-                <p className="text-gray-500 text-xs mt-1">Find your inner peace</p>
+-            </div>
+-
+-            {/* Featured Card */}
+-            <div className="px-4 mb-4">
+-                <motion.div whileTap={{ scale: 0.98 }}
+-                    onClick={() => startSession(SESSIONS[3])}
+-                    className="rounded-3xl p-5 relative overflow-hidden cursor-pointer"
+-                    style={{
+-                        background: 'linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.15))',
+-                        border: '1px solid rgba(99,102,241,0.2)',
+-                    }}>
+-                    <motion.div className="absolute -right-8 -top-8 w-32 h-32 rounded-full opacity-20"
+-                        animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 4, repeat: Infinity }}
+-                        style={{ background: 'radial-gradient(#8B5CF6, transparent)' }} />
+-                    <span className="text-3xl">≡ƒîÖ</span>
+-                    <h3 className="text-white font-bold text-lg mt-2">Tonight's Sleep Session</h3>
+-                    <p className="text-gray-400 text-sm mt-1">15 min guided meditation for deep rest</p>
+-                    <div className="flex items-center gap-2 mt-3">
+-                        <div className="px-3 py-1 rounded-full text-xs font-semibold text-purple-300"
+-                            style={{ background: 'rgba(139,92,246,0.2)' }}>
+-                            <Clock size={10} className="inline mr-1" />15:00
+-                        </div>
+-                        <div className="px-3 py-1 rounded-full text-xs font-semibold text-purple-300"
+-                            style={{ background: 'rgba(139,92,246,0.2)' }}>
+-                            <Headphones size={10} className="inline mr-1" />Guided
+-                        </div>
++                    <div className="rounded-2xl p-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
++                        <Brain size={16} className="text-[#0A84FF] mb-2" />
++                        <p className="text-xl font-bold">{totalMinutes}</p>
++                        <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>Tß╗òng ph├║t thiß╗ün</p>
+                     </div>
+                 </motion.div>
+-            </div>
+ 
+-            {/* Category Filter */}
+-            <div className="px-4 mb-4">
+-                <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
+-                    {CATEGORIES.map(c => (
+-                        <button key={c.id} onClick={() => setCategory(c.id)}
+-                            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all"
+-                            style={{
+-                                background: category === c.id ? 'linear-gradient(135deg, #6366F1, #8B5CF6)' : 'rgba(255,255,255,0.04)',
+-                                color: category === c.id ? '#fff' : '#6B7280',
+-                                border: `1px solid ${category === c.id ? 'rgba(99,102,241,0.3)' : 'rgba(255,255,255,0.06)'}`,
+-                            }}>
+-                            {c.icon} {c.label}
+-                        </button>
+-                    ))}
+-                </div>
+-            </div>
+-
+-            {/* Session Grid */}
+-            <div className="px-4 space-y-3">
+-                {filtered.map((s, i) => (
+-                    <motion.button key={s.id}
+-                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+-                        transition={{ delay: i * 0.05 }}
+-                        whileTap={{ scale: 0.97 }}
+-                        onClick={() => startSession(s)}
+-                        className="w-full flex items-center gap-4 p-4 rounded-2xl text-left transition-all"
+-                        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}
+-                    >
+-                        <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
+-                            style={{ background: `${s.color}15` }}>
+-                            {s.icon}
+-                        </div>
+-                        <div className="flex-1 min-w-0">
+-                            <p className="text-white font-semibold text-sm truncate">{s.title}</p>
+-                            <p className="text-gray-500 text-xs truncate">{s.description}</p>
+-                        </div>
+-                        <div className="flex items-center gap-1 flex-shrink-0">
+-                            <Clock size={12} className="text-gray-500" />
+-                            <span className="text-gray-400 text-xs font-medium">{Math.floor(s.duration / 60)}m</span>
+-                        </div>
+-                        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+-                            style={{ background: `${s.color}20` }}>
+-                            <Play size={14} style={{ color: s.color }} className="ml-0.5" />
+-                        </div>
+-                    </motion.button>
+-                ))}
+-            </div>
++                <AnimatePresence mode="wait">
++                    {!activeSession ? (
++                        /* Session List */
++                        <motion.div key="list" variants={fadeUp} className="space-y-3">
++                            <h2 className="text-base font-bold">Chß╗ìn b├ái thiß╗ün</h2>
++                            {SESSIONS.map(s => (
++                                <motion.button key={s.id} whileTap={{ scale: 0.97 }}
++                                    onClick={() => startSession(s)}
++                                    className="w-full rounded-2xl p-4 flex items-center gap-4 text-left"
++                                    style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
++                                    <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: s.dimColor }}>
++                                        <s.icon size={22} style={{ color: s.color }} />
++                                    </div>
++                                    <div className="flex-1">
++                                        <p className="text-sm font-semibold">{s.label}</p>
++                                        <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{s.desc}</p>
++                                    </div>
++                                    <span className="text-xs font-medium" style={{ color: s.color }}>{Math.round(s.duration / 60)} ph├║t</span>
++                                </motion.button>
++                            ))}
++
++                            {/* Custom timer */}
++                            <div className="rounded-2xl p-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
++                                <p className="text-sm font-semibold mb-2">Tuß╗│ chß╗ënh thß╗¥i gian</p>
++                                <div className="flex gap-2">
++                                    <input type="number" value={customMinutes} onChange={e => setCustomMinutes(e.target.value)}
++                                        placeholder="Sß╗æ ph├║t" className="input-clean flex-1 !py-2.5" />
++                                    <button onClick={() => {
++                                        const m = parseInt(customMinutes);
++                                        if (m > 0) startSession(SESSIONS[0], m * 60);
++                                    }} className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
++                                        style={{ background: '#BF5AF2' }}>Bß║»t ─æß║ºu</button>
++                                </div>
++                            </div>
++                        </motion.div>
++                    ) : (
++                        /* Active Session */
++                        <motion.div key="active" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
++                            exit={{ opacity: 0, scale: 0.95 }} className="flex flex-col items-center pt-4 space-y-6">
++
++                            {/* Timer Ring */}
++                            <div className="relative" style={{ width: ringSize, height: ringSize }}>
++                                <svg width={ringSize} height={ringSize} style={{ transform: 'rotate(-90deg)' }}>
++                                    <circle cx={ringSize / 2} cy={ringSize / 2} r={radius}
++                                        fill="none" stroke={`${activeSession.color}20`} strokeWidth={strokeW} />
++                                    <circle cx={ringSize / 2} cy={ringSize / 2} r={radius}
++                                        fill="none" stroke={activeSession.color} strokeWidth={strokeW} strokeLinecap="round"
++                                        strokeDasharray={circumference} strokeDashoffset={offset}
++                                        style={{ transition: 'stroke-dashoffset 1s linear' }} />
++                                </svg>
++                                <div className="absolute inset-0 flex flex-col items-center justify-center">
++                                    <span className="text-4xl font-bold tracking-wider" style={{ color: activeSession.color }}>
++                                        {formatTime(timeLeft)}
++                                    </span>
++                                    <span className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>{activeSession.label}</span>
++                                    {activeSession.id === 'breathe' && isPlaying && (
++                                        <motion.span key={breathPhase} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
++                                            className="text-sm mt-2 font-medium" style={{ color: activeSession.color }}>
++                                            {breathLabels[breathPhase]}
++                                        </motion.span>
++                                    )}
++                                </div>
++                            </div>
++
++                            {/* Breathing animation circle */}
++                            {activeSession.id === 'breathe' && isPlaying && (
++                                <motion.div
++                                    animate={{ scale: breathPhase === 0 ? 1.3 : breathPhase === 2 ? 0.7 : 1 }}
++                                    transition={{ duration: 3.5, ease: 'easeInOut' }}
++                                    className="w-16 h-16 rounded-full"
++                                    style={{ background: `${activeSession.color}30`, border: `2px solid ${activeSession.color}` }} />
++                            )}
++
++                            {/* Controls */}
++                            <div className="flex items-center gap-5">
++                                <motion.button whileTap={{ scale: 0.9 }} onClick={resetTimer}
++                                    className="w-14 h-14 rounded-full flex items-center justify-center"
++                                    style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
++                                    <RotateCcw size={20} style={{ color: 'var(--text-secondary)' }} />
++                                </motion.button>
++                                <motion.button whileTap={{ scale: 0.9 }} onClick={togglePause}
++                                    className="w-20 h-20 rounded-full flex items-center justify-center text-white"
++                                    style={{ background: activeSession.color, boxShadow: `0 8px 24px ${activeSession.color}40` }}>
++                                    {isPlaying ? <Pause size={28} /> : <Play size={28} className="ml-1" />}
++                                </motion.button>
++                                <motion.button whileTap={{ scale: 0.9 }} onClick={exitSession}
++                                    className="w-14 h-14 rounded-full flex items-center justify-center"
++                                    style={{ background: 'rgba(255,55,95,0.1)', border: '1px solid rgba(255,55,95,0.2)' }}>
++                                    <span className="text-[#FF375F] text-sm font-bold">Γ£ò</span>
++                                </motion.button>
++                            </div>
++                        </motion.div>
++                    )}
++                </AnimatePresence>
++            </motion.div>
+         </div>
+     );
+ }
+
+commit 5c67fafba6a4eff601bc902d88e64be83ff62637
+Author: AI Agent <agent@htstrength.com>
+Date:   Sat Feb 28 14:53:40 2026 +0700
+
+    update github action to build unsigned ipa and patch-package CapacitorHealthkitPlugin
+
+diff --git a/src/pages/MeditationPage.tsx b/src/pages/MeditationPage.tsx
+new file mode 100644
+index 0000000..8b28a10
+--- /dev/null
++++ b/src/pages/MeditationPage.tsx
+@@ -0,0 +1,263 @@
++import { useState, useEffect, useRef } from 'react';
++import { motion } from 'framer-motion';
++import {
++    Wind, Heart, Moon, Sparkles, Play, Pause, RotateCcw,
++    Clock, Headphones, Leaf, Brain, Volume2
++} from 'lucide-react';
++
++// ============================================================
++//  MEDITATION SESSIONS DATA
++// ============================================================
++const SESSIONS = [
++    { id: 'morning', title: 'Morning Mindfulness', duration: 300, icon: '≡ƒîà', color: '#F59E0B', category: 'mindfulness', description: 'Start your day with clarity and intention' },
++    { id: 'breathing', title: 'Deep Breathing', duration: 180, icon: '≡ƒî¼∩╕Å', color: '#06B6D4', category: 'breathing', description: 'Box breathing for stress relief' },
++    { id: 'focus', title: 'Focus Flow', duration: 600, icon: '≡ƒºá', color: '#8B5CF6', category: 'focus', description: 'Enhance concentration and mental clarity' },
++    { id: 'sleep', title: 'Sleep Meditation', duration: 900, icon: '≡ƒîÖ', color: '#6366F1', category: 'sleep', description: 'Drift into deep, restful sleep' },
++    { id: 'body-scan', title: 'Body Scan', duration: 480, icon: '≡ƒºÿ', color: '#EC4899', category: 'mindfulness', description: 'Release tension from head to toe' },
++    { id: 'gratitude', title: 'Gratitude Practice', duration: 300, icon: '≡ƒÖÅ', color: '#22C55E', category: 'mindfulness', description: 'Cultivate thankfulness and joy' },
++    { id: 'energy', title: 'Energy Boost', duration: 240, icon: 'ΓÜí', color: '#FF6B00', category: 'breathing', description: 'Energizing breathwork for vitality' },
++    { id: 'post-workout', title: 'Post-Workout Calm', duration: 420, icon: '≡ƒÅï∩╕Å', color: '#EF4444', category: 'recovery', description: 'Cool down mind and body after training' },
++];
++
++const CATEGORIES = [
++    { id: 'all', label: 'All', icon: <Sparkles size={14} /> },
++    { id: 'mindfulness', label: 'Mindfulness', icon: <Leaf size={14} /> },
++    { id: 'breathing', label: 'Breathing', icon: <Wind size={14} /> },
++    { id: 'focus', label: 'Focus', icon: <Brain size={14} /> },
++    { id: 'sleep', label: 'Sleep', icon: <Moon size={14} /> },
++    { id: 'recovery', label: 'Recovery', icon: <Heart size={14} /> },
++];
++
++// ============================================================
++//  MEDITATION PAGE
++// ============================================================
++export default function MeditationPage() {
++    const [category, setCategory] = useState('all');
++    const [activeSession, setActiveSession] = useState<typeof SESSIONS[0] | null>(null);
++    const [isPlaying, setIsPlaying] = useState(false);
++    const [elapsed, setElapsed] = useState(0);
++    const [breathPhase, setBreathPhase] = useState<'inhale' | 'hold' | 'exhale' | 'rest'>('inhale');
++    const intervalRef = useRef<number | null>(null);
++
++    const filtered = category === 'all' ? SESSIONS : SESSIONS.filter(s => s.category === category);
++
++    useEffect(() => {
++        if (isPlaying && activeSession) {
++            intervalRef.current = window.setInterval(() => {
++                setElapsed(prev => {
++                    if (prev >= activeSession.duration) {
++                        setIsPlaying(false);
++                        return prev;
++                    }
++                    return prev + 1;
++                });
++            }, 1000);
++        }
++        return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
++    }, [isPlaying, activeSession]);
++
++    // Breathing animation cycle (4-4-4-4 box breathing)
++    useEffect(() => {
++        if (!isPlaying || !activeSession?.category.includes('breathing')) return;
++        const cycle = elapsed % 16;
++        if (cycle < 4) setBreathPhase('inhale');
++        else if (cycle < 8) setBreathPhase('hold');
++        else if (cycle < 12) setBreathPhase('exhale');
++        else setBreathPhase('rest');
++    }, [elapsed, isPlaying, activeSession]);
++
++    const startSession = (session: typeof SESSIONS[0]) => {
++        setActiveSession(session);
++        setElapsed(0);
++        setIsPlaying(true);
++    };
++
++    const formatTime = (s: number) => {
++        const m = Math.floor(s / 60);
++        const sec = s % 60;
++        return `${m}:${sec.toString().padStart(2, '0')}`;
++    };
++
++    if (activeSession) {
++        const progress = elapsed / activeSession.duration;
++        const remaining = activeSession.duration - elapsed;
++        const isBreathing = activeSession.category === 'breathing';
++
++        return (
++            <motion.div className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden"
++                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
++                style={{ background: `radial-gradient(ellipse at 50% 30%, ${activeSession.color}15, #0a0a1a 70%)` }}>
++
++                {/* Ambient circles */}
++                <motion.div className="absolute w-96 h-96 rounded-full opacity-10"
++                    animate={{ scale: isPlaying ? [1, 1.3, 1] : 1 }}
++                    transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
++                    style={{ background: `radial-gradient(${activeSession.color}, transparent)` }} />
++
++                {/* Session Info */}
++                <button onClick={() => { setActiveSession(null); setIsPlaying(false); }}
++                    className="absolute top-6 left-4 text-gray-400 text-sm">ΓåÉ Back</button>
++
++                <span className="text-5xl mb-4 relative z-10">{activeSession.icon}</span>
++                <h2 className="text-white font-bold text-xl mb-1 relative z-10">{activeSession.title}</h2>
++                <p className="text-gray-400 text-sm mb-8 relative z-10">{activeSession.description}</p>
++
++                {/* Breathing Circle */}
++                {isBreathing && isPlaying && (
++                    <div className="mb-6 relative z-10">
++                        <motion.div
++                            className="w-32 h-32 rounded-full flex items-center justify-center"
++                            animate={{
++                                scale: breathPhase === 'inhale' ? 1.4 : breathPhase === 'exhale' ? 0.8 : 1.1,
++                            }}
++                            transition={{ duration: 4, ease: 'easeInOut' }}
++                            style={{ background: `${activeSession.color}20`, border: `2px solid ${activeSession.color}40` }}
++                        >
++                            <span className="text-white text-sm font-semibold capitalize">{breathPhase}</span>
++                        </motion.div>
++                    </div>
++                )}
++
++                {/* Timer */}
++                <div className="relative z-10 mb-8">
++                    <div className="relative w-56 h-56 mx-auto">
++                        <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
++                            <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="3" />
++                            <motion.circle cx="50" cy="50" r="44" fill="none"
++                                stroke={activeSession.color} strokeWidth="3" strokeLinecap="round"
++                                strokeDasharray={`${progress * 276} 276`}
++                                animate={{ strokeDasharray: `${progress * 276} 276` }}
++                            />
++                        </svg>
++                        <div className="absolute inset-0 flex flex-col items-center justify-center">
++                            <span className="text-4xl font-black text-white">{formatTime(remaining)}</span>
++                            <span className="text-gray-500 text-xs mt-1">remaining</span>
++                        </div>
++                    </div>
++                </div>
++
++                {/* Controls */}
++                <div className="flex items-center gap-6 relative z-10">
++                    <motion.button whileTap={{ scale: 0.9 }}
++                        onClick={() => { setElapsed(0); }}
++                        className="w-12 h-12 rounded-full flex items-center justify-center"
++                        style={{ background: 'rgba(255,255,255,0.08)' }}>
++                        <RotateCcw size={18} className="text-gray-400" />
++                    </motion.button>
++                    <motion.button whileTap={{ scale: 0.9 }}
++                        onClick={() => setIsPlaying(!isPlaying)}
++                        className="w-16 h-16 rounded-full flex items-center justify-center"
++                        style={{ background: `linear-gradient(135deg, ${activeSession.color}, ${activeSession.color}CC)` }}>
++                        {isPlaying ? <Pause size={24} className="text-white" /> : <Play size={24} className="text-white ml-1" />}
++                    </motion.button>
++                    <motion.button whileTap={{ scale: 0.9 }}
++                        className="w-12 h-12 rounded-full flex items-center justify-center"
++                        style={{ background: 'rgba(255,255,255,0.08)' }}>
++                        <Volume2 size={18} className="text-gray-400" />
++                    </motion.button>
++                </div>
++
++                {elapsed >= activeSession.duration && (
++                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
++                        className="mt-8 text-center relative z-10">
++                        <p className="text-2xl mb-2">≡ƒÄë</p>
++                        <p className="text-white font-semibold">Session Complete!</p>
++                        <p className="text-gray-400 text-sm">Great job staying present.</p>
++                    </motion.div>
++                )}
++            </motion.div>
++        );
++    }
++
++    return (
++        <div className="min-h-screen pb-24" style={{ background: '#0a0a1a' }}>
++            {/* Header */}
++            <div className="px-4 pt-4 pb-2">
++                <h1 className="text-xl font-bold text-white flex items-center gap-2">
++                    <div className="w-8 h-8 rounded-full flex items-center justify-center"
++                        style={{ background: 'linear-gradient(135deg, #6366F1, #8B5CF6)' }}>
++                        <Sparkles size={16} className="text-white" />
++                    </div>
++                    Meditation
++                </h1>
++                <p className="text-gray-500 text-xs mt-1">Find your inner peace</p>
++            </div>
++
++            {/* Featured Card */}
++            <div className="px-4 mb-4">
++                <motion.div whileTap={{ scale: 0.98 }}
++                    onClick={() => startSession(SESSIONS[3])}
++                    className="rounded-3xl p-5 relative overflow-hidden cursor-pointer"
++                    style={{
++                        background: 'linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.15))',
++                        border: '1px solid rgba(99,102,241,0.2)',
++                    }}>
++                    <motion.div className="absolute -right-8 -top-8 w-32 h-32 rounded-full opacity-20"
++                        animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 4, repeat: Infinity }}
++                        style={{ background: 'radial-gradient(#8B5CF6, transparent)' }} />
++                    <span className="text-3xl">≡ƒîÖ</span>
++                    <h3 className="text-white font-bold text-lg mt-2">Tonight's Sleep Session</h3>
++                    <p className="text-gray-400 text-sm mt-1">15 min guided meditation for deep rest</p>
++                    <div className="flex items-center gap-2 mt-3">
++                        <div className="px-3 py-1 rounded-full text-xs font-semibold text-purple-300"
++                            style={{ background: 'rgba(139,92,246,0.2)' }}>
++                            <Clock size={10} className="inline mr-1" />15:00
++                        </div>
++                        <div className="px-3 py-1 rounded-full text-xs font-semibold text-purple-300"
++                            style={{ background: 'rgba(139,92,246,0.2)' }}>
++                            <Headphones size={10} className="inline mr-1" />Guided
++                        </div>
++                    </div>
++                </motion.div>
++            </div>
++
++            {/* Category Filter */}
++            <div className="px-4 mb-4">
++                <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
++                    {CATEGORIES.map(c => (
++                        <button key={c.id} onClick={() => setCategory(c.id)}
++                            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all"
++                            style={{
++                                background: category === c.id ? 'linear-gradient(135deg, #6366F1, #8B5CF6)' : 'rgba(255,255,255,0.04)',
++                                color: category === c.id ? '#fff' : '#6B7280',
++                                border: `1px solid ${category === c.id ? 'rgba(99,102,241,0.3)' : 'rgba(255,255,255,0.06)'}`,
++                            }}>
++                            {c.icon} {c.label}
++                        </button>
++                    ))}
++                </div>
++            </div>
++
++            {/* Session Grid */}
++            <div className="px-4 space-y-3">
++                {filtered.map((s, i) => (
++                    <motion.button key={s.id}
++                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
++                        transition={{ delay: i * 0.05 }}
++                        whileTap={{ scale: 0.97 }}
++                        onClick={() => startSession(s)}
++                        className="w-full flex items-center gap-4 p-4 rounded-2xl text-left transition-all"
++                        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}
++                    >
++                        <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
++                            style={{ background: `${s.color}15` }}>
++                            {s.icon}
++                        </div>
++                        <div className="flex-1 min-w-0">
++                            <p className="text-white font-semibold text-sm truncate">{s.title}</p>
++                            <p className="text-gray-500 text-xs truncate">{s.description}</p>
++                        </div>
++                        <div className="flex items-center gap-1 flex-shrink-0">
++                            <Clock size={12} className="text-gray-500" />
++                            <span className="text-gray-400 text-xs font-medium">{Math.floor(s.duration / 60)}m</span>
++                        </div>
++                        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
++                            style={{ background: `${s.color}20` }}>
++                            <Play size={14} style={{ color: s.color }} className="ml-0.5" />
++                        </div>
++                    </motion.button>
++                ))}
++            </div>
++        </div>
++    );
++}

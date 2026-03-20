@@ -1,0 +1,102 @@
+{
+    "name": "GYM_NUTRI_01",
+    "nodes": [
+        {
+            "parameters": {
+                "path": "nutrition-scan",
+                "httpMethod": "POST",
+                "responseMode": "lastNode",
+                "options": {}
+            },
+            "name": "Webhook",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                250,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "chat",
+                "model": "gpt-4-vision-preview",
+                "messages": {
+                    "values": [
+                        {
+                            "content": "Analyze this food image. Return JSON with calories, protein, carbs, fat.",
+                            "role": "user",
+                            "imgUrl": "={{$json.body.image_url}}"
+                        }
+                    ]
+                }
+            },
+            "name": "GPT4Vision",
+            "type": "n8n-nodes-base.openAi",
+            "typeVersion": 1,
+            "position": [
+                450,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const nutri = JSON.parse($input.item.json.message.content);\nreturn { json: nutri };"
+            },
+            "name": "ParseJSON",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 1,
+            "position": [
+                650,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "INSERT INTO nutrition_logs (calories, protein, carbs, fat) VALUES ($1, $2, $3, $4)"
+            },
+            "name": "SaveDB",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 1,
+            "position": [
+                850,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "GPT4Vision",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "GPT4Vision": {
+            "main": [
+                [
+                    {
+                        "node": "ParseJSON",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "ParseJSON": {
+            "main": [
+                [
+                    {
+                        "node": "SaveDB",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

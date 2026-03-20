@@ -1,0 +1,163 @@
+Build Unsigned IPA	Set up job	???2026-02-28T08:43:00.6240140Z Current runner version: '2.331.0'
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6256430Z ##[group]Runner Image Provisioner
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6256930Z Hosted Compute Agent
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6257260Z Version: 20260213.493
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6257630Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6258070Z Build Date: 2026-02-13T00:28:41Z
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6258470Z Worker ID: {4151f0fc-71cf-4b14-8d11-9bd9d9159e98}
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6258880Z Azure Region: westus
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6259210Z ##[endgroup]
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6260040Z ##[group]Operating System
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6260380Z macOS
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6260650Z 15.7.4
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6260910Z 24G517
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6261180Z ##[endgroup]
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6261470Z ##[group]Runner Image
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6261790Z Image: macos-15-arm64
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6262090Z Version: 20260224.0170.1
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6262760Z Included Software: https://github.com/actions/runner-images/blob/macos-15-arm64/20260224.0170/images/macos/macos-15-arm64-Readme.md
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6263870Z Image Release: https://github.com/actions/runner-images/releases/tag/macos-15-arm64%2F20260224.0170
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6264530Z ##[endgroup]
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6265260Z ##[group]GITHUB_TOKEN Permissions
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6266340Z Contents: read
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6266640Z Metadata: read
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6266950Z Packages: read
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6267260Z ##[endgroup]
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6268650Z Secret source: Actions
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6269060Z Prepare workflow directory
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6483500Z Prepare all required actions
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.6509090Z Getting action download info
+Build Unsigned IPA	Set up job	2026-02-28T08:43:00.8917040Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+Build Unsigned IPA	Set up job	2026-02-28T08:43:01.3178420Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+Build Unsigned IPA	Set up job	2026-02-28T08:43:01.4705310Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+Build Unsigned IPA	Set up job	2026-02-28T08:43:01.6452240Z Complete job name: Build Unsigned IPA
+Build Unsigned IPA	Checkout Repository	???2026-02-28T08:43:01.6851120Z ##[group]Run actions/checkout@v4
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:01.6851660Z with:
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:01.6851990Z   repository: toiyeugym19-cmyk/ht-strength
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:01.6852520Z   token: ***
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:01.6852790Z   ssh-strict: true
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:01.6853080Z   ssh-user: git
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:01.6853360Z   persist-credentials: true
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:01.6853670Z   clean: true
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:01.6853960Z   sparse-checkout-cone-mode: true
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:01.6854290Z   fetch-depth: 1
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:01.6854560Z   fetch-tags: false
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:01.6854850Z   show-progress: true
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:01.6855140Z   lfs: false
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:01.6855390Z   submodules: false
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:01.6855690Z   set-safe-directory: true
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:01.6856100Z ##[endgroup]
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.0090680Z Syncing repository: toiyeugym19-cmyk/ht-strength
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.0092230Z ##[group]Getting Git version info
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.0092790Z Working directory is '/Users/runner/work/ht-strength/ht-strength'
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.0093540Z [command]/opt/homebrew/bin/git version
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.0670910Z git version 2.53.0
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.0694730Z ##[endgroup]
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.0701060Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/f3e02a13-c9ee-43ae-ba36-1faf0173116d/.gitconfig'
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.0707940Z Temporarily overriding HOME='/Users/runner/work/_temp/f3e02a13-c9ee-43ae-ba36-1faf0173116d' before making global git config changes
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.0708910Z Adding repository directory to the temporary git global config as a safe directory
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.0716430Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/ht-strength/ht-strength
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.0810740Z Deleting the contents of '/Users/runner/work/ht-strength/ht-strength'
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.0813140Z ##[group]Initializing the repository
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.0817260Z [command]/opt/homebrew/bin/git init /Users/runner/work/ht-strength/ht-strength
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1011410Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1012520Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1013230Z hint: to use in all of your new repositories, which will suppress this warning,
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1013840Z hint: call:
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1014130Z hint:
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1014500Z hint: 	git config --global init.defaultBranch <name>
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1014930Z hint:
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1015370Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1015990Z hint: 'development'. The just-created branch can be renamed via this command:
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1017580Z hint:
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1017920Z hint: 	git branch -m <name>
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1018250Z hint:
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1018690Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1021930Z Initialized empty Git repository in /Users/runner/work/ht-strength/ht-strength/.git/
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1031370Z [command]/opt/homebrew/bin/git remote add origin https://github.com/toiyeugym19-cmyk/ht-strength
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1111760Z ##[endgroup]
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1112490Z ##[group]Disabling automatic garbage collection
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1114080Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1182780Z ##[endgroup]
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1183370Z ##[group]Setting up auth
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1188230Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.1258170Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.2254910Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.2307410Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.2969750Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.3027750Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.3710150Z [command]/opt/homebrew/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.3772710Z ##[endgroup]
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.3773320Z ##[group]Fetching the repository
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:02.3778770Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +99ab875a8d39dad02689d91ddedfd91c5ae2c4ed:refs/remotes/origin/master
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:03.3382020Z From https://github.com/toiyeugym19-cmyk/ht-strength
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:03.3383350Z  * [new ref]         99ab875a8d39dad02689d91ddedfd91c5ae2c4ed -> origin/master
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:03.3475550Z ##[endgroup]
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:03.3476320Z ##[group]Determining the checkout info
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:03.3477130Z ##[endgroup]
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:03.3478540Z [command]/opt/homebrew/bin/git sparse-checkout disable
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:03.3553420Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:03.3623880Z ##[group]Checking out the ref
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:03.3626030Z [command]/opt/homebrew/bin/git checkout --progress --force -B master refs/remotes/origin/master
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:03.5659000Z Reset branch 'master'
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:03.5665910Z branch 'master' set up to track 'origin/master'.
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:03.5678700Z ##[endgroup]
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:03.5789260Z [command]/opt/homebrew/bin/git log -1 --format=%H
+Build Unsigned IPA	Checkout Repository	2026-02-28T08:43:03.5872180Z 99ab875a8d39dad02689d91ddedfd91c5ae2c4ed
+Build Unsigned IPA	Setup Node.js	???2026-02-28T08:43:03.6153870Z ##[group]Run actions/setup-node@v4
+Build Unsigned IPA	Setup Node.js	2026-02-28T08:43:03.6154810Z with:
+Build Unsigned IPA	Setup Node.js	2026-02-28T08:43:03.6155430Z   node-version: 22
+Build Unsigned IPA	Setup Node.js	2026-02-28T08:43:03.6156070Z   always-auth: false
+Build Unsigned IPA	Setup Node.js	2026-02-28T08:43:03.6156730Z   check-latest: false
+Build Unsigned IPA	Setup Node.js	2026-02-28T08:43:03.6157710Z   token: ***
+Build Unsigned IPA	Setup Node.js	2026-02-28T08:43:03.6158330Z ##[endgroup]
+Build Unsigned IPA	Setup Node.js	2026-02-28T08:43:03.7557820Z Found in cache @ /Users/runner/hostedtoolcache/node/22.22.0/arm64
+Build Unsigned IPA	Setup Node.js	2026-02-28T08:43:03.7561410Z ##[group]Environment details
+Build Unsigned IPA	Setup Node.js	2026-02-28T08:43:04.2055980Z node: v22.22.0
+Build Unsigned IPA	Setup Node.js	2026-02-28T08:43:04.2058740Z npm: 10.9.4
+Build Unsigned IPA	Setup Node.js	2026-02-28T08:43:04.2060700Z yarn: 1.22.22
+Build Unsigned IPA	Setup Node.js	2026-02-28T08:43:04.2062120Z ##[endgroup]
+Build Unsigned IPA	Install Dependencies	???2026-02-28T08:43:04.2194020Z ##[group]Run npm install --legacy-peer-deps
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:04.2195080Z [36;1mnpm install --legacy-peer-deps[0m
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:04.2240930Z shell: /bin/bash -e {0}
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:04.2241700Z ##[endgroup]
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:06.5208250Z npm warn deprecated sourcemap-codec@1.4.8: Please use @jridgewell/sourcemap-codec instead
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:06.9341700Z npm warn deprecated q@1.5.1: You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:06.9465110Z npm warn deprecated
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:06.9641490Z npm warn deprecated (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:07.1270410Z npm warn deprecated prebuild-install@7.1.3: No longer maintained. Please contact the author of the relevant native addon; alternatives are available.
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:07.1504050Z npm warn deprecated source-map@0.8.0-beta.0: The work that was done in this beta branch won't be included in future versions
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:07.8515900Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:11.1594870Z npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:11.2013920Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:11.4063190Z npm warn deprecated @xmldom/xmldom@0.7.13: this version is no longer supported, please update to at least 0.8.*
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:11.5809340Z npm warn deprecated @xmldom/xmldom@0.7.13: this version is no longer supported, please update to at least 0.8.*
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:11.8818070Z npm warn deprecated tar@6.2.1: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:12.6329870Z npm warn deprecated glob@9.3.5: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:28.2999870Z 
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:28.3000740Z > life-planner@0.0.0 postinstall
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:28.3001250Z > patch-package
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:28.3001370Z 
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:28.3061880Z sh: patch-package: command not found
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:28.3098530Z npm error code 127
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:28.3099600Z npm error path /Users/runner/work/ht-strength/ht-strength
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:28.3100620Z npm error command failed
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:28.3101010Z npm error command sh -c patch-package
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:28.3101950Z npm error A complete log of this run can be found in: /Users/runner/.npm/_logs/2026-02-28T08_43_04_336Z-debug-0.log
+Build Unsigned IPA	Install Dependencies	2026-02-28T08:43:28.4807910Z ##[error]Process completed with exit code 127.
+Build Unsigned IPA	Post Checkout Repository	???2026-02-28T08:43:28.4912010Z Post job cleanup.
+Build Unsigned IPA	Post Checkout Repository	2026-02-28T08:43:28.7202500Z [command]/opt/homebrew/bin/git version
+Build Unsigned IPA	Post Checkout Repository	2026-02-28T08:43:28.7271270Z git version 2.53.0
+Build Unsigned IPA	Post Checkout Repository	2026-02-28T08:43:28.7305810Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/bd2edc0e-3a6a-47db-8340-b3d3bd2e434b/.gitconfig'
+Build Unsigned IPA	Post Checkout Repository	2026-02-28T08:43:28.7312440Z Temporarily overriding HOME='/Users/runner/work/_temp/bd2edc0e-3a6a-47db-8340-b3d3bd2e434b' before making global git config changes
+Build Unsigned IPA	Post Checkout Repository	2026-02-28T08:43:28.7313170Z Adding repository directory to the temporary git global config as a safe directory
+Build Unsigned IPA	Post Checkout Repository	2026-02-28T08:43:28.7319150Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/ht-strength/ht-strength
+Build Unsigned IPA	Post Checkout Repository	2026-02-28T08:43:28.7373930Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+Build Unsigned IPA	Post Checkout Repository	2026-02-28T08:43:28.7426420Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Build Unsigned IPA	Post Checkout Repository	2026-02-28T08:43:28.8126020Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Build Unsigned IPA	Post Checkout Repository	2026-02-28T08:43:28.8171150Z http.https://github.com/.extraheader
+Build Unsigned IPA	Post Checkout Repository	2026-02-28T08:43:28.8179020Z [command]/opt/homebrew/bin/git config --local --unset-all http.https://github.com/.extraheader
+Build Unsigned IPA	Post Checkout Repository	2026-02-28T08:43:28.8234000Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Build Unsigned IPA	Post Checkout Repository	2026-02-28T08:43:28.9010050Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Build Unsigned IPA	Post Checkout Repository	2026-02-28T08:43:28.9064710Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Build Unsigned IPA	Complete job	???2026-02-28T08:43:29.0061320Z Cleaning up orphan processes
